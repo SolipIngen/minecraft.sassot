@@ -1,0 +1,38 @@
+{
+    "parent": "sassot:adventure/deflect_arrow",
+    "criteria": {
+      "iron_shield": {
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "sassot:iron_shield"
+              ]
+            }
+          ]
+        },
+        "trigger": "minecraft:inventory_changed"
+      }
+    },
+    "display": {
+      "announce_to_chat": true,
+      "description": {
+        "translate": "advancements.adventure.obtain_iron_shield.description"
+      },
+      "frame": "task",
+      "hidden": false,
+      "icon": {
+        "item": "sassot:iron_shield",
+        "nbt": "{Damage:0}"
+      },
+      "show_toast": true,
+      "title": {
+        "translate": "advancements.adventure.obtain_iron_shield.title"
+      }
+    },
+    "requirements": [
+      [
+        "iron_shield"
+      ]
+    ]
+  }

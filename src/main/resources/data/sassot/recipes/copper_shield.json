@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+      "o": {
+        "item": "minecraft:copper_ingot"
+      }
+    },
+    "pattern": [
+      "ooo",
+      "ooo",
+      " o "
+    ],
+    "result": {
+      "item": "sassot:copper_shield"
+    }
+}

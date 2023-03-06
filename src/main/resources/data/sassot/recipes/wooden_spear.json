@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+      "o": {
+        "item": "minecraft:stick"
+      }
+    },
+    "pattern": [
+      "  o",
+      " o ",
+      "o  "
+    ],
+    "result": {
+      "item": "sassot:wooden_spear"
+    }
+}

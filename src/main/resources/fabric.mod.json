@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "sassot",
+  "version": "0.1.0-1.19.3",
+
+  "name": "Spears, Axes, Swords, Shields, and Other Tools",
+  "description": "A mod that adds Spears, enhances Shields, and reworks Swords, Axes, and other Tools. Follow the progression chain, use new copper tools and weapons, cast new enchantments, and enjoy other new features that shall protect you from the treacherous World.",
+  "authors": [
+    "SolipIngen"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": "https://github.com/SolipIngen/"
+  },
+
+  "license": "MIT License",
+  "icon": "assets/sassot/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "solipingen.sassot.SpearsAxesSwordsShieldsAndOtherTools"
+    ],
+    "client": [
+      "solipingen.sassot.SpearsAxesSwordsShieldsAndOtherToolsClient"
+    ]
+  },
+  "mixins": [
+    "sassot.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.11",
+    "fabric-api": "*",
+    "minecraft": "~1.19.3",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
