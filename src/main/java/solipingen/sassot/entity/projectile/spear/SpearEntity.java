@@ -262,10 +262,10 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
                     if (entity instanceof LivingEntity && (entity.isOnGround() || entity.isInsideWall() || ((LivingEntity)entity).isClimbing()) && !(entity instanceof PlayerEntity && ((PlayerEntity)entity).isCreative())) {
                         LivingEntity livingEntity = (LivingEntity)entity;
                         livingEntity.damage(DamageSource.explosion(this, attacker), strengthOnBlock/MathHelper.square(1.0f + livingEntity.distanceTo(this)/7.0f));
-                        livingEntity.addVelocity(0.1*(1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*knockbackStrength*diffVecNorm.getX(), 0.2*(1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*knockbackStrength*diffVecNorm.getY(), 0.1*(1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*knockbackStrength*diffVecNorm.getZ());
+                        livingEntity.addVelocity(0.1*(1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*knockbackStrength*diffVecNorm.getX(), 0.25*(1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*knockbackStrength*diffVecNorm.getY(), 0.1*(1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*knockbackStrength*diffVecNorm.getZ());
                     }
                     if (!(entity instanceof LivingEntity) && (entity.isOnGround() || entity.isInsideWall())) {
-                        entity.addVelocity(0.1*knockbackStrength*diffVecNorm.getX(), 0.2*knockbackStrength*diffVecNorm.getY(), 0.1*knockbackStrength*diffVecNorm.getZ());
+                        entity.addVelocity(0.1*knockbackStrength*diffVecNorm.getX(), 0.25*knockbackStrength*diffVecNorm.getY(), 0.1*knockbackStrength*diffVecNorm.getZ());
                     }
                 }
                 if (!this.world.isClient && !this.isNoClip() && this.isInsideWall()) {
