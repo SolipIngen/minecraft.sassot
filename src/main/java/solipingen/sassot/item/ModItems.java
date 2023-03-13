@@ -82,7 +82,7 @@ public class ModItems {
         (Item)new SwordItem(ModToolMaterials.COPPER, 4, -2.3f, new FabricItemSettings()));
     
     public static final Item COPPER_SHOVEL = ModItems.registerItem("copper_shovel", 
-        (Item)new ShovelItem(ModToolMaterials.COPPER, 1.0f, -2.4f, new FabricItemSettings()));
+        (Item)new ShovelItem(ModToolMaterials.COPPER, 1.0f, -2.5f, new FabricItemSettings()));
     
     public static final Item COPPER_PICKAXE = ModItems.registerItem("copper_pickaxe", 
         (Item)new PickaxeItem(ModToolMaterials.COPPER, 2, -2.6f, new FabricItemSettings()));
