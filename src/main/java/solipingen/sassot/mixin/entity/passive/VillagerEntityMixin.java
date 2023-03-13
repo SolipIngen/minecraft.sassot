@@ -135,7 +135,14 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
                 }
             }
             if (!(activity == Activity.PANIC || activity == Activity.HIDE || activity == Activity.REST)) {
-                brain.setTaskList(activity, indexedTasks);
+                if (activity == Activity.IDLE) {
+                    if (this.getTarget() == null || (this.getTarget() != null && !this.getTarget().isAlive())) {
+                        brain.setTaskList(activity, indexedTasks);
+                    }
+                }
+                else {
+                    brain.setTaskList(activity, indexedTasks);
+                }
             }
         }
         else {
