@@ -17,88 +17,88 @@ import solipingen.sassot.mixin.item.accessors.HoeItemInvoker;
 public class ModItems {
 
     // Spears
-    public static final Item WOODEN_SPEAR = registerItem("wooden_spear", 
+    public static final Item WOODEN_SPEAR = ModItems.registerItem("wooden_spear", 
         new SpearItem(ToolMaterials.WOOD, 4.0f, -2.3, new FabricItemSettings()));
     
-    public static final Item BAMBOO_SPEAR = registerItem("bamboo_spear", 
+    public static final Item BAMBOO_SPEAR = ModItems.registerItem("bamboo_spear", 
         new SpearItem(ToolMaterials.WOOD, 5.0f, -2.2, new FabricItemSettings()));
     
-    public static final Item STONE_SPEAR = registerItem("stone_spear", 
+    public static final Item STONE_SPEAR = ModItems.registerItem("stone_spear", 
         new SpearItem(ToolMaterials.STONE, 6.0f, -2.8, new FabricItemSettings()));
     
-    public static final Item FLINT_SPEAR = registerItem("flint_spear", 
+    public static final Item FLINT_SPEAR = ModItems.registerItem("flint_spear", 
         new SpearItem(ToolMaterials.STONE, 6.0f, -2.5, new FabricItemSettings()));
     
-    public static final Item COPPER_SPEAR = registerItem("copper_spear", 
+    public static final Item COPPER_SPEAR = ModItems.registerItem("copper_spear", 
         new SpearItem(ModToolMaterials.COPPER, 7.0f, -2.6, new FabricItemSettings()));
     
-    public static final Item GOLDEN_SPEAR = registerItem("golden_spear", 
+    public static final Item GOLDEN_SPEAR = ModItems.registerItem("golden_spear", 
         new SpearItem(ToolMaterials.GOLD, 7.0f, -2.6, new FabricItemSettings()));
 
-    public static final Item IRON_SPEAR = registerItem("iron_spear", 
+    public static final Item IRON_SPEAR = ModItems.registerItem("iron_spear", 
         new SpearItem(ToolMaterials.IRON, 8.0f, -2.5, new FabricItemSettings()));
 
-    public static final Item DIAMOND_SPEAR = registerItem("diamond_spear", 
+    public static final Item DIAMOND_SPEAR = ModItems.registerItem("diamond_spear", 
         new SpearItem(ToolMaterials.DIAMOND, 10.0f, -2.3, new FabricItemSettings()));
     
-    public static final Item NETHERITE_SPEAR = registerItem("netherite_spear", 
+    public static final Item NETHERITE_SPEAR = ModItems.registerItem("netherite_spear", 
         new SpearItem(ToolMaterials.NETHERITE, 11.0f, -2.2, new FabricItemSettings().fireproof()));
 
-    public static final Item BLAZEARM = registerItem("blazearm", 
+    public static final Item BLAZEARM = ModItems.registerItem("blazearm", 
         new BlazearmItem(new FabricItemSettings().fireproof().maxDamage(1808)));
 
     
     // Shields
-    public static final Item WOODEN_SHIELD = registerItem("wooden_shield", 
+    public static final Item WOODEN_SHIELD = ModItems.registerItem("wooden_shield", 
         new ModShieldItem(ToolMaterials.WOOD, 1.0f, false, 60, 0.05f, new FabricItemSettings()));
     
-    public static final Item COPPER_FRAMED_WOODEN_SHIELD = registerItem("copper_framed_wooden_shield", 
+    public static final Item COPPER_FRAMED_WOODEN_SHIELD = ModItems.registerItem("copper_framed_wooden_shield", 
         new ModShieldItem(ModToolMaterials.COPPER, 1.0f, true, 60, 0.05f, new FabricItemSettings()));
 
-    public static final Item GOLD_FRAMED_WOODEN_SHIELD = registerItem("gold_framed_wooden_shield", 
+    public static final Item GOLD_FRAMED_WOODEN_SHIELD = ModItems.registerItem("gold_framed_wooden_shield", 
         new ModShieldItem(ToolMaterials.GOLD, 1.0f, true, 60, 0.05f, new FabricItemSettings()));
     
-    public static final Item IRON_FRAMED_WOODEN_SHIELD = registerItem("iron_framed_wooden_shield", 
+    public static final Item IRON_FRAMED_WOODEN_SHIELD = ModItems.registerItem("iron_framed_wooden_shield", 
         new ModShieldItem(ToolMaterials.IRON, 1.0f, true, 60, 0.05f, new FabricItemSettings()));
     
-    public static final Item COPPER_SHIELD = registerItem("copper_shield", 
+    public static final Item COPPER_SHIELD = ModItems.registerItem("copper_shield", 
         new ModShieldItem(ModToolMaterials.COPPER, 3.0f, false, 70, 0.075f, new FabricItemSettings()));
     
-    public static final Item GOLDEN_SHIELD = registerItem("golden_shield", 
+    public static final Item GOLDEN_SHIELD = ModItems.registerItem("golden_shield", 
         new ModShieldItem(ToolMaterials.GOLD, 3.0f, false, 70, 0.075f, new FabricItemSettings()));
     
-    public static final Item IRON_SHIELD = registerItem("iron_shield", 
+    public static final Item IRON_SHIELD = ModItems.registerItem("iron_shield", 
         new ModShieldItem(ToolMaterials.IRON, 4.0f, false, 80, 0.1f, new FabricItemSettings()));
     
-    public static final Item DIAMOND_SHIELD = registerItem("diamond_shield", 
+    public static final Item DIAMOND_SHIELD = ModItems.registerItem("diamond_shield", 
         new ModShieldItem(ToolMaterials.DIAMOND, 6.0f, false, 100, 0.15f, new FabricItemSettings()));
     
-    public static final Item NETHERITE_SHIELD = registerItem("netherite_shield", 
+    public static final Item NETHERITE_SHIELD = ModItems.registerItem("netherite_shield", 
         new ModShieldItem(ToolMaterials.DIAMOND, 7.0f, false, 120, 0.175f, new FabricItemSettings().fireproof()));
 
     
     // Copper Tools
-    public static final Item COPPER_SWORD = registerItem("copper_sword", 
+    public static final Item COPPER_SWORD = ModItems.registerItem("copper_sword", 
         (Item)new SwordItem(ModToolMaterials.COPPER, 4, -2.3f, new FabricItemSettings()));
     
-    public static final Item COPPER_SHOVEL = registerItem("copper_shovel", 
+    public static final Item COPPER_SHOVEL = ModItems.registerItem("copper_shovel", 
         (Item)new ShovelItem(ModToolMaterials.COPPER, 1.5f, -3.0f, new FabricItemSettings()));
     
-    public static final Item COPPER_PICKAXE = registerItem("copper_pickaxe", 
+    public static final Item COPPER_PICKAXE = ModItems.registerItem("copper_pickaxe", 
         (Item)new PickaxeItem(ModToolMaterials.COPPER, 1, -2.8f, new FabricItemSettings()));
     
-    public static final Item COPPER_AXE = registerItem("copper_axe", 
+    public static final Item COPPER_AXE = ModItems.registerItem("copper_axe", 
         (Item)new AxeItem(ModToolMaterials.COPPER, 6.0f, -3.0f, new FabricItemSettings()));
     
-    public static final Item COPPER_HOE = registerItem("copper_hoe", 
+    public static final Item COPPER_HOE = ModItems.registerItem("copper_hoe", 
         (Item)HoeItemInvoker.invokeHoeItem(ModToolMaterials.COPPER, 0, -3.0f, new FabricItemSettings()));
 
 
     // Elder Guardian Spike
-    public static final Item ELDER_GUARDIAN_SPIKE_SHARD = registerItem("elder_guardian_spike_shard", 
+    public static final Item ELDER_GUARDIAN_SPIKE_SHARD = ModItems.registerItem("elder_guardian_spike_shard", 
         new ElderGuardianSpikeShardItem(1, -1.0f, new FabricItemSettings().maxDamage(89)));
 
-    public static final Item ELDER_GUARDIAN_SPIKE_BONE_SHARD = registerItem("elder_guardian_spike_bone_shard", 
+    public static final Item ELDER_GUARDIAN_SPIKE_BONE_SHARD = ModItems.registerItem("elder_guardian_spike_bone_shard", 
         new Item(new FabricItemSettings()));
 
 

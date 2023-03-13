@@ -23,47 +23,47 @@ public class ModEnchantments {
     private static final EquipmentSlot[] equipmentSlots = {EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND};
 
     // Axes
-    public static final Enchantment HACKING = registerEnchantment("hacking", 
+    public static final Enchantment HACKING = ModEnchantments.registerEnchantment("hacking", 
         new HackingEnchantment(Enchantment.Rarity.RARE, equipmentSlots));
 
         
     // Shields
-    public static final Enchantment SHIELDING = registerEnchantment("shielding", 
+    public static final Enchantment SHIELDING = ModEnchantments.registerEnchantment("shielding", 
         new ShieldingEnchantment(Enchantment.Rarity.COMMON, equipmentSlots));
     
-    public static final Enchantment UNYIELDING = registerEnchantment("unyielding", 
+    public static final Enchantment UNYIELDING = ModEnchantments.registerEnchantment("unyielding", 
         new UnyieldingEnchantment(Enchantment.Rarity.UNCOMMON, equipmentSlots));
     
-    public static final Enchantment PROJECTILE_DEFLECTION = registerEnchantment("projectile_deflection", 
+    public static final Enchantment PROJECTILE_DEFLECTION = ModEnchantments.registerEnchantment("projectile_deflection", 
         new ProjectileDeflectionEnchantment(Enchantment.Rarity.RARE, equipmentSlots));
 
-    public static final Enchantment SHOCK_REBOUND = registerEnchantment("shock_rebound", 
+    public static final Enchantment SHOCK_REBOUND = ModEnchantments.registerEnchantment("shock_rebound", 
         new ShockReboundEnchantment(Enchantment.Rarity.RARE, equipmentSlots));
 
-    public static final Enchantment ECHOING = registerEnchantment("echoing", 
+    public static final Enchantment ECHOING = ModEnchantments.registerEnchantment("echoing", 
         new EchoingEnchantment(Enchantment.Rarity.VERY_RARE, equipmentSlots));
     
-    public static final Enchantment CLOAKING = registerEnchantment("cloaking",
+    public static final Enchantment CLOAKING = ModEnchantments.registerEnchantment("cloaking",
         new CloakingEnchantment(Enchantment.Rarity.VERY_RARE, equipmentSlots));
 
     
     // Spears
-    public static final Enchantment WHIRLWIND = registerEnchantment("whirlwind",
+    public static final Enchantment WHIRLWIND = ModEnchantments.registerEnchantment("whirlwind",
         new WhirlwindEnchantment(Enchantment.Rarity.RARE, EquipmentSlot.MAINHAND));
     
-    public static final Enchantment SKEWERING = registerEnchantment("skewering", 
+    public static final Enchantment SKEWERING = ModEnchantments.registerEnchantment("skewering", 
         new SkeweringEnchantment(Enchantment.Rarity.VERY_RARE, EquipmentSlot.MAINHAND));
 
-    public static final Enchantment THRUSTING = registerEnchantment("thrusting", 
+    public static final Enchantment THRUSTING = ModEnchantments.registerEnchantment("thrusting", 
         new ThrustingEnchantment(Enchantment.Rarity.UNCOMMON, EquipmentSlot.MAINHAND));
 
-    public static final Enchantment GROUNDBREAKING = registerEnchantment("groundbreaking", 
+    public static final Enchantment GROUNDBREAKING = ModEnchantments.registerEnchantment("groundbreaking", 
         new GroundbreakingEnchantment(Enchantment.Rarity.VERY_RARE, EquipmentSlot.MAINHAND));
     
-    public static final Enchantment LEANING = registerEnchantment("leaning", 
+    public static final Enchantment LEANING = ModEnchantments.registerEnchantment("leaning", 
         new LeaningEnchantment(Enchantment.Rarity.RARE, EquipmentSlot.MAINHAND));
 
-    public static final Enchantment FLARE = registerEnchantment("flare", 
+    public static final Enchantment FLARE = ModEnchantments.registerEnchantment("flare", 
         new FlareEnchantment(Enchantment.Rarity.RARE, EquipmentSlot.MAINHAND));
 
 
