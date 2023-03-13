@@ -66,7 +66,7 @@ public class ModVillagerProfessions {
 
     // Trade Offer Replacements
     public static void replaceToolsmithProfessionToLeveledTrade(Map<VillagerProfession, Int2ObjectMap<Factory[]>> originalTradeOffers) {
-        originalTradeOffers.replace(VillagerProfession.TOOLSMITH, copyToFastUtilMap(
+        originalTradeOffers.replace(VillagerProfession.TOOLSMITH, ModVillagerProfessions.copyToFastUtilMap(
             ImmutableMap.of(
                 1, new Factory[]{new BuyForOneEmeraldFactory(Items.COAL, 15, 16, 2), new BuyForOneEmeraldFactory(Items.CHARCOAL, 15, 16, 2),  
                     new SellItemFactory(Items.STONE_PICKAXE, 1, 1, 1), 
@@ -79,12 +79,12 @@ public class ModVillagerProfessions {
                     new SellItemFactory(ModItems.COPPER_HOE, 2, 1, 5), 
                     new SellItemFactory(ModItems.COPPER_AXE, 2, 1, 5)}, 
                 3, new Factory[]{new BuyForOneEmeraldFactory(Items.GOLD_INGOT, 2, 12, 20), 
-                    new SellItemFactory(Items.BELL, 24, 1, 10), 
+                    new SellItemFactory(Items.BELL, 18, 1, 10), 
                     new SellItemFactory(Items.GOLDEN_PICKAXE, 3, 1, 10), 
                     new SellItemFactory(Items.GOLDEN_SHOVEL, 3, 1, 10), 
                     new SellItemFactory(Items.GOLDEN_HOE, 3, 1, 10), 
                     new SellItemFactory(Items.GOLDEN_AXE, 3, 1, 10)}, 
-                4, new Factory[]{new BuyForOneEmeraldFactory(Items.IRON_INGOT, 4, 12, 20), new BuyForOneEmeraldFactory(Items.LAVA_BUCKET, 1, 12, 30), 
+                4, new Factory[]{new BuyForOneEmeraldFactory(Items.IRON_INGOT, 4, 12, 30), new BuyForOneEmeraldFactory(Items.LAVA_BUCKET, 1, 12, 30), 
                     new SellItemFactory(Items.IRON_PICKAXE, 3, 1, 15), 
                     new SellItemFactory(Items.IRON_SHOVEL, 3, 1, 15), 
                     new SellItemFactory(Items.IRON_HOE, 3, 1, 15), 
@@ -98,28 +98,33 @@ public class ModVillagerProfessions {
     }
 
     public static void replaceWeaponsmithProfessionToLeveledTrade(Map<VillagerProfession, Int2ObjectMap<Factory[]>> originalTradeOffers) {
-        originalTradeOffers.replace(VillagerProfession.WEAPONSMITH, copyToFastUtilMap(
+        originalTradeOffers.replace(VillagerProfession.WEAPONSMITH, ModVillagerProfessions.copyToFastUtilMap(
             ImmutableMap.of(
                 1, new Factory[]{new BuyForOneEmeraldFactory(Items.COAL, 15, 16, 2), new BuyForOneEmeraldFactory(Items.CHARCOAL, 15, 16, 2), new BuyForOneEmeraldFactory(Items.FLINT, 24, 16, 2), 
                     new SellItemFactory(Items.STONE_SWORD, 1, 1, 1), 
                     new SellItemFactory(ModItems.STONE_SPEAR, 1, 1, 1), new SellItemFactory(ModItems.FLINT_SPEAR, 1, 1, 1), 
-                    new SellItemFactory(Items.STONE_AXE, 1, 1, 1)}, 
+                    new SellItemFactory(Items.STONE_AXE, 1, 1, 1), 
+                    new SellItemFactory(ModItems.WOODEN_SHIELD, 2, 1, 1)}, 
                 2, new Factory[]{new BuyForOneEmeraldFactory(Items.COPPER_INGOT, 8, 12, 10), 
                     new SellItemFactory(ModItems.COPPER_SWORD, 2, 1, 5), 
                     new SellItemFactory(ModItems.COPPER_SPEAR, 2, 1, 5), 
-                    new SellItemFactory(ModItems.COPPER_AXE, 2, 1, 5)}, 
+                    new SellItemFactory(ModItems.COPPER_AXE, 2, 1, 5), 
+                    new SellItemFactory(ModItems.COPPER_FRAMED_WOODEN_SHIELD, 3, 1, 5), new SellItemFactory(ModItems.COPPER_SHIELD, 4, 1, 5)}, 
                 3, new Factory[]{ new BuyForOneEmeraldFactory(Items.GOLD_INGOT, 2, 12, 20),  
                     new SellItemFactory(Items.GOLDEN_SWORD, 3, 1, 10), 
                     new SellItemFactory(ModItems.GOLDEN_SPEAR, 3, 1, 10), 
-                    new SellItemFactory(Items.GOLDEN_AXE, 3, 1, 10)}, 
-                4, new Factory[]{new BuyForOneEmeraldFactory(Items.IRON_INGOT, 4, 12, 20), new BuyForOneEmeraldFactory(Items.LAVA_BUCKET, 1, 12, 30), 
+                    new SellItemFactory(Items.GOLDEN_AXE, 3, 1, 10), 
+                    new SellItemFactory(ModItems.GOLD_FRAMED_WOODEN_SHIELD, 6, 1, 10), new SellItemFactory(ModItems.GOLDEN_SHIELD, 8, 1, 10)}, 
+                4, new Factory[]{new BuyForOneEmeraldFactory(Items.IRON_INGOT, 4, 12, 30), new BuyForOneEmeraldFactory(Items.LAVA_BUCKET, 1, 12, 30), 
                     new SellItemFactory(Items.IRON_SWORD, 3, 1, 15), 
                     new SellItemFactory(ModItems.IRON_SPEAR, 3, 1, 15), 
-                    new SellItemFactory(Items.IRON_AXE, 3, 1, 15)}, 
+                    new SellItemFactory(Items.IRON_AXE, 3, 1, 15), 
+                    new SellItemFactory(ModItems.IRON_FRAMED_WOODEN_SHIELD, 5, 1, 15), new SellItemFactory(ModItems.IRON_SHIELD, 12, 1, 15)}, 
                 5, new Factory[]{new BuyForOneEmeraldFactory(Items.DIAMOND, 1, 12, 30), 
                     new SellEnchantedToolFactory(Items.DIAMOND_SWORD, 17, 3, 15), 
                     new SellEnchantedToolFactory(ModItems.DIAMOND_SPEAR, 17, 3, 15), 
-                    new SellEnchantedToolFactory(Items.DIAMOND_AXE, 17, 3, 15)}
+                    new SellEnchantedToolFactory(Items.DIAMOND_AXE, 17, 3, 15), 
+                    new SellEnchantedToolFactory(ModItems.DIAMOND_SHIELD, 24, 3, 15)}
             )));
     }
 

@@ -82,21 +82,21 @@ public class ModItems {
         (Item)new SwordItem(ModToolMaterials.COPPER, 4, -2.3f, new FabricItemSettings()));
     
     public static final Item COPPER_SHOVEL = ModItems.registerItem("copper_shovel", 
-        (Item)new ShovelItem(ModToolMaterials.COPPER, 1.5f, -3.0f, new FabricItemSettings()));
+        (Item)new ShovelItem(ModToolMaterials.COPPER, 1.0f, -2.4f, new FabricItemSettings()));
     
     public static final Item COPPER_PICKAXE = ModItems.registerItem("copper_pickaxe", 
-        (Item)new PickaxeItem(ModToolMaterials.COPPER, 1, -2.8f, new FabricItemSettings()));
+        (Item)new PickaxeItem(ModToolMaterials.COPPER, 2, -2.6f, new FabricItemSettings()));
     
     public static final Item COPPER_AXE = ModItems.registerItem("copper_axe", 
         (Item)new AxeItem(ModToolMaterials.COPPER, 6.0f, -3.0f, new FabricItemSettings()));
     
     public static final Item COPPER_HOE = ModItems.registerItem("copper_hoe", 
-        (Item)HoeItemInvoker.invokeHoeItem(ModToolMaterials.COPPER, 0, -3.0f, new FabricItemSettings()));
+        (Item)HoeItemInvoker.invokeHoeItem(ModToolMaterials.COPPER, 2, -2.3f, new FabricItemSettings()));
 
 
     // Elder Guardian Spike
     public static final Item ELDER_GUARDIAN_SPIKE_SHARD = ModItems.registerItem("elder_guardian_spike_shard", 
-        new ElderGuardianSpikeShardItem(1, -1.0f, new FabricItemSettings().maxDamage(89)));
+        new ElderGuardianSpikeShardItem(1, -1.0f, new FabricItemSettings().maxDamage(104)));
 
     public static final Item ELDER_GUARDIAN_SPIKE_BONE_SHARD = ModItems.registerItem("elder_guardian_spike_bone_shard", 
         new Item(new FabricItemSettings()));
