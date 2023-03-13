@@ -56,7 +56,7 @@ public abstract class ItemsMixin {
         }
         else if (item instanceof AxeItem) {
             if  (idPath.matches("wooden_axe")) {
-                Item newAxeItem = (Item)new AxeItem(ToolMaterials.WOOD, 3.0f, -2.8f, new Item.Settings());
+                Item newAxeItem = (Item)new AxeItem(ToolMaterials.WOOD, 3.0f, -2.5f, new Item.Settings());
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, "wooden_axe", newAxeItem));
             }
             else if (idPath.matches("stone_axe")) {
@@ -86,7 +86,7 @@ public abstract class ItemsMixin {
         }
         else if (item instanceof PickaxeItem) {
             if  (idPath.matches("wooden_pickaxe")) {
-                Item newPickaxeItem = (Item)new PickaxeItem(ToolMaterials.WOOD, 2, -2.6f, new Item.Settings());
+                Item newPickaxeItem = (Item)new PickaxeItem(ToolMaterials.WOOD, 2, -2.4f, new Item.Settings());
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, "wooden_pickaxe", newPickaxeItem));
             }
             else if (idPath.matches("stone_pickaxe")) {
@@ -112,27 +112,27 @@ public abstract class ItemsMixin {
         }
         else if (item instanceof ShovelItem) {
             if  (idPath.matches("wooden_shovel")) {
-                Item newShovelItem = (Item)new ShovelItem(ToolMaterials.WOOD, 1.0f, -2.4f, new Item.Settings());
+                Item newShovelItem = (Item)new ShovelItem(ToolMaterials.WOOD, 1.0f, -2.3f, new Item.Settings());
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, "wooden_shovel", newShovelItem));
             }
             else if (idPath.matches("stone_shovel")) {
-                Item newShovelItem = (Item)new ShovelItem(ToolMaterials.STONE, 1.0f, -2.6f, new Item.Settings());
+                Item newShovelItem = (Item)new ShovelItem(ToolMaterials.STONE, 1.0f, -2.7f, new Item.Settings());
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, "stone_shovel", newShovelItem));
             }
             else if (idPath.matches("golden_shovel")) {
-                Item newShovelItem = (Item)new ShovelItem(ToolMaterials.GOLD, 1.0f, -2.4f, new Item.Settings());
+                Item newShovelItem = (Item)new ShovelItem(ToolMaterials.GOLD, 1.0f, -2.5f, new Item.Settings());
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, "golden_shovel", newShovelItem));
             }
             else if (idPath.matches("iron_shovel")) {
-                Item newShovelItem = (Item)new ShovelItem(ToolMaterials.IRON, 1.0f, -2.3f, new Item.Settings());
+                Item newShovelItem = (Item)new ShovelItem(ToolMaterials.IRON, 1.0f, -2.4f, new Item.Settings());
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, "iron_shovel", newShovelItem));
             }
             else if (idPath.matches("diamond_shovel")) {
-                Item newShovelItem = (Item)new ShovelItem(ToolMaterials.DIAMOND, 1.0f, -2.3f, new Item.Settings());
+                Item newShovelItem = (Item)new ShovelItem(ToolMaterials.DIAMOND, 1.0f, -2.4f, new Item.Settings());
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, "diamond_shovel", newShovelItem));
             }
             else if (idPath.matches("netherite_shovel")) {
-                Item newShovelItem = (Item)new ShovelItem(ToolMaterials.NETHERITE, 1.0f, -2.3f, new Item.Settings().fireproof());
+                Item newShovelItem = (Item)new ShovelItem(ToolMaterials.NETHERITE, 1.0f, -2.4f, new Item.Settings().fireproof());
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, "netherite_shovel", newShovelItem));
             }
         }
