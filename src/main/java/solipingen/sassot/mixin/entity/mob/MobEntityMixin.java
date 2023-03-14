@@ -33,29 +33,29 @@ public abstract class MobEntityMixin extends LivingEntity {
     private void redirectedDisableShield(MobEntity mobEntity, PlayerEntity playerEntity, ItemStack mobStack, ItemStack playerStack) {
         if (this.disablesShield()) {
             float amount = (float)this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-            amount += EnchantmentHelper.getAttackDamage(this.getMainHandStack(), playerEntity.getGroup());
-            if (!(this.activeItemStack.getItem() instanceof ShieldItem)) {
+            amount += EnchantmentHelper.getAttackDamage(mobStack, playerEntity.getGroup());
+            if (!(playerStack.getItem() instanceof ShieldItem)) {
                 return;
             }
             if (!this.world.isClient) {
-                ((PlayerEntity)(Object)this).incrementStat(Stats.USED.getOrCreateStat(this.activeItemStack.getItem()));
+                playerEntity.incrementStat(Stats.USED.getOrCreateStat(playerStack.getItem()));
             }
-            int unyieldingLevel = EnchantmentHelper.getLevel(ModEnchantments.UNYIELDING, this.activeItemStack);
-            if (this.activeItemStack.getItem() instanceof ModShieldItem && amount >= ((ModShieldItem)this.activeItemStack.getItem()).getMinDamageToBreak()) {
+            int unyieldingLevel = EnchantmentHelper.getLevel(ModEnchantments.UNYIELDING, playerStack);
+            if (playerStack.getItem() instanceof ModShieldItem && amount >= ((ModShieldItem)playerStack.getItem()).getMinDamageToBreak()) {
                 int i = 1 + MathHelper.floor((1.0f - 0.25f*unyieldingLevel)*amount);
-                Hand hand = this.getActiveHand();
-                this.activeItemStack.damage(i, this, player -> player.sendToolBreakStatus(hand));
+                Hand hand = playerEntity.getActiveHand();
+                playerStack.damage(i, this, player -> player.sendToolBreakStatus(hand));
             }
-            if (this.activeItemStack.isEmpty()) {
+            if (playerStack.isEmpty()) {
                 Hand hand = this.getActiveHand();
                 if (hand == Hand.MAIN_HAND) {
-                    this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                    playerEntity.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
                 } 
                 else {
-                    this.equipStack(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
+                    playerEntity.equipStack(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
                 }
-                this.activeItemStack = ItemStack.EMPTY;
-                this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8f, 0.8f + this.world.random.nextFloat() * 0.4f);
+                playerStack = ItemStack.EMPTY;
+                playerEntity.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8f, 0.8f + this.world.random.nextFloat() * 0.4f);
             }
         }
     }

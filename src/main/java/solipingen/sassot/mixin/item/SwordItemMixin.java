@@ -30,12 +30,12 @@ public abstract class SwordItemMixin extends ToolItem implements Vanishable {
 
     @ModifyConstant(method = "getMiningSpeedMultiplier", constant = @Constant(floatValue = 15.0f))
     private float modifiedCobwebMiningSpeedMultiplier(float originalf) {
-        return 20.0f;
+        return 25.0f;
     }
 
     @ModifyConstant(method = "getMiningSpeedMultiplier", constant = @Constant(floatValue = 1.5f))
     private float modifiedPlantMiningSpeedMultiplier(float originalf) {
-        return 2.0f;
+        return 3.0f;
     }
 
     @Redirect(method = "postMine", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V"))
