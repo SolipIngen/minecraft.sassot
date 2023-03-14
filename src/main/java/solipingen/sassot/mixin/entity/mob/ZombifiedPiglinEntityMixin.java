@@ -28,11 +28,32 @@ public abstract class ZombifiedPiglinEntityMixin extends ZombieEntity implements
 
     @Inject(method = "initEquipment", at = @At("TAIL"))
     private void injectedInitEquipment(Random random, LocalDifficulty localDifficulty, CallbackInfo cbi) {
-        if (random.nextInt(3) == 0) {
-            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOLDEN_SPEAR));
+        if (this.random.nextFloat() < 0.33f) {
+            float spearRandomf = this.random.nextFloat()*this.world.getDifficulty().getId() + 0.1f*this.world.getLocalDifficulty(this.getBlockPos()).getClampedLocalDifficulty();
+            if (spearRandomf < 0.15f) {
+                this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.WOODEN_SPEAR));
+            }
+            else if (spearRandomf >= 0.15f && spearRandomf < 0.25f) {
+                this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.STONE_SPEAR));
+            }
+            else if (spearRandomf >= 0.25f && spearRandomf < 0.5f) {
+                this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.FLINT_SPEAR));
+            }
+            else {
+                this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOLDEN_SPEAR));
+            }
         }
         else {
-            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
+            float swordRandomf = this.random.nextFloat()*this.world.getDifficulty().getId() + 0.1f*this.world.getLocalDifficulty(this.getBlockPos()).getClampedLocalDifficulty();
+            if (swordRandomf < 0.15f) {
+                this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.WOODEN_SWORD));
+            }
+            else if (swordRandomf >= 0.15f && swordRandomf < 0.5f) {
+                this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
+            }
+            else {
+                this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
+            }
         }
     }
 

@@ -210,13 +210,13 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
             BlockPos inBlockPos = blockHitResult.getBlockPos();
             float strength = this.damageAmount*MathHelper.square(blockImpactFactor);
             int blocksBroken = 0;
-            Iterable<BlockPos> blockPosList = BlockPos.iterateOutwards(inBlockPos, 7 + (int)Math.ceil(blockImpactFactor), 7 + MathHelper.ceil(blockImpactFactor), 7 + MathHelper.ceil(blockImpactFactor));
+            Iterable<BlockPos> blockPosList = BlockPos.iterateOutwards(inBlockPos, 7 + MathHelper.ceil(blockImpactFactor), 7 + MathHelper.ceil(blockImpactFactor), 7 + MathHelper.ceil(blockImpactFactor));
             for (BlockPos currentBlockPos : blockPosList) {
                 double currentSquaredDistance = currentBlockPos.getSquaredDistance(inBlockPos);
-                if (currentSquaredDistance > 64.0) continue;
+                if (currentSquaredDistance > MathHelper.square(7.0 + Math.ceil(blockImpactFactor))) continue;
                 BlockState blockState = this.world.getBlockState(currentBlockPos);
-                float blockStrength = (float)Math.pow(Math.max(blockState.getBlock().getBlastResistance(), 1.0f + 0.1f*this.random.nextFloat()), -(float)Math.sqrt(currentSquaredDistance))*strength;
-                if (blockState.getBlock().getBlastResistance() < blockStrength/MathHelper.square(1.0f + (float)Math.sqrt(currentSquaredDistance)/8.0f)) {
+                float strengthOnBlock = (float)Math.pow(Math.max(blockState.getBlock().getBlastResistance(), 1.0f + 0.1f*this.random.nextFloat()), -(float)Math.sqrt(currentSquaredDistance))*strength;
+                if (blockState.getBlock().getBlastResistance() < strengthOnBlock/MathHelper.square(1.0f + (float)Math.sqrt(currentSquaredDistance)/7.0f)) {
                     if (blockState.isOf(Blocks.INFESTED_STONE)) {
                         this.world.setBlockState(currentBlockPos, Blocks.STONE.getDefaultState());
                         this.world.playSound(null, currentBlockPos, SoundEvents.ENTITY_SILVERFISH_DEATH, SoundCategory.HOSTILE);
@@ -247,7 +247,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
                     }
                     this.world.breakBlock(currentBlockPos, this.random.nextInt(3) == 0);
                     blocksBroken++;
-                    if (this.getOwner() != null && this.getOwner() instanceof ServerPlayerEntity && this.random.nextInt(blocksBroken) == 0) {
+                    if (this.getOwner() != null && this.getOwner() instanceof ServerPlayerEntity && this.random.nextInt(blocksBroken) <= 1) {
                         this.spearStack.damage(1, this.random, (ServerPlayerEntity)this.getOwner());
                     }
                     if (!this.brokeBlock) {
@@ -257,13 +257,15 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
                 Entity attacker = this.getOwner() != null ? this.getOwner() : this;
                 List<Entity> entityList = this.world.getOtherEntities(this, new Box(currentBlockPos).expand(1.0));
                 for (Entity entity : entityList) {
+                    float knockbackStrength = 0.125f*strengthOnBlock/MathHelper.square(1.0f + entity.distanceTo(this)/7.0f);
+                    Vec3d diffVecNorm = entity.getPos().subtract(this.getPos()).normalize();
                     if (entity instanceof LivingEntity && (entity.isOnGround() || entity.isInsideWall() || ((LivingEntity)entity).isClimbing()) && !(entity instanceof PlayerEntity && ((PlayerEntity)entity).isCreative())) {
                         LivingEntity livingEntity = (LivingEntity)entity;
-                        livingEntity.damage(DamageSource.explosion(this, attacker), strength/MathHelper.square(1.0f + livingEntity.distanceTo(this)/8.0f));
-                        livingEntity.setVelocity(livingEntity.getVelocity().x, 0.125*(1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*strength/MathHelper.square(1.0f + entity.distanceTo(this)/8.0f), livingEntity.getVelocity().z);
+                        livingEntity.damage(DamageSource.explosion(this, attacker), strengthOnBlock/MathHelper.square(1.0f + livingEntity.distanceTo(this)/7.0f));
+                        livingEntity.addVelocity(0.1*(1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*knockbackStrength*diffVecNorm.getX(), 0.2*(1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*knockbackStrength*diffVecNorm.getY(), 0.1*(1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*knockbackStrength*diffVecNorm.getZ());
                     }
-                    else if (!(entity instanceof LivingEntity) && (entity.isOnGround() || entity.isInsideWall())) {
-                        entity.setVelocity(entity.getVelocity().x, 0.125*strength/MathHelper.square(1.0f + entity.distanceTo(this)/8.0f), entity.getVelocity().z);
+                    if (!(entity instanceof LivingEntity) && (entity.isOnGround() || entity.isInsideWall())) {
+                        entity.addVelocity(0.1*knockbackStrength*diffVecNorm.getX(), 0.2*knockbackStrength*diffVecNorm.getY(), 0.1*knockbackStrength*diffVecNorm.getZ());
                     }
                 }
                 if (!this.world.isClient && !this.isNoClip() && this.isInsideWall()) {
