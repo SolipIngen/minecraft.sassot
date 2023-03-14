@@ -41,29 +41,6 @@ public class ModVillagerProfessions {
     public static final PointOfInterestType SPEARMAN_MARKER_POI = ModVillagerProfessions.registerPOI("spearman_marker_poi", ModBlocks.SPEARMAN_MARKER);
 
 
-    private static VillagerProfession registerVillagerProfession(String name, RegistryKey<PointOfInterestType> poiType, @Nullable ImmutableSet<Item> gatherableItems, @Nullable ImmutableSet<Block> secondaryJobSites, @Nullable SoundEvent workSound) {
-        ImmutableSet<Item> gatherableItemsSet = ImmutableSet.of();
-        if (gatherableItems != null) {
-            gatherableItemsSet = gatherableItems;
-        }
-        ImmutableSet<Block> secondaryJobSitesSet = ImmutableSet.of();
-        if (secondaryJobSites != null) {
-            secondaryJobSitesSet = secondaryJobSites;
-        }
-        return Registry.register(Registries.VILLAGER_PROFESSION, new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, name),
-            new VillagerProfession(name, entry -> entry.matchesKey(poiType), entry -> entry.matchesKey(poiType), gatherableItemsSet, secondaryJobSitesSet, workSound));
-    }
-
-    private static PointOfInterestType registerPOI(String name, Block block) {
-        return PointOfInterestHelper.register(new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, name),
-            1, 1, ImmutableSet.copyOf(block.getStateManager().getStates()));
-    }
-
-    public static void registerModVillagerProfessions() {
-        SpearsAxesSwordsShieldsAndOtherTools.LOGGER.debug("Registering Villagers for " + SpearsAxesSwordsShieldsAndOtherTools.MOD_ID);
-    }
-
-
     // Trade Offer Replacements
     public static void replaceToolsmithProfessionToLeveledTrade(Map<VillagerProfession, Int2ObjectMap<Factory[]>> originalTradeOffers) {
         originalTradeOffers.replace(VillagerProfession.TOOLSMITH, ModVillagerProfessions.copyToFastUtilMap(
@@ -126,6 +103,28 @@ public class ModVillagerProfessions {
                     new SellEnchantedToolFactory(Items.DIAMOND_AXE, 17, 3, 15), 
                     new SellEnchantedToolFactory(ModItems.DIAMOND_SHIELD, 24, 3, 15)}
             )));
+    }
+
+    private static VillagerProfession registerVillagerProfession(String name, RegistryKey<PointOfInterestType> poiType, @Nullable ImmutableSet<Item> gatherableItems, @Nullable ImmutableSet<Block> secondaryJobSites, @Nullable SoundEvent workSound) {
+        ImmutableSet<Item> gatherableItemsSet = ImmutableSet.of();
+        if (gatherableItems != null) {
+            gatherableItemsSet = gatherableItems;
+        }
+        ImmutableSet<Block> secondaryJobSitesSet = ImmutableSet.of();
+        if (secondaryJobSites != null) {
+            secondaryJobSitesSet = secondaryJobSites;
+        }
+        return Registry.register(Registries.VILLAGER_PROFESSION, new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, name),
+            new VillagerProfession(name, entry -> entry.matchesKey(poiType), entry -> entry.matchesKey(poiType), gatherableItemsSet, secondaryJobSitesSet, workSound));
+    }
+
+    private static PointOfInterestType registerPOI(String name, Block block) {
+        return PointOfInterestHelper.register(new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, name),
+            1, 1, ImmutableSet.copyOf(block.getStateManager().getStates()));
+    }
+
+    public static void registerModVillagerProfessions() {
+        SpearsAxesSwordsShieldsAndOtherTools.LOGGER.debug("Registering Villagers for " + SpearsAxesSwordsShieldsAndOtherTools.MOD_ID);
     }
 
     private static Int2ObjectMap<Factory[]> copyToFastUtilMap(ImmutableMap<Integer, Factory[]> map) {

@@ -49,7 +49,7 @@ public abstract class WitherSkeletonEntityMixin extends AbstractSkeletonEntity i
 
     @Inject(method = "initEquipment", at = @At("TAIL"))
     private void injectedInitEquipment(Random random, LocalDifficulty localDifficulty, CallbackInfo cbi) {
-        if (random.nextFloat() < 0.005f*(this.world.getDifficulty().getId() + localDifficulty.getClampedLocalDifficulty())) {
+        if (random.nextFloat() < 0.004f*(this.world.getDifficulty().getId() + localDifficulty.getClampedLocalDifficulty())) {
             this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.BLAZEARM));
         }
         else if (random.nextFloat() >= 0.01f*(this.world.getDifficulty().getId() + localDifficulty.getClampedLocalDifficulty()) && random.nextFloat() < 0.4f + 0.02f*(this.world.getDifficulty().getId() + localDifficulty.getClampedLocalDifficulty())) {

@@ -46,8 +46,11 @@ public abstract class PiglinEntityMixin extends AbstractPiglinEntity implements 
     private Item redirectedMakeInitialWeapon() {
         if (this.random.nextFloat() < 0.33f) {
             float spearRandomf = this.random.nextFloat()*this.world.getDifficulty().getId() + 0.1f*this.world.getLocalDifficulty(this.getBlockPos()).getClampedLocalDifficulty();
-            if (spearRandomf < 0.25f) {
+            if (spearRandomf < 0.15f) {
                 return ModItems.WOODEN_SPEAR;
+            }
+            else if (spearRandomf >= 0.15f && spearRandomf < 0.25f) {
+                return ModItems.STONE_SPEAR;
             }
             else if (spearRandomf >= 0.25f && spearRandomf < 0.5f) {
                 return ModItems.FLINT_SPEAR;
@@ -56,10 +59,10 @@ public abstract class PiglinEntityMixin extends AbstractPiglinEntity implements 
         }
         else {
             float swordRandomf = this.random.nextFloat()*this.world.getDifficulty().getId() + 0.1f*this.world.getLocalDifficulty(this.getBlockPos()).getClampedLocalDifficulty();
-            if (swordRandomf < 0.25f) {
+            if (swordRandomf < 0.15f) {
                 return Items.WOODEN_SWORD;
             }
-            else if (swordRandomf >= 0.25f && swordRandomf < 0.5f) {
+            else if (swordRandomf >= 0.15f && swordRandomf < 0.5f) {
                 return Items.STONE_SWORD;
             }
             return Items.GOLDEN_SWORD;
