@@ -1,0 +1,62 @@
+{
+    "parent": "sassot:adventure/obtain_echo_shard",
+    "criteria": {
+      "deflected_magic": {
+        "conditions": {
+          "damage": {
+            "type": {
+              "tags": [
+                {
+                  "expected": true,
+                  "id": "minecraft:bypasses_armor"
+                }
+              ]
+            },
+            "blocked": true
+          }
+        },
+        "trigger": "minecraft:entity_hurt_player"
+      }, 
+      "deflected_sonic_boom": {
+        "conditions": {
+          "damage": {
+            "type": {
+              "tags": [
+                {
+                  "expected": true,
+                  "id": "minecraft:bypasses_enchantments"
+                }
+              ]
+            },
+            "blocked": true
+          }
+        },
+        "trigger": "minecraft:entity_hurt_player"
+      }
+    }, 
+    "display": {
+      "announce_to_chat": true,
+      "description": {
+        "translate": "advancements.adventure.echo_reverse.description"
+      },
+      "frame": "challenge",
+      "hidden": false,
+      "icon": {
+        "item": "sassot:diamond_shield",
+        "nbt": "{Damage:0,Enchantments:[{sassot:echoing,lvl:3}]}"
+      },
+      "show_toast": true,
+      "title": {
+        "translate": "advancements.adventure.echo_reverse.title"
+      }
+    },
+    "requirements": [
+      [
+        "deflected_magic", 
+        "deflected_sonic_boom"
+      ]
+    ], 
+    "rewards" : {
+        "experience": 60
+    }
+}

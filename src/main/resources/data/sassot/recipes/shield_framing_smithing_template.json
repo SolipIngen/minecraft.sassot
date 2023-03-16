@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+      "o": {
+        "tag": "minecraft:planks"
+      }, 
+      "#": {
+        "item": "sassot:wooden_shield"
+      }
+    },
+    "pattern": [
+      "ooo",
+      "o#o",
+      "ooo"
+    ],
+    "result": {
+      "item": "sassot:shield_framing_smithing_template"
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "parent": "minecraft:adventure/kill_mob_near_sculk_catalyst",
+    "criteria": {
+      "echo_shard": {
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "minecraft:echo_shard"
+              ]
+            }
+          ]
+        },
+        "trigger": "minecraft:inventory_changed"
+      }
+    },
+    "display": {
+      "announce_to_chat": true,
+      "description": {
+        "translate": "advancements.adventure.obtain_echo_shard.description"
+      },
+      "frame": "goal",
+      "hidden": false,
+      "icon": {
+        "item": "minecraft:echo_shard"
+      },
+      "show_toast": true,
+      "title": {
+        "translate": "advancements.adventure.obtain_echo_shard.title"
+      }
+    },
+    "requirements": [
+      [
+        "echo_shard"
+      ]
+    ]
+  }
