@@ -31,6 +31,7 @@ public class SpearsAxesSwordsShieldsAndOtherTools implements ModInitializer {
 		ModCriteria.registerModCriteria();
 		ModEnchantments.registerModEnchantments();
 		ModEntityTypes.registerModEntityTypes();
+		ModItems.replaceVanillaItems();
 		ModItems.registerModItems();
 		ModItemGroups.registerModItemsToVanillaGroups();
 		ModRecipes.registerModRecipes();
