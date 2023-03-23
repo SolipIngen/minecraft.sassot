@@ -432,8 +432,8 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
     @Override
     public void setAngryAt(@Nullable UUID angryAt) {
         VillagerProfession profession = this.getVillagerData().getProfession();
-        if (this.world instanceof ServerWorld && angryAt != null && (profession == ModVillagerProfessions.SWORDSMAN || profession == ModVillagerProfessions.SPEARMAN)) {
-            if (this.getAngryAt() == angryAt) return;
+        if (this.world instanceof ServerWorld && (profession == ModVillagerProfessions.SWORDSMAN || profession == ModVillagerProfessions.SPEARMAN)) {
+            if (angryAt != null && this.getAngryAt() == angryAt) return;
             this.angryAt = angryAt;
             ((VillagerEntity)(Object)this).reinitializeBrain((ServerWorld)this.world);
         }
