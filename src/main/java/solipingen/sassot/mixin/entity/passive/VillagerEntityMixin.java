@@ -436,7 +436,6 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
             if (this.getAngryAt() == angryAt) return;
             this.angryAt = angryAt;
             ((VillagerEntity)(Object)this).reinitializeBrain((ServerWorld)this.world);
-            this.playSound(SoundEvents.ENTITY_VILLAGER_NO, this.getSoundVolume(), this.getSoundPitch());
         }
     }
 
@@ -485,6 +484,9 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
             super.start();
             this.villager.setAttacking(true);
             this.villager.setCurrentHand(Hand.MAIN_HAND);
+            if (this.villager.world instanceof ServerWorld) {
+                this.villager.playSound(SoundEvents.ENTITY_VILLAGER_NO, 1.0f, this.villager.getSoundPitch());
+            }
         }
 
         @Override
@@ -505,8 +507,19 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
     }
 
     class VillagerMeleeAttackGoal extends MeleeAttackGoal {
+        private final VillagerEntity villager;
+
         public VillagerMeleeAttackGoal(VillagerEntity villager) {
             super(villager, 0.67, false);
+            this.villager = villager;
+        }
+
+        @Override
+        public void start() {
+            super.start();
+            if (this.villager.world instanceof ServerWorld) {
+                this.villager.playSound(SoundEvents.ENTITY_VILLAGER_NO, 1.0f, this.villager.getSoundPitch());
+            }
         }
 
         @Override
