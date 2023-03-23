@@ -244,8 +244,11 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
         int deflectionLevel = EnchantmentHelper.getLevel(ModEnchantments.PROJECTILE_DEFLECTION, activeStack);
         if (((LivingEntity)(Object)this).isBlocking() && vec3d != null) {
             if (shockReboundLevel > 0 && entity != null && entity instanceof LivingEntity) {
-                ((LivingEntity)entity).damage(this.getDamageSources().thorns(this), 0.1f*shockReboundLevel*amount);
-                ((LivingEntity)entity).takeKnockback(0.02*shockReboundLevel*amount, this.getX() - entity.getX(), this.getX() - entity.getX());
+                LivingEntity livingEntity = (LivingEntity)entity;
+                float knockbackResistance = (float)livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE);
+                float reboundDamage = livingEntity.disablesShield() ? 0.2f*shockReboundLevel*amount : 0.2f*shockReboundLevel*amount*knockbackResistance;
+                livingEntity.damage(this.getDamageSources().thorns(this), reboundDamage);
+                livingEntity.takeKnockback(0.04*shockReboundLevel*amount, this.getX() - entity.getX(), this.getX() - entity.getX());
             }
             if (deflectionLevel > 0 && entity != null && entity instanceof ProjectileEntity) {
                 Vec3d initialVelocity = entity.getVelocity();
