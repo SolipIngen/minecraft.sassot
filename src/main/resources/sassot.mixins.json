@@ -37,6 +37,7 @@
     "entity.EntityMixin", 
     "entity.LivingEntityMixin", 
     "item.accessors.HoeItemInvoker", 
+    "item.ItemsMixin", 
     "item.ItemStackMixin", 
     "item.MiningToolItemMixin", 
     "item.ShieldItemMixin", 

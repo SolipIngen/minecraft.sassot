@@ -2,13 +2,11 @@ package solipingen.sassot.item;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.AxeItem;
-import net.minecraft.item.HoeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ShovelItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterials;
-import net.minecraft.item.TridentItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -108,149 +106,6 @@ public class ModItems {
     public static final Item ELDER_GUARDIAN_SPIKE_BONE_SHARD = ModItems.registerItem("elder_guardian_spike_bone_shard", 
         new Item(new FabricItemSettings()));
 
-    
-    // Replace Vanilla Items with Mod Versions
-    public static void replaceVanillaItems() {
-        for (Item item : Registries.ITEM) {
-            String name = item.getTranslationKey().substring(item.getTranslationKey().lastIndexOf(".") + 1);
-            int rawId = Registries.ITEM.getRawId(item);
-            if (item instanceof SwordItem) {
-                if (name.matches("wooden_sword")) {
-                    Item newSwordItem = (Item)new SwordItem(ToolMaterials.WOOD, 2, -1.8f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newSwordItem);
-                }
-                else if (name.matches("stone_sword")) {
-                    Item newSwordItem = (Item)new SwordItem(ToolMaterials.STONE, 3, -2.4f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newSwordItem);
-                }
-                else if (name.matches("golden_sword")) {
-                    Item newSwordItem = (Item)new SwordItem(ToolMaterials.GOLD, 4, -2.3f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newSwordItem);
-                }
-                else if (name.matches("iron_sword")) {
-                    Item newSwordItem = (Item)new SwordItem(ToolMaterials.IRON, 5, -2.2f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newSwordItem);
-                }
-                else if (name.matches("diamond_sword")) {
-                    Item newSwordItem = (Item)new SwordItem(ToolMaterials.DIAMOND, 6, -2.0f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newSwordItem);
-                }
-                else if (name.matches("netherite_sword")) {
-                    Item newSwordItem = (Item)new SwordItem(ToolMaterials.NETHERITE, 6, -1.9f, new Item.Settings().fireproof());
-                    Registry.register(Registries.ITEM, rawId, name, newSwordItem);
-                }
-            }
-            else if (item instanceof AxeItem) {
-                if  (name.matches("wooden_axe")) {
-                    Item newAxeItem = (Item)new AxeItem(ToolMaterials.WOOD, 3.0f, -2.5f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newAxeItem);
-                }
-                else if (name.matches("stone_axe")) {
-                    Item newAxeItem = (Item)new AxeItem(ToolMaterials.STONE, 5.0f, -3.2f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newAxeItem);
-                }
-                else if (name.matches("golden_axe")) {
-                    Item newAxeItem = (Item)new AxeItem(ToolMaterials.GOLD, 6.0f, -3.0f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newAxeItem);
-                }
-                else if (name.matches("iron_axe")) {
-                    Item newAxeItem = (Item)new AxeItem(ToolMaterials.IRON, 7.0f, -2.9f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newAxeItem);
-                }
-                else if (name.matches("diamond_axe")) {
-                    Item newAxeItem = (Item)new AxeItem(ToolMaterials.DIAMOND, 8.0f, -2.7f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newAxeItem);
-                }
-                else if (name.matches("netherite_axe")) {
-                    Item newAxeItem = (Item)new AxeItem(ToolMaterials.NETHERITE, 8.0f, -2.6f, new Item.Settings().fireproof());
-                    Registry.register(Registries.ITEM, rawId, name, newAxeItem);
-                }
-            }
-            else if (item instanceof TridentItem) {
-                Item newTridentItem = (Item)new TridentItem(new Item.Settings().maxDamage(1095));
-                Registry.register(Registries.ITEM, rawId, name, newTridentItem);
-            }
-            else if (item instanceof PickaxeItem) {
-                if  (name.matches("wooden_pickaxe")) {
-                    Item newPickaxeItem = (Item)new PickaxeItem(ToolMaterials.WOOD, 2, -2.4f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newPickaxeItem);
-                }
-                else if (name.matches("stone_pickaxe")) {
-                    Item newPickaxeItem = (Item)new PickaxeItem(ToolMaterials.STONE, 2, -2.8f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newPickaxeItem);
-                }
-                else if (name.matches("golden_pickaxe")) {
-                    Item newPickaxeItem = (Item)new PickaxeItem(ToolMaterials.GOLD, 2, -2.6f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newPickaxeItem);
-                }
-                else if (name.matches("iron_pickaxe")) {
-                    Item newPickaxeItem = (Item)new PickaxeItem(ToolMaterials.IRON, 2, -2.5f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newPickaxeItem);
-                }
-                else if (name.matches("diamond_pickaxe")) {
-                    Item newPickaxeItem = (Item)new PickaxeItem(ToolMaterials.DIAMOND, 2, -2.5f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newPickaxeItem);
-                }
-                else if (name.matches("netherite_pickaxe")) {
-                    Item newPickaxeItem = (Item)new PickaxeItem(ToolMaterials.NETHERITE, 2, -2.5f, new Item.Settings().fireproof());
-                    Registry.register(Registries.ITEM, rawId, name, newPickaxeItem);
-                }
-            }
-            else if (item instanceof ShovelItem) {
-                if  (name.matches("wooden_shovel")) {
-                    Item newShovelItem = (Item)new ShovelItem(ToolMaterials.WOOD, 1.0f, -2.3f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newShovelItem);
-                }
-                else if (name.matches("stone_shovel")) {
-                    Item newShovelItem = (Item)new ShovelItem(ToolMaterials.STONE, 1.0f, -2.7f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newShovelItem);
-                }
-                else if (name.matches("golden_shovel")) {
-                    Item newShovelItem = (Item)new ShovelItem(ToolMaterials.GOLD, 1.0f, -2.5f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newShovelItem);
-                }
-                else if (name.matches("iron_shovel")) {
-                    Item newShovelItem = (Item)new ShovelItem(ToolMaterials.IRON, 1.0f, -2.4f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newShovelItem);
-                }
-                else if (name.matches("diamond_shovel")) {
-                    Item newShovelItem = (Item)new ShovelItem(ToolMaterials.DIAMOND, 1.0f, -2.4f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newShovelItem);
-                }
-                else if (name.matches("netherite_shovel")) {
-                    Item newShovelItem = (Item)new ShovelItem(ToolMaterials.NETHERITE, 1.0f, -2.4f, new Item.Settings().fireproof());
-                    Registry.register(Registries.ITEM, rawId, name, newShovelItem);
-                }
-            }
-            else if (item instanceof HoeItem) {
-                if  (name.matches("wooden_hoe")) {
-                    Item newHoeItem = (Item)HoeItemInvoker.invokeHoeItem(ToolMaterials.WOOD, 2, -2.2f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newHoeItem);
-                }
-                else if (name.matches("stone_hoe")) {
-                    Item newHoeItem = (Item)HoeItemInvoker.invokeHoeItem(ToolMaterials.STONE, 2, -2.4f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newHoeItem);
-                }
-                else if (name.matches("golden_hoe")) {
-                    Item newHoeItem = (Item)HoeItemInvoker.invokeHoeItem(ToolMaterials.GOLD, 2, -2.3f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newHoeItem);
-                }
-                else if (name.matches("iron_hoe")) {
-                    Item newHoeItem = (Item)HoeItemInvoker.invokeHoeItem(ToolMaterials.IRON, 2, -2.3f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newHoeItem);
-                }
-                else if (name.matches("diamond_hoe")) {
-                    Item newHoeItem = (Item)HoeItemInvoker.invokeHoeItem(ToolMaterials.DIAMOND, 2, -2.3f, new Item.Settings());
-                    Registry.register(Registries.ITEM, rawId, name, newHoeItem);
-                }
-                else if (name.matches("netherite_hoe")) {
-                    Item newHoeItem = (Item)HoeItemInvoker.invokeHoeItem(ToolMaterials.NETHERITE, 2, -2.3f, new Item.Settings().fireproof());
-                    Registry.register(Registries.ITEM, rawId, name, newHoeItem);
-                }
-            }
-        }
-        SpearsAxesSwordsShieldsAndOtherTools.LOGGER.debug("Replacing Vanilla Items for " + SpearsAxesSwordsShieldsAndOtherTools.MOD_ID);
-    }
 
     // Registering Methods
     private static Item registerItem(String name, Item item) {
