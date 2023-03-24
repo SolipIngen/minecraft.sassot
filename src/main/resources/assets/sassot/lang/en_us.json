@@ -3,6 +3,7 @@
     "language.region": "United States",
     "language.code": "en_us",
 
+    "block.sassot.echo_crystal_block": "Echo Crystal Block", 
     "block.sassot.echo_crystal_cluster": "Echo Crystal Cluster", 
     "block.sassot.large_echo_crystal_bud": "Large Echo Crystal Bud", 
     "block.sassot.medium_echo_crystal_bud": "Medium Echo Crystal Bud", 

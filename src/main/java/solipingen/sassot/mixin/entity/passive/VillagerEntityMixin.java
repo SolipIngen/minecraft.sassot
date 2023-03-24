@@ -355,7 +355,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
                     int weaponsmithLevel = villager.getVillagerData().getLevel();
                     int materialLevel = swordItem.getMaterial().getMiningLevel();
                     if (materialLevel < level) {
-                        if (level == 1 && weaponsmithLevel >= 1) {
+                        if (level >= 1 && weaponsmithLevel >= 1) {
                             this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
                         }
                     }
@@ -385,7 +385,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
                     int weaponsmithLevel = villager.getVillagerData().getLevel();
                     int materialLevel = spearItem.getMaterial().getMiningLevel();
                     if (materialLevel < level) {
-                        if (level == 1 && weaponsmithLevel >= 1) {
+                        if (level >= 1 && weaponsmithLevel >= 1) {
                             int randomInt = this.random.nextInt(3);
                             this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.STONE_SPEAR));
                             if (randomInt == 0) {
@@ -394,18 +394,18 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
                         }
                     }
                     if (materialLevel < level - 1) {
-                        if (level == 2 && weaponsmithLevel >= 2) {
+                        if (level >= 2 && weaponsmithLevel >= 2) {
                             this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.COPPER_SPEAR));
                         }
-                        if (level == 3 && weaponsmithLevel >= 3) {
+                        if (level >= 3 && weaponsmithLevel >= 3) {
                             this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOLDEN_SPEAR));
                         }
                     }
                     if (materialLevel < level - 2) {
-                        if (level == 4 && weaponsmithLevel >= 4) {
+                        if (level >= 4 && weaponsmithLevel >= 4) {
                             this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.IRON_SPEAR));
                         }
-                        if (level == 5 && weaponsmithLevel == 5) {
+                        if (level >= 5 && weaponsmithLevel >= 5) {
                             this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.DIAMOND_SPEAR));
                         }
                     }
