@@ -209,7 +209,6 @@ public class BlazearmEntity extends PersistentProjectileEntity {
 
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
-        super.onBlockHit(blockHitResult);
         if (this.world.isClient || this.isWet()) return;
         float impactSpeed = (float)this.getVelocity().length();
         BlockPos inBlockPos = blockHitResult.getBlockPos();
@@ -408,6 +407,7 @@ public class BlazearmEntity extends PersistentProjectileEntity {
                 this.playSound(SoundEvents.ITEM_FIRECHARGE_USE, 0.8f, this.world.getRandom().nextFloat() * 0.4f + 0.8f);
             }
         }
+        super.onBlockHit(blockHitResult);
     }
 
     public boolean hasSkewering() {
@@ -470,7 +470,7 @@ public class BlazearmEntity extends PersistentProjectileEntity {
             super.age();
         }
         else if (this.pickupType == PersistentProjectileEntity.PickupPermission.ALLOWED || (i > 0 && this.inGround)) {
-            if (this.random.nextInt((int)i) == 0) {
+            if (this.random.nextInt((int)i + 1) == 0) {
                 super.age();
             }
         }

@@ -95,17 +95,17 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntity impl
 
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
-        super.onBlockHit(blockHitResult);
         Entity entity2 = this.getOwner() != null ? this.getOwner() : this;
-        BlockPos blockPos;
-        LightningEntity lightningEntity;
-        if (this.world instanceof ServerWorld && this.world.isRaining() && ((TridentEntity)(Object)this).hasChanneling() && this.world.isSkyVisible(blockPos = this.getBlockPos()) && (lightningEntity = EntityType.LIGHTNING_BOLT.create(this.world)) != null) {
+        BlockPos blockPos = this.getBlockPos();
+        LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(this.world);
+        if (this.world instanceof ServerWorld && this.world.isRaining() && ((TridentEntity)(Object)this).hasChanneling() && this.world.isSkyVisible(blockPos) && lightningEntity != null) {
             this.world.setThunderGradient(1.0f);
             lightningEntity.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(blockPos));
             lightningEntity.setChanneler(entity2 instanceof ServerPlayerEntity ? (ServerPlayerEntity)entity2 : null);
             this.world.spawnEntity(lightningEntity);
             this.playSound(SoundEvents.ITEM_TRIDENT_THUNDER, 5.0f, 1.0f);
         }
+        super.onBlockHit(blockHitResult);
     }
 
     @ModifyVariable(method = "onEntityHit", at = @At("STORE"), ordinal = 0)
@@ -200,7 +200,7 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntity impl
     private void injectedAge(CallbackInfo cbi) {
         byte i = this.dataTracker.get(LOYALTY);
         if (this.pickupType == PersistentProjectileEntity.PickupPermission.ALLOWED || (i > 0 && this.inGround)) {
-            if (this.random.nextInt((int)i) == 0) {
+            if (this.random.nextInt((int)i + 1) == 0) {
                 super.age();
             }
         }

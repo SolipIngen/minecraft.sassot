@@ -51,7 +51,7 @@ import solipingen.sassot.util.interfaces.mixin.entity.LivingEntityInterface;
 
 public class BlazearmItem extends Item implements Vanishable {
     private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
-    private final float ATTACK_DAMAGE = 11.0f;
+    private final float ATTACK_DAMAGE = 9.0f;
     private final double ATTACK_SPEED_MODIFIER = -2.4;
     public int returnTimer;
 
