@@ -462,7 +462,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
         Item mainHandItem = this.getMainHandStack().getItem();
         if (mainHandItem instanceof SwordItem) {
             int swordsmanLevel = this.getVillagerData().getLevel();
-            return MathHelper.square(this.getWidth() * 2.0f + 1.0f + 0.1f*Math.max(swordsmanLevel, 2)) + target.getWidth();
+            return MathHelper.square(this.getWidth() * 2.0f + 1.0f + 0.2f*(swordsmanLevel - 1)) + target.getWidth();
         }
         return super.squaredAttackRange(target);
     }

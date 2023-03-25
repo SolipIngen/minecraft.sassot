@@ -6,6 +6,7 @@
   "mixins": [
     "block.accessors.AbstractBlockAccessor", 
     "block.BambooBlockMixin", 
+    "block.BlocksMixin", 
     "block.BuddingAmethystBlockMixin", 
     "block.PowderSnowBlockMixin", 
     "enchantment.DamageEnchantmentMixin", 
