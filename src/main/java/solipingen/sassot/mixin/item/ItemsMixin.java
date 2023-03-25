@@ -26,7 +26,7 @@ import solipingen.sassot.mixin.item.accessors.HoeItemInvoker;
 public abstract class ItemsMixin {
 
     
-    @Inject(method = "register(Lnet/minecraft/util/Identifier;Lnet/minecraft/item/Item;)Lnet/minecraft/item/Item;", at = @At("TAIL"), cancellable = true)
+    @Inject(method = "register(Lnet/minecraft/util/Identifier;Lnet/minecraft/item/Item;)Lnet/minecraft/item/Item;", at = @At("RETURN"), cancellable = true)
     private static void injectedRegister(Identifier id, Item item, CallbackInfoReturnable<Item> cbireturn) {
         String name = id.getPath();
         int rawId = Item.getRawId(item);
