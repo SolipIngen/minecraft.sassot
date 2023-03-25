@@ -208,7 +208,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
     protected void onBlockHit(BlockHitResult blockHitResult) {
         super.onBlockHit(blockHitResult);
         if (this.world.isClient) return;
-        if (this.hasGroundSHAKING()) {
+        if (this.hasGroundshaking()) {
             BlockPos inBlockPos = blockHitResult.getBlockPos();
             float strength = this.damageAmount*this.impactFactor;
             int range = MathHelper.ceil(this.damageAmount*this.impactFactor);
@@ -243,15 +243,16 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
         Entity attacker = this.getOwner() != null ? this.getOwner() : this;
         List<Entity> entityList = this.world.getOtherEntities(this, new Box(currentBlockPos).expand(1.0));
         for (Entity entity : entityList) {
+            if (strengthOnBlock <= 0.0f) continue;
             Vec3d diffVecNorm = entity.getPos().subtract(this.getPos()).normalize();
             if (entity instanceof LivingEntity && (entity.isOnGround() || entity.isInsideWall() || ((LivingEntity)entity).isClimbing()) && !(entity instanceof PlayerEntity && ((PlayerEntity)entity).isCreative())) {
                 LivingEntity livingEntity = (LivingEntity)entity;
                 double knockbackFactor = 1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE);
                 livingEntity.damage(this.getDamageSources().explosion(this, attacker), strengthOnBlock);
-                livingEntity.addVelocity(0.5*knockbackFactor*strengthOnBlock*diffVecNorm.getX(), 0.25*knockbackFactor*strengthOnBlock*diffVecNorm.getY(), 0.5*knockbackFactor*strengthOnBlock*diffVecNorm.getZ());
+                livingEntity.addVelocity(0.4*knockbackFactor*strengthOnBlock*diffVecNorm.getX(), 0.25*knockbackFactor*strengthOnBlock*diffVecNorm.getY(), 0.4*knockbackFactor*strengthOnBlock*diffVecNorm.getZ());
             }
             if (!(entity instanceof LivingEntity) && (entity.isOnGround() || entity.isInsideWall())) {
-                entity.addVelocity(0.5*strengthOnBlock*diffVecNorm.getX(), 0.25*strengthOnBlock*diffVecNorm.getY(), 0.5*strengthOnBlock*diffVecNorm.getZ());
+                entity.addVelocity(0.4*strengthOnBlock*diffVecNorm.getX(), 0.25*strengthOnBlock*diffVecNorm.getY(), 0.4*strengthOnBlock*diffVecNorm.getZ());
             }
         }
         if (blockState.getBlock().getBlastResistance() < strengthOnBlock) {
@@ -315,7 +316,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
         return this.dataTracker.get(SKEWERING) > 0;
     }
 
-    public boolean hasGroundSHAKING() {
+    public boolean hasGroundshaking() {
         return this.dataTracker.get(GROUNDSHAKING) > 0;
     }
 
@@ -356,7 +357,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
         this.brokeBlock = nbt.getBoolean("BrokeBlock");
         this.dataTracker.set(LOYALTY, nbt.getByte("Loyalty"));
         this.dataTracker.set(SKEWERING, nbt.getByte("Skewering"));
-        this.dataTracker.set(GROUNDSHAKING, nbt.getByte("GroundSHAKING"));
+        this.dataTracker.set(GROUNDSHAKING, nbt.getByte("Groundshaking"));
         this.dataTracker.set(ENCHANTED, nbt.getBoolean("Enchanted"));
     }
 
@@ -368,7 +369,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
         nbt.putBoolean("BrokeBlock", this.brokeBlock);
         nbt.putByte("Loyalty", this.getLoyalty());
         nbt.putByte("Skewering", this.dataTracker.get(SKEWERING));
-        nbt.putByte("GroundSHAKING", this.dataTracker.get(GROUNDSHAKING));
+        nbt.putByte("Groundshaking", this.dataTracker.get(GROUNDSHAKING));
         nbt.putBoolean("Enchanted", this.isEnchanted());
     }
 

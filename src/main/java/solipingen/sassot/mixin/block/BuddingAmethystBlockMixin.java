@@ -26,7 +26,6 @@ import solipingen.sassot.block.ModBlocks;
 @SuppressWarnings("deprecation")
 @Mixin(BuddingAmethystBlock.class)
 public abstract class BuddingAmethystBlockMixin extends AmethystBlock {
-    @Shadow @Final public static int GROW_CHANCE;
     @Shadow @Final private static Direction[] DIRECTIONS;
 
 
@@ -39,13 +38,13 @@ public abstract class BuddingAmethystBlockMixin extends AmethystBlock {
         BlockState aboveBlockState = world.getBlockState(pos.up());
         BlockState aboveAboveBlockState = world.getBlockState(pos.up(2));
         if (aboveBlockState.isOf(Blocks.SCULK_CATALYST) && aboveAboveBlockState.isOf(Blocks.SCULK_SHRIEKER)) {
-            Direction bloomDirection = direction.getOpposite();
-            BlockPos blockPos = pos.offset(bloomDirection);
+            Direction budDirection = Direction.random(world.getRandom());
+            budDirection = budDirection == direction ? budDirection.getOpposite() : budDirection;
+            BlockPos blockPos = pos.offset(budDirection);
             BlockState blockState = world.getBlockState(blockPos);
-            Block block = Blocks.AIR;
-            if (aboveAboveBlockState.get(SculkShriekerBlock.SHRIEKING) && aboveBlockState.get(SculkCatalystBlock.BLOOM) && (BuddingAmethystBlock.canGrowIn(blockState) || blockState.isOf(Blocks.SCULK_VEIN))) {
-                block = ModBlocks.SMALL_ECHO_CRYSTAL_BUD;
-                BlockState blockState2 = block.getDefaultState().with(EchoCrystalClusterBlock.FACING, bloomDirection).with(EchoCrystalClusterBlock.WATERLOGGED, blockState.getFluidState().getFluid() == Fluids.WATER);
+            if (aboveAboveBlockState.get(SculkShriekerBlock.SHRIEKING) && aboveBlockState.get(SculkCatalystBlock.BLOOM) && (BuddingAmethystBlock.canGrowIn(blockState) || blockState.isOf(Blocks.SCULK_VEIN)) && world.getRandom().nextInt(4) == 0) {
+                Block block = ModBlocks.SMALL_ECHO_CRYSTAL_BUD;
+                BlockState blockState2 = block.getDefaultState().with(EchoCrystalClusterBlock.FACING, budDirection).with(EchoCrystalClusterBlock.WATERLOGGED, blockState.getFluidState().getFluid() == Fluids.WATER);
                 world.setBlockState(blockPos, blockState2, Block.NOTIFY_ALL);
             }
         }
