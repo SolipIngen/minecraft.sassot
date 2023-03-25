@@ -39,7 +39,7 @@ public class ModSoundEvents {
     public static final SoundEvent DIAMOND_SHIELD_BLOCK = ModSoundEvents.registerSoundEvent("diamond_shield_block");
     public static final SoundEvent NETHERITE_SHIELD_BLOCK = ModSoundEvents.registerSoundEvent("netherite_shield_block");
 
-    public static final SoundEvent GROUNDBREAKING = ModSoundEvents.registerSoundEvent("groundbreaking");
+    public static final SoundEvent GROUNDSHAKING = ModSoundEvents.registerSoundEvent("groundshaking");
 
     public static final SoundEvent PILLAGER_SPEAR_THROW = ModSoundEvents.registerSoundEvent("pillager_spear_throw");
     public static final SoundEvent WITHER_SKELETON_SPEAR_THROW = ModSoundEvents.registerSoundEvent("wither_skeleton_spear_throw");

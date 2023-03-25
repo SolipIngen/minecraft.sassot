@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FluidBlock;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -34,9 +35,11 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 import solipingen.sassot.advancement.ModCriteria;
 import solipingen.sassot.enchantment.ModEnchantments;
 import solipingen.sassot.sound.ModSoundEvents;
@@ -46,10 +49,10 @@ import solipingen.sassot.util.interfaces.mixin.entity.LivingEntityInterface;
 public abstract class SpearEntity extends PersistentProjectileEntity {
     private static final TrackedData<Byte> LOYALTY = DataTracker.registerData(SpearEntity.class, TrackedDataHandlerRegistry.BYTE);
     private static final TrackedData<Byte> SKEWERING = DataTracker.registerData(SpearEntity.class, TrackedDataHandlerRegistry.BYTE);
-    private static final TrackedData<Byte> GROUNDBREAKING = DataTracker.registerData(SpearEntity.class, TrackedDataHandlerRegistry.BYTE);
+    private static final TrackedData<Byte> GROUNDSHAKING = DataTracker.registerData(SpearEntity.class, TrackedDataHandlerRegistry.BYTE);
     private static final TrackedData<Boolean> ENCHANTED = DataTracker.registerData(SpearEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private final float damageAmount;
-    private final float speed;
+    private final float launchSpeed;
     private ItemStack spearStack;
     private boolean dealtDamage;
     private boolean brokeBlock;
@@ -57,22 +60,22 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
     private float impactFactor;
 
 
-    public SpearEntity(EntityType<? extends SpearEntity> entityType, float damageAmount, float speed, World world) {
+    public SpearEntity(EntityType<? extends SpearEntity> entityType, float damageAmount, float launchSpeed, World world) {
         super(entityType, world);
         this.damageAmount = damageAmount;
-        this.speed = speed;
+        this.launchSpeed = launchSpeed;
         this.brokeBlock = false;
     }
 
-    public SpearEntity(EntityType<? extends SpearEntity> entityType, LivingEntity owner, float damageAmount, float speed, ItemStack stack, World world) {
+    public SpearEntity(EntityType<? extends SpearEntity> entityType, LivingEntity owner, float damageAmount, float launchSpeed, ItemStack stack, World world) {
         super(entityType, owner, world);
         this.damageAmount = damageAmount;
-        this.speed = speed;
+        this.launchSpeed = launchSpeed;
         this.spearStack = stack.copy();
         this.brokeBlock = false;
         this.dataTracker.set(LOYALTY, (byte)EnchantmentHelper.getLevel(Enchantments.LOYALTY, spearStack));
         this.dataTracker.set(SKEWERING, (byte)EnchantmentHelper.getLevel(ModEnchantments.SKEWERING, spearStack));
-        this.dataTracker.set(GROUNDBREAKING, (byte)EnchantmentHelper.getLevel(ModEnchantments.GROUNDBREAKING, spearStack));
+        this.dataTracker.set(GROUNDSHAKING, (byte)EnchantmentHelper.getLevel(ModEnchantments.GROUNDSHAKING, spearStack));
         this.dataTracker.set(ENCHANTED, spearStack.hasGlint());
     }
 
@@ -81,7 +84,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
         super.initDataTracker();
         this.dataTracker.startTracking(LOYALTY, (byte)0);
         this.dataTracker.startTracking(SKEWERING, (byte)0);
-        this.dataTracker.startTracking(GROUNDBREAKING, (byte)0);
+        this.dataTracker.startTracking(GROUNDSHAKING, (byte)0);
         this.dataTracker.startTracking(ENCHANTED, false);
     }
 
@@ -91,7 +94,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
         if (this.inGroundTime > 2) {
             this.dealtDamage = true;
         }
-        this.impactFactor = (float)this.getVelocity().length()/this.speed;
+        this.impactFactor = Math.max(MathHelper.square((float)this.getVelocity().length()/this.launchSpeed), MathHelper.sqrt((float)this.getVelocity().length()/this.launchSpeed));
         Entity entity = this.getOwner();
         byte i = this.dataTracker.get(LOYALTY);
         if (i > 0 && (this.dealtDamage || this.isNoClip()) && entity != null) {
@@ -203,80 +206,108 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
 
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
+        super.onBlockHit(blockHitResult);
         if (this.world.isClient) return;
-        float blockImpactFactor = this.brokeBlock ? this.impactFactor : (float)Math.max(this.impactFactor, 1.0f);
-        if (this.hasGroundbreaking()) {
+        if (this.hasGroundSHAKING()) {
             BlockPos inBlockPos = blockHitResult.getBlockPos();
-            float strength = this.damageAmount*MathHelper.square(blockImpactFactor);
-            int blocksBroken = 0;
-            Iterable<BlockPos> blockPosList = BlockPos.iterateOutwards(inBlockPos, 7 + MathHelper.ceil(blockImpactFactor), 7 + MathHelper.ceil(blockImpactFactor), 7 + MathHelper.ceil(blockImpactFactor));
-            for (BlockPos currentBlockPos : blockPosList) {
-                double currentSquaredDistance = currentBlockPos.getSquaredDistance(inBlockPos);
-                if (currentSquaredDistance > MathHelper.square(7.0 + Math.ceil(blockImpactFactor))) continue;
-                BlockState blockState = this.world.getBlockState(currentBlockPos);
-                float strengthOnBlock = (float)Math.pow(Math.max(blockState.getBlock().getBlastResistance(), 1.0f + 0.1f*this.random.nextFloat()), -(float)Math.sqrt(currentSquaredDistance))*strength;
-                Entity attacker = this.getOwner() != null ? this.getOwner() : this;
-                List<Entity> entityList = this.world.getOtherEntities(this, new Box(currentBlockPos).expand(1.0));
-                for (Entity entity : entityList) {
-                    float knockbackStrength = 0.125f*strengthOnBlock/MathHelper.square(1.0f + entity.distanceTo(this)/7.0f);
-                    Vec3d diffVecNorm = entity.getPos().subtract(this.getPos()).normalize();
-                    if (entity instanceof LivingEntity && (entity.isOnGround() || entity.isInsideWall() || ((LivingEntity)entity).isClimbing()) && !(entity instanceof PlayerEntity && ((PlayerEntity)entity).isCreative())) {
-                        LivingEntity livingEntity = (LivingEntity)entity;
-                        double knockbackFactor = 1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE);
-                        livingEntity.damage(this.getDamageSources().explosion(this, attacker), strengthOnBlock/MathHelper.square(1.0f + livingEntity.distanceTo(this)/7.0f));
-                        livingEntity.addVelocity(0.1*knockbackFactor*knockbackStrength*diffVecNorm.getX(), 0.04*knockbackFactor*knockbackStrength, 0.1*knockbackFactor*knockbackStrength*diffVecNorm.getZ());
-                    }
-                    if (!(entity instanceof LivingEntity) && (entity.isOnGround() || entity.isInsideWall())) {
-                        entity.addVelocity(0.1*knockbackStrength*diffVecNorm.getX(), 0.04*knockbackStrength, 0.1*knockbackStrength*diffVecNorm.getZ());
-                    }
-                }
-                if (blockState.getBlock().getBlastResistance() < strengthOnBlock/MathHelper.square(1.0f + (float)Math.sqrt(currentSquaredDistance)/7.0f)) {
-                    if (blockState.isOf(Blocks.INFESTED_STONE)) {
-                        this.world.setBlockState(currentBlockPos, Blocks.STONE.getDefaultState());
-                        this.world.playSound(null, currentBlockPos, SoundEvents.ENTITY_SILVERFISH_DEATH, SoundCategory.HOSTILE);
-                    }
-                    else if (blockState.isOf(Blocks.INFESTED_COBBLESTONE)) {
-                        this.world.setBlockState(currentBlockPos, Blocks.COBBLESTONE.getDefaultState());
-                        this.world.playSound(null, currentBlockPos, SoundEvents.ENTITY_SILVERFISH_DEATH, SoundCategory.HOSTILE);
-                    }
-                    else if (blockState.isOf(Blocks.INFESTED_STONE_BRICKS)) {
-                        this.world.setBlockState(currentBlockPos, Blocks.STONE_BRICKS.getDefaultState());
-                        this.world.playSound(null, currentBlockPos, SoundEvents.ENTITY_SILVERFISH_DEATH, SoundCategory.HOSTILE);
-                    }
-                    else if (blockState.isOf(Blocks.INFESTED_CRACKED_STONE_BRICKS)) {
-                        this.world.setBlockState(currentBlockPos, Blocks.CRACKED_STONE_BRICKS.getDefaultState());
-                        this.world.playSound(null, currentBlockPos, SoundEvents.ENTITY_SILVERFISH_DEATH, SoundCategory.HOSTILE);
-                    }
-                    else if (blockState.isOf(Blocks.INFESTED_MOSSY_STONE_BRICKS)) {
-                        this.world.setBlockState(currentBlockPos, Blocks.MOSSY_STONE_BRICKS.getDefaultState());
-                        this.world.playSound(null, currentBlockPos, SoundEvents.ENTITY_SILVERFISH_DEATH, SoundCategory.HOSTILE);
-                    }
-                    else if (blockState.isOf(Blocks.INFESTED_CHISELED_STONE_BRICKS)) {
-                        this.world.setBlockState(currentBlockPos, Blocks.CHISELED_STONE_BRICKS.getDefaultState());
-                        this.world.playSound(null, currentBlockPos, SoundEvents.ENTITY_SILVERFISH_DEATH, SoundCategory.HOSTILE);
-                    }
-                    else if (blockState.isOf(Blocks.INFESTED_DEEPSLATE)) {
-                        this.world.setBlockState(currentBlockPos, Blocks.DEEPSLATE.getDefaultState());
-                        this.world.playSound(null, currentBlockPos, SoundEvents.ENTITY_SILVERFISH_DEATH, SoundCategory.HOSTILE);
-                    }
-                    this.world.breakBlock(currentBlockPos, this.random.nextInt(3) == 0);
-                    blocksBroken++;
-                    if (this.getOwner() != null && this.getOwner() instanceof ServerPlayerEntity && this.random.nextInt(blocksBroken) <= 1) {
-                        this.spearStack.damage(1, this.random, (ServerPlayerEntity)this.getOwner());
-                    }
-                    if (!this.brokeBlock) {
-                        this.brokeBlock = true;
-                    }
-                }
-                if (!this.world.isClient && !this.isNoClip() && this.isInsideWall()) {
-                    this.setVelocity(0.0, 0.0, 0.0);
-                }
+            float strength = this.damageAmount*this.impactFactor;
+            int range = MathHelper.ceil(this.damageAmount*this.impactFactor);
+            Iterable<BlockPos> blockPosIterable = BlockPos.iterateOutwards(inBlockPos, range, range, range);
+            this.shakeGround(inBlockPos, inBlockPos, strength);
+            for (BlockPos currentBlockPos : blockPosIterable) {
+                if (currentBlockPos.getSquaredDistance(inBlockPos) > MathHelper.square(range)) continue;
+                this.shakeGround(currentBlockPos, inBlockPos, strength);
             }
             if (this.world instanceof ServerWorld) {
                 ((ServerWorld)this.world).spawnParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
             }
-            this.playSound(ModSoundEvents.GROUNDBREAKING, 10.0f*strength, 0.8f + 0.4f*this.random.nextFloat());
-            super.onBlockHit(blockHitResult);
+            this.playSound(ModSoundEvents.GROUNDSHAKING, 20.0f*strength, 0.8f + 0.4f*this.random.nextFloat());
+        }
+    }
+
+    private void shakeGround(BlockPos currentBlockPos, BlockPos sourceBlockPos, float strength) {
+        BlockState blockState = this.world.getBlockState(currentBlockPos);
+        if (blockState.isAir() || blockState.getBlock() instanceof FluidBlock) return;
+        float strengthOnBlock = strength/Math.max(MathHelper.sqrt(blockState.getBlock().getBlastResistance()), 1.0f);
+        int blocksBroken = 0;
+        int fluidBlocksNumber = 0;
+        for (Direction direction : Direction.values()) {
+            BlockState neighborBlockState = this.world.getBlockState(currentBlockPos.offset(direction));
+            if (neighborBlockState.isAir() || neighborBlockState.getBlock() instanceof FluidBlock) {
+                fluidBlocksNumber += fluidBlocksNumber >= Direction.values().length ? 0 : 1;
+            }
+        }
+        double currentSquaredDistance = currentBlockPos.getSquaredDistance(sourceBlockPos);
+        float reductionFactor = currentBlockPos == sourceBlockPos ? 1.0f : (float)(Math.log(Direction.values().length - Math.max(fluidBlocksNumber - 1, 0))/Math.log((Direction.values().length))/Math.max(currentSquaredDistance, 1.0));
+        strengthOnBlock *= reductionFactor;
+        Entity attacker = this.getOwner() != null ? this.getOwner() : this;
+        List<Entity> entityList = this.world.getOtherEntities(this, new Box(currentBlockPos).expand(1.0));
+        for (Entity entity : entityList) {
+            Vec3d diffVecNorm = entity.getPos().subtract(this.getPos()).normalize();
+            if (entity instanceof LivingEntity && (entity.isOnGround() || entity.isInsideWall() || ((LivingEntity)entity).isClimbing()) && !(entity instanceof PlayerEntity && ((PlayerEntity)entity).isCreative())) {
+                LivingEntity livingEntity = (LivingEntity)entity;
+                double knockbackFactor = 1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE);
+                livingEntity.damage(this.getDamageSources().explosion(this, attacker), strengthOnBlock);
+                livingEntity.addVelocity(0.5*knockbackFactor*strengthOnBlock*diffVecNorm.getX(), 0.25*knockbackFactor*strengthOnBlock*diffVecNorm.getY(), 0.5*knockbackFactor*strengthOnBlock*diffVecNorm.getZ());
+            }
+            if (!(entity instanceof LivingEntity) && (entity.isOnGround() || entity.isInsideWall())) {
+                entity.addVelocity(0.5*strengthOnBlock*diffVecNorm.getX(), 0.25*strengthOnBlock*diffVecNorm.getY(), 0.5*strengthOnBlock*diffVecNorm.getZ());
+            }
+        }
+        if (blockState.getBlock().getBlastResistance() < strengthOnBlock) {
+            if (blockState.isOf(Blocks.INFESTED_STONE)) {
+                this.world.setBlockState(currentBlockPos, Blocks.STONE.getDefaultState());
+                this.world.playSound(null, currentBlockPos, SoundEvents.ENTITY_SILVERFISH_DEATH, SoundCategory.HOSTILE);
+                this.world.emitGameEvent(null, GameEvent.ENTITY_DIE, currentBlockPos);
+            }
+            else if (blockState.isOf(Blocks.INFESTED_COBBLESTONE)) {
+                this.world.setBlockState(currentBlockPos, Blocks.COBBLESTONE.getDefaultState());
+                this.world.playSound(null, currentBlockPos, SoundEvents.ENTITY_SILVERFISH_DEATH, SoundCategory.HOSTILE);
+                this.world.emitGameEvent(null, GameEvent.ENTITY_DIE, currentBlockPos);
+            }
+            else if (blockState.isOf(Blocks.INFESTED_STONE_BRICKS)) {
+                this.world.setBlockState(currentBlockPos, Blocks.STONE_BRICKS.getDefaultState());
+                this.world.playSound(null, currentBlockPos, SoundEvents.ENTITY_SILVERFISH_DEATH, SoundCategory.HOSTILE);
+                this.world.emitGameEvent(null, GameEvent.ENTITY_DIE, currentBlockPos);
+            }
+            else if (blockState.isOf(Blocks.INFESTED_CRACKED_STONE_BRICKS)) {
+                this.world.setBlockState(currentBlockPos, Blocks.CRACKED_STONE_BRICKS.getDefaultState());
+                this.world.playSound(null, currentBlockPos, SoundEvents.ENTITY_SILVERFISH_DEATH, SoundCategory.HOSTILE);
+                this.world.emitGameEvent(null, GameEvent.ENTITY_DIE, currentBlockPos);
+            }
+            else if (blockState.isOf(Blocks.INFESTED_MOSSY_STONE_BRICKS)) {
+                this.world.setBlockState(currentBlockPos, Blocks.MOSSY_STONE_BRICKS.getDefaultState());
+                this.world.playSound(null, currentBlockPos, SoundEvents.ENTITY_SILVERFISH_DEATH, SoundCategory.HOSTILE);
+                this.world.emitGameEvent(null, GameEvent.ENTITY_DIE, currentBlockPos);
+            }
+            else if (blockState.isOf(Blocks.INFESTED_CHISELED_STONE_BRICKS)) {
+                this.world.setBlockState(currentBlockPos, Blocks.CHISELED_STONE_BRICKS.getDefaultState());
+                this.world.playSound(null, currentBlockPos, SoundEvents.ENTITY_SILVERFISH_DEATH, SoundCategory.HOSTILE);
+                this.world.emitGameEvent(null, GameEvent.ENTITY_DIE, currentBlockPos);
+            }
+            else if (blockState.isOf(Blocks.INFESTED_DEEPSLATE)) {
+                this.world.setBlockState(currentBlockPos, Blocks.DEEPSLATE.getDefaultState());
+                this.world.playSound(null, currentBlockPos, SoundEvents.ENTITY_SILVERFISH_DEATH, SoundCategory.HOSTILE);
+                this.world.emitGameEvent(null, GameEvent.ENTITY_DIE, currentBlockPos);
+            }
+            if (this.world.breakBlock(currentBlockPos, true)) {
+                blocksBroken++;
+                this.world.emitGameEvent(null, GameEvent.BLOCK_DESTROY, currentBlockPos);
+            }
+        }
+        if (this.getOwner() != null && this.getOwner() instanceof ServerPlayerEntity && blocksBroken > 0) {
+            if (this.brokeBlock) {
+                this.spearStack.damage(this.random.nextInt(blocksBroken) == 0 ? 1 : 0, this.random, (ServerPlayerEntity)this.getOwner());
+            }
+            else {
+                this.spearStack.damage(blocksBroken, this.random, (ServerPlayerEntity)this.getOwner());
+            }
+        }
+        if (!this.brokeBlock) {
+            this.brokeBlock = true;
+        }
+        if (!this.world.isClient && !this.isNoClip() && this.isInsideWall()) {
+            this.setVelocity(0.0, 0.0, 0.0);
         }
     }
 
@@ -284,8 +315,8 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
         return this.dataTracker.get(SKEWERING) > 0;
     }
 
-    public boolean hasGroundbreaking() {
-        return this.dataTracker.get(GROUNDBREAKING) > 0;
+    public boolean hasGroundSHAKING() {
+        return this.dataTracker.get(GROUNDSHAKING) > 0;
     }
 
     @Override
@@ -325,7 +356,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
         this.brokeBlock = nbt.getBoolean("BrokeBlock");
         this.dataTracker.set(LOYALTY, nbt.getByte("Loyalty"));
         this.dataTracker.set(SKEWERING, nbt.getByte("Skewering"));
-        this.dataTracker.set(GROUNDBREAKING, nbt.getByte("Groundbreaking"));
+        this.dataTracker.set(GROUNDSHAKING, nbt.getByte("GroundSHAKING"));
         this.dataTracker.set(ENCHANTED, nbt.getBoolean("Enchanted"));
     }
 
@@ -337,7 +368,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
         nbt.putBoolean("BrokeBlock", this.brokeBlock);
         nbt.putByte("Loyalty", this.getLoyalty());
         nbt.putByte("Skewering", this.dataTracker.get(SKEWERING));
-        nbt.putByte("Groundbreaking", this.dataTracker.get(GROUNDBREAKING));
+        nbt.putByte("GroundSHAKING", this.dataTracker.get(GROUNDSHAKING));
         nbt.putBoolean("Enchanted", this.isEnchanted());
     }
 

@@ -172,10 +172,10 @@
             "sassot:netherite_shield_block"
         ]
     }, 
-    "groundbreaking": {
-        "subtitle": "subtitles.sassot.groundbreaking", 
+    "groundshaking": {
+        "subtitle": "subtitles.sassot.groundshaking", 
         "sounds": [
-            "sassot:groundbreaking"
+            "sassot:groundshaking"
         ]
     }, 
     "pillager_spear_throw": {

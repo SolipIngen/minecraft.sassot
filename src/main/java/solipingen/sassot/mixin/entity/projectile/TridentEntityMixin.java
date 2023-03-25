@@ -33,6 +33,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import solipingen.sassot.advancement.ModCriteria;
@@ -76,7 +77,7 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntity impl
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/TridentEntity;getOwner()Lnet/minecraft/entity/Entity;"))
     private void injectedTick(CallbackInfo cbi) {
-        this.impactFactor = (float)this.getVelocity().length()/2.5f;
+        this.impactFactor = Math.max(MathHelper.square((float)this.getVelocity().length()/2.5f), MathHelper.sqrt((float)this.getVelocity().length()/2.5f));
     }
 
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/TridentEntity;asItemStack()Lnet/minecraft/item/ItemStack;"))
@@ -95,17 +96,17 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntity impl
 
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
-        Entity entity2 = this.getOwner() != null ? this.getOwner() : this;
+        super.onBlockHit(blockHitResult);
+        Entity owner = this.getOwner() != null ? this.getOwner() : this;
         BlockPos blockPos = this.getBlockPos();
         LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(this.world);
         if (this.world instanceof ServerWorld && this.world.isRaining() && ((TridentEntity)(Object)this).hasChanneling() && this.world.isSkyVisible(blockPos) && lightningEntity != null) {
             this.world.setThunderGradient(1.0f);
             lightningEntity.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(blockPos));
-            lightningEntity.setChanneler(entity2 instanceof ServerPlayerEntity ? (ServerPlayerEntity)entity2 : null);
+            lightningEntity.setChanneler(owner instanceof ServerPlayerEntity ? (ServerPlayerEntity)owner : null);
             this.world.spawnEntity(lightningEntity);
             this.playSound(SoundEvents.ITEM_TRIDENT_THUNDER, 5.0f, 1.0f);
         }
-        super.onBlockHit(blockHitResult);
     }
 
     @ModifyVariable(method = "onEntityHit", at = @At("STORE"), ordinal = 0)

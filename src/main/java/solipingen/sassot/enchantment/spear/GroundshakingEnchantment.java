@@ -8,10 +8,10 @@ import solipingen.sassot.enchantment.ModEnchantments;
 import solipingen.sassot.item.SpearItem;
 
 
-public class GroundbreakingEnchantment extends Enchantment {
+public class GroundshakingEnchantment extends Enchantment {
 
     
-    public GroundbreakingEnchantment(Enchantment.Rarity weight, EquipmentSlot ... slotTypes) {
+    public GroundshakingEnchantment(Enchantment.Rarity weight, EquipmentSlot ... slotTypes) {
         super(weight, EnchantmentTarget.BREAKABLE, slotTypes);
     }
 

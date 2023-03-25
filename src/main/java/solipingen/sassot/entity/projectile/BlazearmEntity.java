@@ -85,7 +85,7 @@ public class BlazearmEntity extends PersistentProjectileEntity {
         if (this.inGroundTime > 2) {
             this.dealtDamage = true;
         }
-        this.impactFactor = (float)this.getVelocity().length()/2.7f;
+        this.impactFactor = Math.max(MathHelper.square((float)this.getVelocity().length()/2.7f), MathHelper.sqrt((float)this.getVelocity().length()/2.7f));
         Entity entity = this.getOwner();
         byte i = this.dataTracker.get(LOYALTY);
         if (i > 0 && (this.dealtDamage || this.isNoClip()) && entity != null) {
@@ -209,6 +209,7 @@ public class BlazearmEntity extends PersistentProjectileEntity {
 
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
+        super.onBlockHit(blockHitResult);
         if (this.world.isClient || this.isWet()) return;
         float impactSpeed = (float)this.getVelocity().length();
         BlockPos inBlockPos = blockHitResult.getBlockPos();
@@ -407,7 +408,6 @@ public class BlazearmEntity extends PersistentProjectileEntity {
                 this.playSound(SoundEvents.ITEM_FIRECHARGE_USE, 0.8f, this.world.getRandom().nextFloat() * 0.4f + 0.8f);
             }
         }
-        super.onBlockHit(blockHitResult);
     }
 
     public boolean hasSkewering() {
