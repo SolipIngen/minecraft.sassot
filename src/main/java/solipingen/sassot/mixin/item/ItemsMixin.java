@@ -5,7 +5,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.item.AxeItem;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.HoeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -134,7 +136,7 @@ public abstract class ItemsMixin {
         }
         else if (item instanceof HoeItem) {
             if  (name.matches("wooden_hoe")) {
-                Item newHoeItem = (Item)HoeItemInvoker.invokeHoeItem(ToolMaterials.WOOD, 2, -2.2f, new Item.Settings());
+                Item newHoeItem = (Item)HoeItemInvoker.invokeHoeItem(ToolMaterials.WOOD, 2, -2.1f, new Item.Settings());
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, name, newHoeItem));
             }
             else if (name.matches("stone_hoe")) {
@@ -146,15 +148,15 @@ public abstract class ItemsMixin {
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, name, newHoeItem));
             }
             else if (name.matches("iron_hoe")) {
-                Item newHoeItem = (Item)HoeItemInvoker.invokeHoeItem(ToolMaterials.IRON, 2, -2.3f, new Item.Settings());
+                Item newHoeItem = (Item)HoeItemInvoker.invokeHoeItem(ToolMaterials.IRON, 2, -2.2f, new Item.Settings());
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, name, newHoeItem));
             }
             else if (name.matches("diamond_hoe")) {
-                Item newHoeItem = (Item)HoeItemInvoker.invokeHoeItem(ToolMaterials.DIAMOND, 2, -2.3f, new Item.Settings());
+                Item newHoeItem = (Item)HoeItemInvoker.invokeHoeItem(ToolMaterials.DIAMOND, 2, -2.2f, new Item.Settings());
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, name, newHoeItem));
             }
             else if (name.matches("netherite_hoe")) {
-                Item newHoeItem = (Item)HoeItemInvoker.invokeHoeItem(ToolMaterials.NETHERITE, 2, -2.3f, new Item.Settings().fireproof());
+                Item newHoeItem = (Item)HoeItemInvoker.invokeHoeItem(ToolMaterials.NETHERITE, 2, -2.2f, new Item.Settings().fireproof());
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, name, newHoeItem));
             }
         }
@@ -162,6 +164,15 @@ public abstract class ItemsMixin {
             Item newTridentItem = (Item)new TridentItem(new Item.Settings().maxDamage(1095));
             cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, name, newTridentItem));
         }
+        else if (name.matches("blaze_rod")) {
+            Item newBlazeRodItem = new Item(new Item.Settings().fireproof());
+            cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, name, newBlazeRodItem));
+        }
+        else if (name.matches("end_rod")) {
+            Item newEndRodItem = new BlockItem(Blocks.END_ROD, new Item.Settings().fireproof());
+            cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, name, newEndRodItem));
+        }
     }
+
     
 }

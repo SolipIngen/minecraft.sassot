@@ -16,12 +16,14 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.WitherSkeletonEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
@@ -116,6 +118,15 @@ public abstract class WitherSkeletonEntityMixin extends AbstractSkeletonEntity i
         spearEntity.setVelocity(d, e + g * 0.15, f, speed, 14 - this.world.getDifficulty().getId() * 4);
         this.playSound(soundEvent, 1.0f, 1.0f / (this.getRandom().nextFloat() * 0.4f + 0.8f));
         this.world.spawnEntity(spearEntity);
+    }
+
+    @Override
+    public double squaredAttackRange(LivingEntity target) {
+        Item mainHandItem = this.getMainHandStack().getItem();
+        if (mainHandItem instanceof SwordItem) {
+            return MathHelper.square(this.getWidth() * 2.0f + 1.0f) + target.getWidth();
+        }
+        return super.squaredAttackRange(target);
     }
 
 

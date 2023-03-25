@@ -47,6 +47,7 @@ import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.raid.RaiderEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
@@ -57,6 +58,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TimeHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerData;
@@ -453,6 +455,16 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
             return ((VexEntity)livingEntity).getOwner() instanceof RaiderEntity;
         }
         return false;
+    }
+
+    @Override
+    public double squaredAttackRange(LivingEntity target) {
+        Item mainHandItem = this.getMainHandStack().getItem();
+        if (mainHandItem instanceof SwordItem) {
+            int swordsmanLevel = this.getVillagerData().getLevel();
+            return MathHelper.square(this.getWidth() * 2.0f + 1.0f + 0.1f*Math.max(swordsmanLevel, 2)) + target.getWidth();
+        }
+        return super.squaredAttackRange(target);
     }
 
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
