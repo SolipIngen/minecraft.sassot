@@ -40,5 +40,11 @@ public abstract class ShieldItemMixin extends Item {
     public boolean isEnchantable(ItemStack stack) {
         return !stack.hasEnchantments();
     }
+
+    @Override
+    public int getEnchantability() {
+        return 15;
+    }
+
     
 }

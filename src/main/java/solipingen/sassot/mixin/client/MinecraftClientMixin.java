@@ -149,7 +149,7 @@ public abstract class MinecraftClientMixin extends ReentrantThreadExecutor<Runna
             double g = vec3d.squaredDistanceTo(vec3d4);
             BlockHitResult blockHitResult = this.world.raycast(new RaycastContext(vec3d, vec3d4, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity2));
             if ((bl && g > attackReach*attackReach) || blockHitResult.getType() == HitResult.Type.BLOCK) {
-                BlockPos blockPos = new BlockPos(vec3d4.getX() < 0 ? -MathHelper.floor(Math.abs(vec3d4.getX())) : MathHelper.floor(vec3d4.getX()), vec3d4.getY() < 0 ? -MathHelper.floor(Math.abs(vec3d4.getY())) : MathHelper.floor(vec3d4.getY()), vec3d4.getZ() < 0 ? -MathHelper.floor(Math.abs(vec3d4.getZ())) : MathHelper.floor(vec3d4.getZ()));
+                BlockPos blockPos = new BlockPos(MathHelper.floor(vec3d4.getX()), MathHelper.floor(vec3d4.getY()), MathHelper.floor(vec3d4.getZ()));
                 this.crosshairTarget = BlockHitResult.createMissed(vec3d4, Direction.getFacing(vec3d2.x, vec3d2.y, vec3d2.z), blockPos);
             } 
             else {

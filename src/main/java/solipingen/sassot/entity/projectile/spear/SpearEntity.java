@@ -97,7 +97,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
         this.impactFactor = Math.max(MathHelper.square((float)this.getVelocity().length()/this.launchSpeed), MathHelper.sqrt((float)this.getVelocity().length()/this.launchSpeed));
         Entity entity = this.getOwner();
         byte i = this.dataTracker.get(LOYALTY);
-        if (i > 0 && (this.dealtDamage || this.isNoClip()) && entity != null) {
+        if (i > 0 && (this.dealtDamage || this.brokeBlock || this.isNoClip()) && entity != null) {
             this.setNoClip(true);
             Vec3d vec3d = entity.getEyePos().subtract(this.getPos());
             this.setPos(this.getX(), this.getY() + vec3d.y * 0.015 * (double)i, this.getZ());
@@ -292,20 +292,15 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
                 this.world.emitGameEvent(null, GameEvent.ENTITY_DIE, currentBlockPos);
             }
             if (this.world.breakBlock(currentBlockPos, true)) {
+                if (!this.brokeBlock) {
+                    this.brokeBlock = true;
+                }
                 blocksBroken++;
                 this.world.emitGameEvent(null, GameEvent.BLOCK_DESTROY, currentBlockPos);
             }
         }
         if (this.getOwner() != null && this.getOwner() instanceof ServerPlayerEntity && blocksBroken > 0) {
-            if (this.brokeBlock) {
-                this.spearStack.damage(this.random.nextInt(blocksBroken) == 0 ? 1 : 0, this.random, (ServerPlayerEntity)this.getOwner());
-            }
-            else {
-                this.spearStack.damage(blocksBroken, this.random, (ServerPlayerEntity)this.getOwner());
-            }
-        }
-        if (!this.brokeBlock) {
-            this.brokeBlock = true;
+            this.spearStack.damage(blocksBroken, this.random, (ServerPlayerEntity)this.getOwner());
         }
         if (!this.world.isClient && !this.isNoClip() && this.isInsideWall()) {
             this.setVelocity(0.0, 0.0, 0.0);
