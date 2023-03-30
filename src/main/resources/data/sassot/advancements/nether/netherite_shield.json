@@ -8,7 +8,12 @@
               "items": [
                 "sassot:netherite_shield"
               ]
-            }
+            }, 
+            {
+              "items": [
+                "sassot:netherite_framed_wooden_shield"
+              ]
+          }
           ]
         },
         "trigger": "minecraft:inventory_changed"

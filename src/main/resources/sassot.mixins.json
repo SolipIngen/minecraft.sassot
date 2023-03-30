@@ -42,6 +42,7 @@
     "item.ItemStackMixin", 
     "item.MiningToolItemMixin", 
     "item.ShieldItemMixin", 
+    "item.SmithingTemplateItemMixin", 
     "item.SwordItemMixin", 
     "item.ToolMaterialsMixin", 
     "item.TridentItemMixin", 
@@ -49,6 +50,7 @@
     "server.network.ServerPlayNetworkHandlerMixin"
   ],
   "client": [
+    "client.gui.screen.ingame.SmithingScreenMixin", 
     "client.gui.InGameHudMixin", 
     "client.network.ClientPlayerInteractionManagerMixin", 
     "client.render.entity.feature.HeldItemFeatureRendererMixin", 

@@ -26,6 +26,8 @@ public class ShieldFramingTemplateItem extends SmithingTemplateItem {
     private static final Text SHIELD_FRAMING_ADDITIONS_SLOT_DESCRIPTION_TEXT = Text.translatable(Util.createTranslationKey("item", new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID,"smithing_template.shield_framing.additions_slot_description")));
     private static final Identifier EMPTY_SLOT_SHIELD_TEXTURE = new Identifier("item/empty_armor_slot_shield");
     private static final Identifier EMPTY_SLOT_INGOT_TEXTURE = new Identifier("item/empty_slot_ingot");
+    private static final Identifier EMPTY_SLOT_EMERALD_TEXTURE = new Identifier("item/empty_slot_emerald");
+    private static final Identifier EMPTY_SLOT_DIAMOND_TEXTURE = new Identifier("item/empty_slot_diamond");
     private final Text baseSlotDescriptionText;
     private final Text additionsSlotDescriptionText;
     private final List<Identifier> emptyBaseSlotTextures;
@@ -50,7 +52,7 @@ public class ShieldFramingTemplateItem extends SmithingTemplateItem {
     }
 
     private static List<Identifier> getFramingEmptyAdditionsSlotTextures() {
-        return List.of(EMPTY_SLOT_INGOT_TEXTURE);
+        return List.of(EMPTY_SLOT_INGOT_TEXTURE, EMPTY_SLOT_DIAMOND_TEXTURE, EMPTY_SLOT_EMERALD_TEXTURE);
     }
 
     @Override

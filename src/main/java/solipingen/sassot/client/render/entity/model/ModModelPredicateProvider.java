@@ -36,6 +36,9 @@ public class ModModelPredicateProvider {
         ModModelPredicateProvider.registerShield(ModItems.COPPER_FRAMED_WOODEN_SHIELD);
         ModModelPredicateProvider.registerShield(ModItems.GOLD_FRAMED_WOODEN_SHIELD);
         ModModelPredicateProvider.registerShield(ModItems.IRON_FRAMED_WOODEN_SHIELD);
+        ModModelPredicateProvider.registerShield(ModItems.DIAMOND_FRAMED_WOODEN_SHIELD);
+        ModModelPredicateProvider.registerShield(ModItems.EMERALD_FRAMED_WOODEN_SHIELD);
+        ModModelPredicateProvider.registerShield(ModItems.NETHERITE_FRAMED_WOODEN_SHIELD);
 
         // Shields
         ModModelPredicateProvider.registerShield(ModItems.COPPER_SHIELD);
@@ -48,7 +51,7 @@ public class ModModelPredicateProvider {
 
     private static void registerSpear(Item spear) {
         ModelPredicateProviderRegistry.register(spear, new Identifier("throwing"),
-            (stack, world, entity, seed) -> (entity != null && entity.isUsingItem() && !(entity instanceof MerchantEntity) && entity.getActiveItem() == stack) || (entity instanceof PiglinEntity && ((MobEntity)entity).isAttacking() && entity.getMainHandStack() == stack) ? 1.0f : 0.0f);
+            (stack, world, entity, seed) -> (entity != null && entity.isUsingItem() && !(entity instanceof MerchantEntity) && entity.getActiveItem() == stack) || (entity instanceof PiglinEntity && ((MobEntity)entity).isAttacking() && entity.getActiveItem() == stack) ? 1.0f : 0.0f);
     }
 
     private static void registerShield(Item shield) {

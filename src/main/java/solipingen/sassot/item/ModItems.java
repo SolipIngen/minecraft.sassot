@@ -60,6 +60,15 @@ public class ModItems {
     
     public static final Item IRON_FRAMED_WOODEN_SHIELD = ModItems.registerItem("iron_framed_wooden_shield", 
         new ModShieldItem(ToolMaterials.IRON, 1.0f, true, 60, 0.05f, new FabricItemSettings()));
+
+    public static final Item DIAMOND_FRAMED_WOODEN_SHIELD = ModItems.registerItem("diamond_framed_wooden_shield", 
+        new ModShieldItem(ToolMaterials.DIAMOND, 1.0f, true, 60, 0.05f, new FabricItemSettings()));
+
+    public static final Item EMERALD_FRAMED_WOODEN_SHIELD = ModItems.registerItem("emerald_framed_wooden_shield", 
+        new ModShieldItem(ModToolMaterials.EMERALD, 1.0f, true, 60, 0.05f, new FabricItemSettings()));
+
+    public static final Item NETHERITE_FRAMED_WOODEN_SHIELD = ModItems.registerItem("netherite_framed_wooden_shield", 
+        new ModShieldItem(ToolMaterials.NETHERITE, 1.0f, true, 60, 0.05f, new FabricItemSettings()));
     
     public static final Item COPPER_SHIELD = ModItems.registerItem("copper_shield", 
         new ModShieldItem(ModToolMaterials.COPPER, 3.0f, false, 70, 0.075f, new FabricItemSettings()));

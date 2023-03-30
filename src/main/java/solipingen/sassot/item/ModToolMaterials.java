@@ -9,7 +9,8 @@ import net.minecraft.util.Lazy;
 @SuppressWarnings("deprecation")
 public enum ModToolMaterials implements ToolMaterial {
     BONE(ModMiningLevels.WOOD, 108, 4.0f, 1.0f, 9, () -> Ingredient.ofItems(Items.BONE)), 
-    COPPER(ModMiningLevels.COPPER, 250, 6.0f, 1.0f, 14, () -> Ingredient.ofItems(Items.COPPER_INGOT));
+    COPPER(ModMiningLevels.COPPER, 250, 6.0f, 1.0f, 14, () -> Ingredient.ofItems(Items.COPPER_INGOT)), 
+    EMERALD(ModMiningLevels.IRON, 420, 4.0f, 1.0f, 15, () -> Ingredient.ofItems(Items.EMERALD));
 
     private final int miningLevel;
     private final int itemDurability;

@@ -7,7 +7,7 @@
       "item": "minecraft:iron_ingot"
     },
     "base": {
-      "item": "sassot:copper_framed_wooden_shield"
+      "item": "sassot:wooden_shield"
     },
     "result": {
       "item": "sassot:iron_framed_wooden_shield"
