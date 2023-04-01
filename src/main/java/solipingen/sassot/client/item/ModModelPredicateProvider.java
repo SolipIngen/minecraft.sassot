@@ -1,4 +1,4 @@
-package solipingen.sassot.client.render.entity.model;
+package solipingen.sassot.client.item;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -17,7 +17,7 @@ import solipingen.sassot.item.ModItems;
 public class ModModelPredicateProvider {
     
     
-    public static void registerModModelPredicates() {
+    public static void registerModItemModelPredicates() {
 
         // Spears
         ModModelPredicateProvider.registerSpear(ModItems.WOODEN_SPEAR);
