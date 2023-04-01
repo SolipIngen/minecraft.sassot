@@ -87,7 +87,7 @@ public class ModVillagerProfessions {
                     new SellItemFactory(ModItems.COPPER_SPEAR, 2, 1, 5), 
                     new SellItemFactory(ModItems.COPPER_AXE, 2, 1, 5), 
                     new SellItemFactory(ModItems.COPPER_FRAMED_WOODEN_SHIELD, 3, 1, 5), new SellItemFactory(ModItems.COPPER_SHIELD, 4, 1, 5)}, 
-                3, new Factory[]{ new BuyForOneEmeraldFactory(Items.GOLD_INGOT, 2, 12, 20),  
+                3, new Factory[]{new BuyForOneEmeraldFactory(Items.GOLD_INGOT, 2, 12, 20),  
                     new SellItemFactory(Items.GOLDEN_SWORD, 3, 1, 10), 
                     new SellItemFactory(ModItems.GOLDEN_SPEAR, 3, 1, 10), 
                     new SellItemFactory(Items.GOLDEN_AXE, 3, 1, 10), 
@@ -101,7 +101,7 @@ public class ModVillagerProfessions {
                     new SellEnchantedToolFactory(Items.DIAMOND_SWORD, 17, 3, 15), 
                     new SellEnchantedToolFactory(ModItems.DIAMOND_SPEAR, 17, 3, 15), 
                     new SellEnchantedToolFactory(Items.DIAMOND_AXE, 17, 3, 15), 
-                    new SellEnchantedToolFactory(ModItems.DIAMOND_SHIELD, 24, 3, 15)}
+                    new SellEnchantedToolFactory(ModItems.DIAMOND_FRAMED_WOODEN_SHIELD, 15, 3, 15), new SellEnchantedToolFactory(ModItems.EMERALD_FRAMED_WOODEN_SHIELD, 10, 3, 15), new SellEnchantedToolFactory(ModItems.DIAMOND_SHIELD, 24, 3, 15)}
             )));
     }
 
@@ -124,7 +124,7 @@ public class ModVillagerProfessions {
     }
 
     public static void registerModVillagerProfessions() {
-        SpearsAxesSwordsShieldsAndOtherTools.LOGGER.debug("Registering Villagers for " + SpearsAxesSwordsShieldsAndOtherTools.MOD_ID);
+        SpearsAxesSwordsShieldsAndOtherTools.LOGGER.debug("Registering Mod Villager Professions for " + SpearsAxesSwordsShieldsAndOtherTools.MOD_ID);
     }
 
     private static Int2ObjectMap<Factory[]> copyToFastUtilMap(ImmutableMap<Integer, Factory[]> map) {

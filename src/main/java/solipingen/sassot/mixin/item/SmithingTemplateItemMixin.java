@@ -28,13 +28,9 @@ public abstract class SmithingTemplateItemMixin extends Item {
         ArrayList<Identifier> textures = new ArrayList<Identifier>();
         for (Identifier texture : originalList) {
             textures.add(texture);
-            if (textures.size() == 7) {
-                textures.add(EMPTY_SLOT_SPEAR_TEXTURE);
-            }
-            else if (textures.size() == 8) {
-                textures.add(EMPTY_SLOT_SHIELD_TEXTURE);
-            }
         }
+        textures.add(EMPTY_SLOT_SPEAR_TEXTURE);
+        textures.add(EMPTY_SLOT_SHIELD_TEXTURE);
         return List.copyOf(textures);
     }
 
