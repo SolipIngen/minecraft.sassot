@@ -51,7 +51,7 @@ public class ModModelPredicateProvider {
 
     private static void registerSpear(Item spear) {
         ModelPredicateProviderRegistry.register(spear, new Identifier("throwing"),
-            (stack, world, entity, seed) -> (entity != null && entity.isUsingItem() && !(entity instanceof MerchantEntity) && entity.getActiveItem() == stack) || (entity instanceof PiglinEntity && ((MobEntity)entity).isAttacking() && entity.getActiveItem() == stack) ? 1.0f : 0.0f);
+            (stack, world, entity, seed) -> (entity != null && entity.isUsingItem() && !(entity instanceof MerchantEntity) && entity.getActiveItem() == stack) || (entity instanceof PiglinEntity && ((MobEntity)entity).isAttacking()) ? 1.0f : 0.0f);
     }
 
     private static void registerShield(Item shield) {

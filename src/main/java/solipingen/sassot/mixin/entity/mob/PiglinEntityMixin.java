@@ -20,9 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.RangedWeaponItem;
-import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -113,15 +111,6 @@ public abstract class PiglinEntityMixin extends AbstractPiglinEntity implements 
         spearEntity.setVelocity(d, e + g * 0.15, f, speed, 14 - this.world.getDifficulty().getId() * 4);
         this.playSound(ModSoundEvents.PIGLIN_SPEAR_THROW, 1.0f, 1.0f / (this.getRandom().nextFloat() * 0.4f + 0.8f));
         this.world.spawnEntity(spearEntity);
-    }
-
-    @Override
-    public double squaredAttackRange(LivingEntity target) {
-        Item mainHandItem = this.getMainHandStack().getItem();
-        if (mainHandItem instanceof SwordItem) {
-            return MathHelper.square(this.getWidth() * 2.0f + 1.0f) + target.getWidth();
-        }
-        return super.squaredAttackRange(target);
     }
 
 

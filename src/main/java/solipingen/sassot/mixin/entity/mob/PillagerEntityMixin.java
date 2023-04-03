@@ -20,13 +20,11 @@ import net.minecraft.entity.mob.IllagerEntity;
 import net.minecraft.entity.mob.PillagerEntity;
 import net.minecraft.entity.mob.RavagerEntity;
 import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
@@ -175,15 +173,7 @@ public abstract class PillagerEntityMixin extends IllagerEntity implements Cross
             cbi.cancel();
         }
     }
-
-    @Override
-    public double squaredAttackRange(LivingEntity target) {
-        Item mainHandItem = this.getMainHandStack().getItem();
-        if (mainHandItem instanceof SwordItem) {
-            return MathHelper.square(this.getWidth() * 2.0f + 1.0f) + target.getWidth();
-        }
-        return super.squaredAttackRange(target);
-    }
+    
     
     static class PillagerSpearThrowAttackGoal extends SpearThrowAttackGoal {
         private final PillagerEntity pillager;

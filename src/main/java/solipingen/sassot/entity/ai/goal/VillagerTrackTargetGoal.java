@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Box;
 import org.jetbrains.annotations.Nullable;
 
+
 public class VillagerTrackTargetGoal extends TrackTargetGoal {
     private final VillagerEntity villager;
     @Nullable

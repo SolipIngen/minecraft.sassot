@@ -82,6 +82,7 @@ import solipingen.sassot.entity.projectile.spear.SpearEntity;
 import solipingen.sassot.entity.projectile.spear.StoneSpearEntity;
 import solipingen.sassot.entity.projectile.spear.WoodenSpearEntity;
 import solipingen.sassot.item.ModItems;
+import solipingen.sassot.item.ModMiningLevels;
 import solipingen.sassot.item.SpearItem;
 import solipingen.sassot.sound.ModSoundEvents;
 import solipingen.sassot.village.ModVillagerProfessions;
@@ -181,9 +182,6 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
         ItemStack itemStack = this.getEquippedStack(EquipmentSlot.MAINHAND);
         if (!itemStack.isEmpty()) {
             this.goalSelector.add(3, this.spearThrowAttackGoal);
-        }
-        else {
-            this.goalSelector.add(3, this.meleeAttackGoal);
         }
         this.targetSelector.add(1, this.villagerTrackTargetGoal);
         this.targetSelector.add(2, new RevengeGoal(this, MerchantEntity.class, IronGolemEntity.class).setGroupRevenge(new Class[0]));
@@ -346,71 +344,52 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
         this.world.spawnEntity(spearEntity);
     }
 
-    @Inject(method = "talkWithVillager", at = @At("TAIL"))
+    @Inject(method = "talkWithVillager", at = @At("TAIL"), cancellable = true)
     private void injectedTalkWithVillager(ServerWorld world, VillagerEntity villager, long time, CallbackInfo cbi) {
         if (villager.getVillagerData().getProfession() == VillagerProfession.WEAPONSMITH) {
+            if (this.getMainHandStack().hasEnchantments()) {
+                cbi.cancel();
+            }
+            int level = this.getVillagerData().getLevel();
+            int weaponsmithLevel = villager.getVillagerData().getLevel();
             if (this.getVillagerData().getProfession() == ModVillagerProfessions.SWORDSMAN) {
-                ItemStack mainHandStack = this.getMainHandStack();
-                if (mainHandStack.getItem() instanceof SwordItem) {
-                    SwordItem swordItem = (SwordItem)mainHandStack.getItem();
-                    int level = this.getVillagerData().getLevel();
-                    int weaponsmithLevel = villager.getVillagerData().getLevel();
-                    int materialLevel = swordItem.getMaterial().getMiningLevel();
-                    if (materialLevel < level) {
-                        if (level >= 1 && weaponsmithLevel >= 1) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
-                        }
-                    }
-                    if (materialLevel < level - 1) {
-                        if (level == 2 && weaponsmithLevel >= 2) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.COPPER_SWORD));
-                        }
-                        if (level == 3 && weaponsmithLevel >= 3) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
-                        }
-                    }
-                    if (materialLevel < level - 2) {
-                        if (level == 4 && weaponsmithLevel >= 4) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
-                        }
-                        if (level == 5 && weaponsmithLevel == 5) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
-                        }
-                    }
+                int materialLevel = ((SwordItem)this.getMainHandStack().getItem()).getMaterial().getMiningLevel();
+                if (level >= 1 && weaponsmithLevel >= 1 && materialLevel < ModMiningLevels.STONE) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
+                }
+                if (level >= 2 && weaponsmithLevel >= 2 && materialLevel < ModMiningLevels.COPPER) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.COPPER_SWORD));
+                }
+                if (level >= 3 && weaponsmithLevel >= 3 && materialLevel < ModMiningLevels.STONE) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
+                }
+                if (level >= 4 && weaponsmithLevel >= 4 && materialLevel < ModMiningLevels.IRON) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+                }
+                if (level == 5 && weaponsmithLevel == 5 && materialLevel < ModMiningLevels.DIAMOND) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
                 }
             }
             else if (this.getVillagerData().getProfession() == ModVillagerProfessions.SPEARMAN) {
-                ItemStack mainHandStack = this.getMainHandStack();
-                if (mainHandStack.getItem() instanceof SpearItem) {
-                    SpearItem spearItem = (SpearItem)mainHandStack.getItem();
-                    int level = this.getVillagerData().getLevel();
-                    int weaponsmithLevel = villager.getVillagerData().getLevel();
-                    int materialLevel = spearItem.getMaterial().getMiningLevel();
-                    if (materialLevel < level) {
-                        if (level >= 1 && weaponsmithLevel >= 1) {
-                            int randomInt = this.random.nextInt(3);
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.STONE_SPEAR));
-                            if (randomInt == 0) {
-                                this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.FLINT_SPEAR));
-                            }
-                        }
+                int materialLevel = ((SpearItem)this.getMainHandStack().getItem()).getMaterial().getMiningLevel();
+                if (level >= 1 && weaponsmithLevel >= 1 && materialLevel < ModMiningLevels.STONE) {
+                    int randomInt = this.random.nextInt(3);
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.STONE_SPEAR));
+                    if (randomInt == 0) {
+                        this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.FLINT_SPEAR));
                     }
-                    if (materialLevel < level - 1) {
-                        if (level >= 2 && weaponsmithLevel >= 2) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.COPPER_SPEAR));
-                        }
-                        if (level >= 3 && weaponsmithLevel >= 3) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOLDEN_SPEAR));
-                        }
-                    }
-                    if (materialLevel < level - 2) {
-                        if (level >= 4 && weaponsmithLevel >= 4) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.IRON_SPEAR));
-                        }
-                        if (level >= 5 && weaponsmithLevel >= 5) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.DIAMOND_SPEAR));
-                        }
-                    }
+                }
+                if (level >= 2 && weaponsmithLevel >= 2 && materialLevel < ModMiningLevels.COPPER) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.COPPER_SPEAR));
+                }
+                if (level >= 3 && weaponsmithLevel >= 3 && materialLevel < ModMiningLevels.STONE) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOLDEN_SPEAR));
+                }
+                if (level >= 4 && weaponsmithLevel >= 4 && materialLevel < ModMiningLevels.IRON) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.IRON_SPEAR));
+                }
+                if (level == 5 && weaponsmithLevel == 5 && materialLevel < ModMiningLevels.DIAMOND) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.DIAMOND_SPEAR));
                 }
             }
         }
@@ -461,8 +440,10 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
     public double squaredAttackRange(LivingEntity target) {
         Item mainHandItem = this.getMainHandStack().getItem();
         if (mainHandItem instanceof SwordItem) {
-            int swordsmanLevel = this.getVillagerData().getLevel();
-            return MathHelper.square(this.getWidth() * 2.0f + 1.0f + 0.2f*(swordsmanLevel - 1)) + target.getWidth();
+            return (double)MathHelper.square(this.getWidth() * 2.0f + 1.0f + target.getWidth());
+        }
+        else if (mainHandItem instanceof SpearItem || this.getMainHandStack().isOf(ModItems.BLAZEARM)) {
+            return (double)MathHelper.square(this.getWidth() * 2.0f + 2.0f + target.getWidth());
         }
         return super.squaredAttackRange(target);
     }

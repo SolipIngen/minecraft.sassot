@@ -21,6 +21,7 @@
     "entity.accessors.PiglinBrainInvoker", 
     "entity.ai.brain.task.HoldTradeOffersTaskMixin", 
     "entity.ai.brain.task.MeleeAttackTaskMixin", 
+    "entity.ai.goal.TridentAttackGoalMixin", 
     "entity.mob.DrownedEntityMixin", 
     "entity.mob.MobEntityMixin", 
     "entity.mob.PiglinBrainMixin", 

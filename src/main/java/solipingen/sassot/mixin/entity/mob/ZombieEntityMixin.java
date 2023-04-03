@@ -8,21 +8,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.SwordItem;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.World;
 import solipingen.sassot.item.ModItems;
-import solipingen.sassot.item.SpearItem;
 
 
 @Mixin(ZombieEntity.class)
@@ -90,16 +85,6 @@ public abstract class ZombieEntityMixin extends HostileEntity {
         }
     }
 
-    @Override
-    public double squaredAttackRange(LivingEntity target) {
-        Item mainHandItem = this.getMainHandStack().getItem();
-        if (mainHandItem instanceof SwordItem) {
-            return MathHelper.square(this.getWidth() * 2.0f + 1.0f) + target.getWidth();
-        }
-        else if (mainHandItem instanceof SpearItem) {
-            return MathHelper.square(this.getWidth() * 2.0f + 2.0f) + target.getWidth();
-        }
-        return super.squaredAttackRange(target);
-    }
+
     
 }
