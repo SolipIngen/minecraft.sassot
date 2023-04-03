@@ -26,6 +26,7 @@ public class ModSoundEvents {
     public static final SoundEvent BLAZEARM_FLARE_2 = ModSoundEvents.registerSoundEvent("blazearm_flare_2");
     public static final SoundEvent BLAZEARM_FLARE_3 = ModSoundEvents.registerSoundEvent("blazearm_flare_3");
 
+    public static final SoundEvent ECHO_CRYSTAL_BLOCK_BREAK = ModSoundEvents.registerSoundEvent("echo_crystal_block_break");
     public static final SoundEvent ECHO_CRYSTAL_CLUSTER_BREAK = ModSoundEvents.registerSoundEvent("echo_crystal_cluster_break");
     public static final SoundEvent LARGE_ECHO_CRYSTAL_BUD_BREAK = ModSoundEvents.registerSoundEvent("large_echo_crystal_bud_break");
     public static final SoundEvent MEDIUM_ECHO_CRYSTAL_BUD_BREAK = ModSoundEvents.registerSoundEvent("medium_echo_crystal_bud_break");

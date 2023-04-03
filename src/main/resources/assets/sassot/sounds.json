@@ -96,7 +96,16 @@
         "sounds": [
             "sassot:blazearm_flare_3"
         ]
-    },
+    }, 
+    "echo_crystal_block_break": {
+        "subtitle": "subtitles.sassot.echo_crystal_block_break", 
+        "sounds": [
+            "sassot:echo_crystal_cluster_break_ver1", 
+            "sassot:echo_crystal_cluster_break_ver2", 
+            "sassot:echo_crystal_cluster_break_ver3", 
+            "sassot:echo_crystal_cluster_break_ver4"
+        ]
+    }, 
     "echo_crystal_cluster_break": {
         "subtitle": "subtitles.sassot.echo_crystal_cluster_break", 
         "sounds": [

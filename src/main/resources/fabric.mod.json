@@ -23,6 +23,9 @@
     ],
     "client": [
       "solipingen.sassot.SpearsAxesSwordsShieldsAndOtherToolsClient"
+    ],
+    "fabric-datagen": [
+      "solipingen.sassot.SpearsAxesSwordsShieldsAndOtherToolsDataGenerator"
     ]
   },
   "mixins": [
