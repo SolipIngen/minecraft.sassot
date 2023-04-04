@@ -293,7 +293,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         int sweepLevel = EnchantmentHelper.getEquipmentLevel(Enchantments.SWEEPING, this);
         int thrustLevel = EnchantmentHelper.getEquipmentLevel(ModEnchantments.THRUSTING, this);
         int hackLevel = EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this);
-
         if (sweepLevel > 0) {
             cbireturn.setReturnValue((float)(1.0 / (this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED) + 0.1*sweepLevel) * 20.0));
         }
@@ -357,7 +356,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         else if (mainHandItem instanceof AxeItem) {
             f += 0.04f * (1.0f + 0.33f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this)) * ((AxeItem)mainHandItem).getAttackDamage();
         }
-
         boolean criticalBl = ((PlayerEntity)(Object)this).getAttackCooldownProgress(0.5f) > 0.9f && this.fallDistance > 0.0f && !this.onGround && !this.isClimbing() && !this.isTouchingWater() && !this.hasVehicle() && !this.isSprinting();
         if (this.isSprinting() || criticalBl) {
             f += 0.15f;

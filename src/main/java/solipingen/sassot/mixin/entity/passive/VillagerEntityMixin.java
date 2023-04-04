@@ -27,7 +27,18 @@ import net.minecraft.entity.InteractionObserver;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.Activity;
 import net.minecraft.entity.ai.brain.Brain;
+import net.minecraft.entity.ai.brain.MemoryModuleType;
+import net.minecraft.entity.ai.brain.task.CelebrateRaidWinTask;
+import net.minecraft.entity.ai.brain.task.EndRaidTask;
+import net.minecraft.entity.ai.brain.task.FindWalkTargetTask;
+import net.minecraft.entity.ai.brain.task.LookAtMobTask;
+import net.minecraft.entity.ai.brain.task.RandomTask;
+import net.minecraft.entity.ai.brain.task.SeekSkyTask;
 import net.minecraft.entity.ai.brain.task.Task;
+import net.minecraft.entity.ai.brain.task.TaskTriggerer;
+import net.minecraft.entity.ai.brain.task.Tasks;
+import net.minecraft.entity.ai.brain.task.VillagerWalkTowardsTask;
+import net.minecraft.entity.ai.brain.task.WaitTask;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.RevengeGoal;
@@ -66,6 +77,7 @@ import net.minecraft.village.VillagerDataContainer;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.village.VillagerType;
 import net.minecraft.village.TradeOffers.Factory;
+import net.minecraft.village.raid.Raid;
 import net.minecraft.world.World;
 import solipingen.sassot.entity.ai.SpearThrowingMob;
 import solipingen.sassot.entity.ai.goal.SpearThrowAttackGoal;
@@ -143,6 +155,9 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
                         brain.setTaskList(activity, indexedTasks);
                     }
                 }
+                else if (activity == Activity.RAID && this.world instanceof ServerWorld) {
+                    brain.setTaskList(activity, VillagerEntityMixin.createFighterRaidTasks((ServerWorld)this.world, ((VillagerEntity)(Object)this), 0.67f));
+                }
                 else {
                     brain.setTaskList(activity, indexedTasks);
                 }
@@ -190,10 +205,32 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
         this.targetSelector.add(3, new ActiveTargetGoal<ZombieEntity>((MobEntity)this, ZombieEntity.class, true, this::shouldBeTargetedMob));
         this.targetSelector.add(3, new ActiveTargetGoal<VexEntity>((MobEntity)this, VexEntity.class, false, this::shouldBeTargetedMob));
     }
+
+    private static ImmutableList<Pair<Integer, ? extends Task<? super VillagerEntity>>> createFighterRaidTasks(ServerWorld world, VillagerEntity villager, float speed) {
+        return ImmutableList.of(Pair.of(0, TaskTriggerer.runIf(TaskTriggerer.predicate(VillagerEntityMixin::wonRaid), Tasks.pickRandomly(ImmutableList.of(Pair.of(SeekSkyTask.create(speed), 5), Pair.of(FindWalkTargetTask.create(speed * 1.1f), 2))))), 
+            Pair.of(0, new CelebrateRaidWinTask(600, 600)), 
+            Pair.of(2, TaskTriggerer.runIf(TaskTriggerer.predicate(VillagerEntityMixin::hasActiveRaid), VillagerWalkTowardsTask.create(MemoryModuleType.JOB_SITE, speed, 1, 100, 1200))), 
+            VillagerEntityMixin.createBusyFollowTask(), Pair.of(99, EndRaidTask.create()));
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static Pair<Integer, Task<LivingEntity>> createBusyFollowTask() {
+        return Pair.of(5, new RandomTask(ImmutableList.of(Pair.of(LookAtMobTask.create(EntityType.VILLAGER, 8.0f), 2), Pair.of(LookAtMobTask.create(EntityType.PLAYER, 8.0f), 2), Pair.of(new WaitTask(30, 60), 8))));
+    }
+
+    private static boolean hasActiveRaid(ServerWorld world, LivingEntity entity) {
+        Raid raid = world.getRaidAt(entity.getBlockPos());
+        return raid != null && raid.isActive() && !raid.hasWon() && !raid.hasLost();
+    }
+
+    private static boolean wonRaid(ServerWorld world, LivingEntity livingEntity) {
+        Raid raid = world.getRaidAt(livingEntity.getBlockPos());
+        return raid != null && raid.hasWon();
+    }
     
     private void initFighterAttackDamageAddition() {
         long levelledAttackDamageAddition = Math.round(Math.pow(1.5, this.getVillagerData().getLevel()));
-        EntityAttributeModifier attackDamageModifier = new EntityAttributeModifier("levelled_attack_damage", (double)levelledAttackDamageAddition, EntityAttributeModifier.Operation.ADDITION);
+        EntityAttributeModifier attackDamageModifier = new EntityAttributeModifier("Villager attack damage bonus", (double)levelledAttackDamageAddition, EntityAttributeModifier.Operation.ADDITION);
         this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).clearModifiers();
         this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).addPersistentModifier(attackDamageModifier);
     }

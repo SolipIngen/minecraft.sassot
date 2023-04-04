@@ -88,12 +88,13 @@ public class SpearThrowAttackTask<E extends MobEntity, T extends LivingEntity> e
             float g = MathHelper.clamp(f, 0.1f, 1.0f);
             if (d > entity.squaredAttackRange(target)) {
                 ((SpearThrowingMob)entity).spearAttack(target, g);
+                this.updateCountdownTicks = MathHelper.floor(f * (float)(this.maxIntervalTicks - this.minIntervalTicks) + (float)this.minIntervalTicks);
             }
             else {
                 entity.swingHand(Hand.MAIN_HAND);
                 entity.tryAttack(target);
+                this.updateCountdownTicks = 0;
             }
-            this.updateCountdownTicks = MathHelper.floor(f * (float)(this.maxIntervalTicks - this.minIntervalTicks) + (float)this.minIntervalTicks);
         } 
         else if (this.updateCountdownTicks < 0) {
             this.updateCountdownTicks = MathHelper.floor(MathHelper.lerp(Math.sqrt(d) / (double)this.maxShootRange, (double)this.minIntervalTicks, (double)this.maxIntervalTicks));

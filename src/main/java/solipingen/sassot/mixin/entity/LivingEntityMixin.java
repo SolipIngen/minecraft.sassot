@@ -410,10 +410,10 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
             if (profession == ModVillagerProfessions.SWORDSMAN || profession == ModVillagerProfessions.SPEARMAN) {
                 int i = villager.getVillagerData().getLevel();
                 if (((LivingEntity)(Object)this) instanceof MobEntity && ((MobEntity)(Object)this).getXpToDrop() >= 1) {
-                    villager.setExperience(villager.getExperience() + i*this.random.nextBetween(1, ((MobEntity)(Object)this).getXpToDrop()));
+                    villager.setExperience(villager.getExperience() + i*((MobEntity)(Object)this).getXpToDrop());
                 }
                 else if (((LivingEntity)(Object)this) instanceof PlayerEntity && ((PlayerEntity)(Object)this).getXpToDrop() >= 1) {
-                    villager.setExperience(villager.getExperience() + i*this.random.nextBetween(1, ((PlayerEntity)(Object)this).getXpToDrop()));
+                    villager.setExperience(villager.getExperience() + i*((PlayerEntity)(Object)this).getXpToDrop());
                 }
             }
             villager.reinitializeBrain((ServerWorld)villager.world);

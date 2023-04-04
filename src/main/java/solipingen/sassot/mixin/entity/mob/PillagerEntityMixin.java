@@ -45,7 +45,7 @@ import solipingen.sassot.sound.ModSoundEvents;
 public abstract class PillagerEntityMixin extends IllagerEntity implements CrossbowUser, SpearThrowingMob {
     private final PillagerMeleeAttackGoal meleeAttackGoal = new PillagerMeleeAttackGoal((PillagerEntity)(Object)this);
     private final PillagerSpearThrowAttackGoal spearThrowAttackGoal = new PillagerSpearThrowAttackGoal(this, 1.0, 40 - 5*(this.world.getDifficulty().getId() - 1), 10.0f);
-    private final CrossbowAttackGoal<PillagerEntity> crossbowAttackGoal = new CrossbowAttackGoal<PillagerEntity>((PillagerEntity)(Object)this, 1.0, 8.0f);
+    private final CrossbowAttackGoal<PillagerEntity> crossbowAttackGoal = new CrossbowAttackGoal<PillagerEntity>((PillagerEntity)(Object)this, 1.0, 24.0f);
 
 
     protected PillagerEntityMixin(EntityType<? extends IllagerEntity> entityType, World world) {

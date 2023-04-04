@@ -92,12 +92,13 @@ public class SpearThrowAttackGoal extends ProjectileAttackGoal {
             float g = MathHelper.clamp(f, 0.1f, 1.0f);
             if (d > this.mob.squaredAttackRange(target)) {
                 this.owner.spearAttack(this.target, g);
+                this.updateCountdownTicks = MathHelper.floor(f * (float)(this.maxIntervalTicks - this.minIntervalTicks) + (float)this.minIntervalTicks);
             }
             else {
                 this.mob.swingHand(Hand.MAIN_HAND);
                 this.mob.tryAttack(target);
+                this.updateCountdownTicks = 0;
             }
-            this.updateCountdownTicks = MathHelper.floor(f * (float)(this.maxIntervalTicks - this.minIntervalTicks) + (float)this.minIntervalTicks);
         } 
         else if (this.updateCountdownTicks < 0) {
             this.updateCountdownTicks = MathHelper.floor(MathHelper.lerp(Math.sqrt(d) / (double)this.maxShootRange, (double)this.minIntervalTicks, (double)this.maxIntervalTicks));

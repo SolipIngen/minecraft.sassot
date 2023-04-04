@@ -24,6 +24,7 @@
     "entity.ai.goal.TridentAttackGoalMixin", 
     "entity.mob.DrownedEntityMixin", 
     "entity.mob.MobEntityMixin", 
+    "entity.mob.PatrolEntityMixin", 
     "entity.mob.PiglinBrainMixin", 
     "entity.mob.PiglinEntityMixin", 
     "entity.mob.PillagerEntityMixin", 
