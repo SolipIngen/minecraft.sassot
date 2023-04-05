@@ -19,9 +19,9 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.IllagerEntity;
 import net.minecraft.entity.mob.PillagerEntity;
 import net.minecraft.entity.mob.RavagerEntity;
-import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
@@ -52,7 +52,12 @@ public abstract class PillagerEntityMixin extends IllagerEntity implements Cross
         super(entityType, world);
     }
 
-    @Inject(method = "initialize", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void injectedInit(EntityType<? extends PillagerEntity> entityType, World world, CallbackInfo cbi) {
+        this.updateAttackType();
+    }
+
+    @Inject(method = "initialize", at = @At("TAIL"), cancellable = true)
     private void injectedInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> cbireturn) {
         this.updateAttackType();
         if (spawnReason == SpawnReason.STRUCTURE || this.isPatrolLeader()) {
@@ -115,7 +120,7 @@ public abstract class PillagerEntityMixin extends IllagerEntity implements Cross
         }
     }
 
-    public void updateAttackType() {
+    private void updateAttackType() {
         if (this.world == null || this.world.isClient) {
             return;
         }
@@ -123,7 +128,7 @@ public abstract class PillagerEntityMixin extends IllagerEntity implements Cross
         this.goalSelector.remove(this.spearThrowAttackGoal);
         this.goalSelector.remove(this.crossbowAttackGoal);
         ItemStack itemStack = this.getMainHandStack();
-        if (itemStack.getItem() instanceof CrossbowItem) {
+        if (itemStack.getItem() instanceof RangedWeaponItem) {
             this.goalSelector.add(3, this.crossbowAttackGoal);
         } 
         else if (itemStack.getItem() instanceof SwordItem) {
@@ -173,7 +178,20 @@ public abstract class PillagerEntityMixin extends IllagerEntity implements Cross
             cbi.cancel();
         }
     }
-    
+
+    @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
+    private void injectedReadCustomDataFromNbt(NbtCompound nbt, CallbackInfo cbi) {
+        this.updateAttackType();
+    }
+
+    @Override
+    public void equipStack(EquipmentSlot slot, ItemStack stack) {
+        super.equipStack(slot, stack);
+        if (!this.world.isClient) {
+            this.updateAttackType();
+        }
+    }
+   
     
     static class PillagerSpearThrowAttackGoal extends SpearThrowAttackGoal {
         private final PillagerEntity pillager;

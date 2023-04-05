@@ -52,6 +52,7 @@ public class SpearThrowAttackGoal extends ProjectileAttackGoal {
             return false;
         }
         this.target = livingEntity;
+        System.out.println(true);
         return true;
     }
     
@@ -97,11 +98,10 @@ public class SpearThrowAttackGoal extends ProjectileAttackGoal {
             else {
                 this.mob.swingHand(Hand.MAIN_HAND);
                 this.mob.tryAttack(target);
-                this.updateCountdownTicks = 0;
             }
         } 
         else if (this.updateCountdownTicks < 0) {
-            this.updateCountdownTicks = MathHelper.floor(MathHelper.lerp(Math.sqrt(d) / (double)this.maxShootRange, (double)this.minIntervalTicks, (double)this.maxIntervalTicks));
+            this.updateCountdownTicks = d <= this.mob.squaredAttackRange(target) ? 20 : MathHelper.floor(MathHelper.lerp(Math.sqrt(d) / (double)this.maxShootRange, (double)this.minIntervalTicks, (double)this.maxIntervalTicks));
         }
     }
 }

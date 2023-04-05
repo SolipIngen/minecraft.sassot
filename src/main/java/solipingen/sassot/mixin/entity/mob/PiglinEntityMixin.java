@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.RangedWeaponItem;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
@@ -69,7 +70,7 @@ public abstract class PiglinEntityMixin extends AbstractPiglinEntity implements 
         }
     }
 
-    @Inject(method = "initialize", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "initialize", at = @At("TAIL"), cancellable = true)
     private void injectedInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> cbireturn) {
         if (spawnReason == SpawnReason.STRUCTURE) {
             if (!(this.getMainHandStack().getItem() instanceof RangedWeaponItem)) {
@@ -87,6 +88,21 @@ public abstract class PiglinEntityMixin extends AbstractPiglinEntity implements 
     @Redirect(method = "getActivity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/PiglinEntity;isHoldingTool()Z"))
     private boolean redirectedIsHoldingTool(PiglinEntity piglin) {
         return this.isHoldingTool() || this.getMainHandStack().getItem() instanceof SpearItem || this.getOffHandStack().getItem() instanceof SpearItem || this.isHolding(ModItems.BLAZEARM);
+    }
+
+    @Inject(method = "prefersNewEquipment", at = @At("TAIL"), cancellable = true)
+    private void injectedPrefersNewEquipment(ItemStack newStack, ItemStack oldStack, CallbackInfoReturnable<Boolean> cbireturn) {
+        if (newStack.getItem() instanceof ShieldItem) {
+            cbireturn.setReturnValue(false);
+        }
+    }
+
+    @Override
+    public ItemStack tryEquip(ItemStack stack) {
+        if (stack.getItem() instanceof ShieldItem) {
+            return ItemStack.EMPTY;
+        }
+        return super.tryEquip(stack);
     }
 
     @Override

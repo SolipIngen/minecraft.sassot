@@ -93,11 +93,10 @@ public class SpearThrowAttackTask<E extends MobEntity, T extends LivingEntity> e
             else {
                 entity.swingHand(Hand.MAIN_HAND);
                 entity.tryAttack(target);
-                this.updateCountdownTicks = 0;
             }
         } 
         else if (this.updateCountdownTicks < 0) {
-            this.updateCountdownTicks = MathHelper.floor(MathHelper.lerp(Math.sqrt(d) / (double)this.maxShootRange, (double)this.minIntervalTicks, (double)this.maxIntervalTicks));
+            this.updateCountdownTicks = d <= entity.squaredAttackRange(target) ? 20 : MathHelper.floor(MathHelper.lerp(Math.sqrt(d) / (double)this.maxShootRange, (double)this.minIntervalTicks, (double)this.maxIntervalTicks));
         }
     }
 

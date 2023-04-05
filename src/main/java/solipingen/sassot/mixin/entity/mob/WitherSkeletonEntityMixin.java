@@ -70,7 +70,7 @@ public abstract class WitherSkeletonEntityMixin extends AbstractSkeletonEntity i
         super.updateEnchantments(random, localDifficulty);
     }
 
-    @Inject(method = "initialize", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "initialize", at = @At("TAIL"), cancellable = true)
     private void injectedInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> cbireturn) {
         this.updateEnchantments(world.getRandom(), difficulty);
     }

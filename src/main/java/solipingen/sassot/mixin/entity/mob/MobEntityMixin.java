@@ -17,12 +17,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.item.SwordItem;
+import net.minecraft.item.TridentItem;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import solipingen.sassot.enchantment.ModEnchantments;
+import solipingen.sassot.item.BlazearmItem;
 import solipingen.sassot.item.ModItems;
 import solipingen.sassot.item.ModShieldItem;
 import solipingen.sassot.item.SpearItem;
@@ -33,6 +35,41 @@ public abstract class MobEntityMixin extends LivingEntity {
 
     protected MobEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
+    }
+
+    @Inject(method = "prefersNewEquipment", at = @At("TAIL"), cancellable = true)
+    private void injectedPrefersNewEquipment(ItemStack newStack, ItemStack oldStack, CallbackInfoReturnable<Boolean> cbireturn) {
+        if (newStack.getItem() instanceof SpearItem) {
+            if (!(oldStack.getItem() instanceof SpearItem)) {
+                cbireturn.setReturnValue(true);
+            }
+            else {
+                SpearItem spearItem = (SpearItem)newStack.getItem();
+                SpearItem spearItem2 = (SpearItem)oldStack.getItem();
+                if (spearItem.getAttackDamage() != spearItem2.getAttackDamage()) {
+                    cbireturn.setReturnValue(spearItem.getAttackDamage() > spearItem2.getAttackDamage());
+                }
+                else {
+                    cbireturn.setReturnValue(((MobEntity)(Object)this).prefersNewDamageableItem(newStack, oldStack));
+                }
+            }
+        }
+        if (newStack.getItem() instanceof TridentItem) {
+            if (!(oldStack.getItem() instanceof TridentItem)) {
+                cbireturn.setReturnValue(true);
+            }
+            else {
+                cbireturn.setReturnValue(((MobEntity)(Object)this).prefersNewDamageableItem(newStack, oldStack));
+            }
+        }
+        if (newStack.getItem() instanceof BlazearmItem) {
+            if (!(oldStack.getItem() instanceof BlazearmItem)) {
+                cbireturn.setReturnValue(true);
+            }
+            else {
+                cbireturn.setReturnValue(((MobEntity)(Object)this).prefersNewDamageableItem(newStack, oldStack));
+            }
+        }
     }
 
     @Redirect(method = "tryAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/MobEntity;disablePlayerShield(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)V"))
