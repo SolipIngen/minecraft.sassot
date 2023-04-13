@@ -170,7 +170,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
                 iLivingEntity.setIsSkewered(true);
             }
         }
-        DamageSource damageSource = this.getDamageSources().thrown(this, entity2 == null ? this : entity2);
+        DamageSource damageSource = this.getDamageSources().trident(this, entity2 == null ? this : entity2);
         this.dealtDamage = true;
         SoundEvent soundEvent = ModSoundEvents.SPEAR_HIT_ENTITY;
         if (entity.damage(damageSource, f)) {

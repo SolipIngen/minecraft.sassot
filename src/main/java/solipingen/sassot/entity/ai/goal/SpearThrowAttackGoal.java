@@ -52,7 +52,6 @@ public class SpearThrowAttackGoal extends ProjectileAttackGoal {
             return false;
         }
         this.target = livingEntity;
-        System.out.println(true);
         return true;
     }
     

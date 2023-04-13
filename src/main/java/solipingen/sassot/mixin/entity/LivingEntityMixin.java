@@ -271,7 +271,8 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
                         float r = damagef - ((LivingEntity)(Object)this).getAbsorptionAmount();
                         ((LivingEntity)(Object)this).setAbsorptionAmount(0.0f);
                         ((LivingEntity)(Object)this).setHealth(health - r);
-                    } else {
+                    } 
+                    else {
                         ((LivingEntity)(Object)this).setAbsorptionAmount(((LivingEntity)(Object)this).getAbsorptionAmount() - damagef);
                     }
                     ((LivingEntity)(Object)this).getDamageTracker().onDamage(source, health, damagef);
@@ -304,7 +305,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
                 if (this.world instanceof ServerWorld) {
                     if (!(source.isOf(DamageTypes.FALLING_ANVIL) || source.isOf(DamageTypes.FALLING_STALACTITE) || source.isOf(DamageTypes.STALAGMITE))) {
                         ((ServerWorld)this.world).spawnParticles(ParticleTypes.SONIC_BOOM, this.getX(), this.getEyePos().y - 0.5, this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
-                        this.world.playSound(null, this.getX(), this.getY(), this.getZ(), ModSoundEvents.SHIELD_ECHO, this.getSoundCategory(), 0.5f + 0.1f*echoingLevel, 0.7f + 0.15f*echoingLevel + 0.15f*this.random.nextFloat());
+                        this.world.playSound(null, this.getX(), this.getY(), this.getZ(), ModSoundEvents.SHIELD_ECHO, this.getSoundCategory(), 0.5f + 0.1f*echoingLevel, 0.67f + 0.05f*echoingLevel + 0.05f*this.random.nextFloat());
                     }
                 }
             }

@@ -8,6 +8,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.MapColor;
+import net.minecraft.block.Material;
 import net.minecraft.block.SculkBlock;
 import net.minecraft.block.SculkCatalystBlock;
 import net.minecraft.block.SculkSensorBlock;
@@ -16,6 +18,7 @@ import net.minecraft.block.SculkVeinBlock;
 import net.minecraft.block.enums.SculkSensorPhase;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.sound.BlockSoundGroup;
 
 @Mixin(Blocks.class)
 public abstract class BlocksMixin {
@@ -32,7 +35,7 @@ public abstract class BlocksMixin {
         else if (entry instanceof SculkVeinBlock) {
             Registry.register(Registries.BLOCK, name, entry);
             int rawId = Registries.BLOCK.getRawId(entry);
-            Block newEntry = (Block)new SculkVeinBlock(AbstractBlock.Settings.copy(entry).luminance(state -> 1));
+            Block newEntry = (Block)new SculkVeinBlock(AbstractBlock.Settings.of(new Material.Builder(MapColor.BLACK).replaceable().destroyedByPiston().build()).noCollision().strength(0.2f).luminance(state -> 1).sounds(BlockSoundGroup.SCULK_VEIN));
             cbireturn.setReturnValue(Registry.register(Registries.BLOCK, rawId, name, newEntry));
         }
         else if (entry instanceof SculkSensorBlock) {
