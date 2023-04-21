@@ -43,6 +43,25 @@ public class ModItemGroups {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(entries -> entries.add(ModItems.NETHERITE_SPEAR));
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(entries -> entries.add(ModItems.BLAZEARM));
 
+        // Fishing Rod Items
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(ModItems.COPPER_FUSED_FISHING_ROD));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(ModItems.IRON_FUSED_FISHING_ROD));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(ModItems.GOLD_FUSED_FISHING_ROD));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(ModItems.DIAMOND_FUSED_FISHING_ROD));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(ModItems.NETHERITE_FUSED_FISHING_ROD));
+
+        // On A Stick Items
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(ModItems.CARROT_ON_A_COPPER_FUSED_STICK));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(ModItems.CARROT_ON_AN_IRON_FUSED_STICK));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(ModItems.CARROT_ON_A_GOLD_FUSED_STICK));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(ModItems.CARROT_ON_A_DIAMOND_FUSED_STICK));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(ModItems.CARROT_ON_A_NETHERITE_FUSED_STICK));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(ModItems.WARPED_FUNGUS_ON_A_COPPER_FUSED_STICK));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(ModItems.WARPED_FUNGUS_ON_AN_IRON_FUSED_STICK));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(ModItems.WARPED_FUNGUS_ON_A_GOLD_FUSED_STICK));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(ModItems.WARPED_FUNGUS_ON_A_DIAMOND_FUSED_STICK));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(ModItems.WARPED_FUNGUS_ON_A_NETHERITE_FUSED_STICK));
+
         // Echo Crystal Items
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.NATURAL).register(entries -> entries.add(ModBlocks.ECHO_CRYSTAL_BLOCK));
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS).register(entries -> entries.add(ModBlocks.ECHO_CRYSTAL_BLOCK));
@@ -57,6 +76,9 @@ public class ModItemGroups {
     
         // Shield Framing Template
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(entries -> entries.add(ModItems.SHIELD_FRAMING_SMITHING_TEMPLATE));
+
+        // Fishing Rod Fusion Template
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(entries -> entries.add(ModItems.FISHING_ROD_FUSION_SMITHING_TEMPLATE));
 
         // Elder Guardian Items
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(entries -> entries.add(ModItems.ELDER_GUARDIAN_SPIKE_SHARD));

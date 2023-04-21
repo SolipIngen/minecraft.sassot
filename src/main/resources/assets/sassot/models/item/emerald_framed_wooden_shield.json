@@ -51,7 +51,7 @@
         },
         {
             "predicate": {
-                "cloaking": 1
+                "sassot:cloaking": 1
             },
             "model": "minecraft:item/air"
         }

@@ -62,6 +62,7 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntity impl
 
     @Inject(method = "<init>(Lnet/minecraft/world/World;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;)V", at = @At("TAIL"))
     private void injectedInit(World world, LivingEntity owner, ItemStack stack, CallbackInfo cbi) {
+        this.impactFactor = 1.0f;
         this.dataTracker.set(SKEWERING, (byte)EnchantmentHelper.getLevel(ModEnchantments.SKEWERING, stack));
     }
 
@@ -69,9 +70,14 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntity impl
     private void injectedInitDataTracker(CallbackInfo cbi) {
         this.dataTracker.startTracking(SKEWERING, (byte)0);
     }
+
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void injectedSuperTick(CallbackInfo cbi) {
+        super.tick();
+    }
     
     @ModifyConstant(method = "tick", constant = @Constant(intValue = 4))
-    private int injectedInGroundTime(int inGroundTime) {
+    private int modifiedInGroundTime(int inGroundTime) {
         return 2;
     }
 
@@ -94,9 +100,14 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntity impl
         return 0.1;
     }
 
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;tick()V"))
+    private void redirectedSuperTick(PersistentProjectileEntity persistentProjectileEntity) {
+    }
+
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
         super.onBlockHit(blockHitResult);
+        if (this.world.isClient) return;
         Entity owner = this.getOwner() != null ? this.getOwner() : this;
         BlockPos blockPos = this.getBlockPos();
         LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(this.world);
@@ -111,7 +122,7 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntity impl
 
     @ModifyVariable(method = "onEntityHit", at = @At("STORE"), ordinal = 0)
     private float injectedAttackDamage(float f, EntityHitResult entityHitResult) {
-        float entityImpactFactor = this.dealtDamage ? this.impactFactor : (float)Math.max(this.impactFactor, 1.0f);
+        float entityImpactFactor = this.dealtDamage ? this.impactFactor : Math.max(this.impactFactor, 1.0f);
         float baseDamage = 9.0f*entityImpactFactor;
         Entity targetEntity = entityHitResult.getEntity();
         float additionalDamage = EnchantmentHelper.getAttackDamage(this.tridentStack, EntityGroup.DEFAULT);

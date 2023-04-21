@@ -28,6 +28,7 @@ public abstract class SmithingScreenMixin extends ForgingScreen<SmithingScreenHa
     @Shadow @Final private CyclingSlotIcon templateSlotIcon;
     @Shadow @Final private CyclingSlotIcon baseSlotIcon;
     private static final Identifier EMPTY_SLOT_SHIELD_FRAMING_UPGRADE_TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "item/empty_slot_shield_framing_upgrade");
+    private static final Identifier EMPTY_SLOT_FISHING_ROD_FUSION_UPGRADE_TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "item/empty_slot_fishing_rod_fusion_upgrade");
 
 
     public SmithingScreenMixin(SmithingScreenHandler handler, PlayerInventory playerInventory, Text title, Identifier texture) {
@@ -42,6 +43,7 @@ public abstract class SmithingScreenMixin extends ForgingScreen<SmithingScreenHa
         }
         if (slotIcon == this.templateSlotIcon) {
             textures.add(EMPTY_SLOT_SHIELD_FRAMING_UPGRADE_TEXTURE);
+            textures.add(EMPTY_SLOT_FISHING_ROD_FUSION_UPGRADE_TEXTURE);
         }
         List<Identifier> textureList = List.copyOf(textures);
         slotIcon.updateTexture(textureList);

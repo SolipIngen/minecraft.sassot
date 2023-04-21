@@ -23,6 +23,7 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.world.World;
 import solipingen.sassot.sound.ModSoundEvents;
 
+
 public class ModShieldItem extends ShieldItem {
     public static final int field_30918 = 5;
     public final float minDamageToBreak;

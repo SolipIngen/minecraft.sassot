@@ -48,6 +48,8 @@ public class ModSoundEvents {
     public static final SoundEvent PIGLIN_SPEAR_THROW = ModSoundEvents.registerSoundEvent("piglin_spear_throw");
     public static final SoundEvent VILLAGER_SPEAR_THROW = ModSoundEvents.registerSoundEvent("villager_spear_throw");
 
+    public static final SoundEvent VILLAGER_ATTACK = ModSoundEvents.registerSoundEvent("villager_attack");
+
 
     private static SoundEvent registerSoundEvent(String name) {
         Identifier id = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, name);

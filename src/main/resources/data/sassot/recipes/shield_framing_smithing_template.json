@@ -3,7 +3,7 @@
     "category": "equipment",
     "key": {
       "o": {
-        "tag": "minecraft:planks"
+        "item": "minecraft:stick"
       }, 
       "#": {
         "item": "sassot:wooden_shield"

@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.CobwebBlock;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.Material;
 import net.minecraft.block.SculkBlock;
@@ -26,7 +27,13 @@ public abstract class BlocksMixin {
 
     @Inject(method = "register", at = @At("HEAD"), cancellable = true)
     private static void injectedRegister(String name, Block entry, CallbackInfoReturnable<Block> cbireturn) {
-        if (entry instanceof SculkBlock) {
+        if (entry instanceof CobwebBlock) {
+            Registry.register(Registries.BLOCK, name, entry);
+            int rawId = Registries.BLOCK.getRawId(entry);
+            Block newEntry = (Block)new CobwebBlock(AbstractBlock.Settings.copy(entry).hardness(1.0f).resistance(0.1f));
+            cbireturn.setReturnValue(Registry.register(Registries.BLOCK, rawId, name, newEntry));
+        }
+        else if (entry instanceof SculkBlock) {
             Registry.register(Registries.BLOCK, name, entry);
             int rawId = Registries.BLOCK.getRawId(entry);
             Block newEntry = (Block)new SculkBlock(AbstractBlock.Settings.copy(entry).luminance(state -> 2));

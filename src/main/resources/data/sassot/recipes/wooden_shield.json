@@ -4,15 +4,12 @@
     "key": {
       "W": {
         "tag": "minecraft:planks"
-      },
-      "o": {
-        "item": "minecraft:stick"
       }
     },
     "pattern": [
-      "ooo",
-      "oWo",
-      " o "
+      "WWW",
+      "WWW",
+      " W "
     ],
     "result": {
       "item": "sassot:wooden_shield"

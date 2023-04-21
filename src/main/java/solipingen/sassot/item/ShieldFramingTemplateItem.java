@@ -14,6 +14,7 @@ import net.minecraft.util.Util;
 import net.minecraft.world.World;
 import solipingen.sassot.SpearsAxesSwordsShieldsAndOtherTools;
 
+
 public class ShieldFramingTemplateItem extends SmithingTemplateItem {
 
     private static final Formatting TITLE_FORMATTING = Formatting.GRAY;

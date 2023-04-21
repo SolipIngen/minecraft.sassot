@@ -142,6 +142,11 @@
           },
           {
             "type": "minecraft:item",
+            "name": "sassot:shield_framing_smithing_template",
+            "weight": 15
+          },
+          {
+            "type": "minecraft:item",
             "functions": [
               {
                 "add": false,

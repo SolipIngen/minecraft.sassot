@@ -17,6 +17,7 @@ import solipingen.sassot.SpearsAxesSwordsShieldsAndOtherTools;
 public abstract class SmithingTemplateItemMixin extends Item {
     private static final Identifier EMPTY_SLOT_SPEAR_TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "item/empty_slot_spear");
     private static final Identifier EMPTY_SLOT_SHIELD_TEXTURE = new Identifier("item/empty_armor_slot_shield"); 
+    private static final Identifier EMPTY_SLOT_FISHING_ROD_TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "item/empty_slot_fishing_rod");
     
 
     public SmithingTemplateItemMixin(Settings settings) {
@@ -31,6 +32,7 @@ public abstract class SmithingTemplateItemMixin extends Item {
         }
         textures.add(EMPTY_SLOT_SPEAR_TEXTURE);
         textures.add(EMPTY_SLOT_SHIELD_TEXTURE);
+        textures.add(EMPTY_SLOT_FISHING_ROD_TEXTURE);
         return List.copyOf(textures);
     }
 

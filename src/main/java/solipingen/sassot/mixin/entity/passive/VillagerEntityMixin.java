@@ -323,7 +323,10 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
     private Int2ObjectMap<TradeOffers.Factory[]> modifiedFilledRecipes(Int2ObjectMap<TradeOffers.Factory[]> int2ObjectMap) {
         VillagerData villagerData = this.getVillagerData();
         Map<VillagerProfession, Int2ObjectMap<Factory[]>> tradeOffers = TradeOffers.PROFESSION_TO_LEVELED_TRADE;
-        if (villagerData.getProfession() == VillagerProfession.TOOLSMITH) {
+        if (villagerData.getProfession() == VillagerProfession.FISHERMAN) {
+            ModVillagerProfessions.replaceFishermanProfessionToLeveledTrade(tradeOffers);
+        }
+        else if (villagerData.getProfession() == VillagerProfession.TOOLSMITH) {
             ModVillagerProfessions.replaceToolsmithProfessionToLeveledTrade(tradeOffers);
         }
         else if (villagerData.getProfession() == VillagerProfession.WEAPONSMITH) {
@@ -515,7 +518,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
             this.villager.setAttacking(true);
             this.villager.setCurrentHand(Hand.MAIN_HAND);
             if (this.villager.world instanceof ServerWorld) {
-                this.villager.playSound(SoundEvents.ENTITY_VILLAGER_NO, 1.0f, this.villager.getSoundPitch());
+                this.villager.playSound(ModSoundEvents.VILLAGER_ATTACK, 1.0f, this.villager.getSoundPitch());
             }
         }
 
@@ -548,7 +551,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
         public void start() {
             super.start();
             if (this.villager.world instanceof ServerWorld) {
-                this.villager.playSound(SoundEvents.ENTITY_VILLAGER_NO, 1.0f, this.villager.getSoundPitch());
+                this.villager.playSound(ModSoundEvents.VILLAGER_ATTACK, 1.0f, this.villager.getSoundPitch());
             }
         }
 

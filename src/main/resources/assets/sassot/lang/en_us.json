@@ -245,18 +245,46 @@
     "item.sassot.copper_axe": "Copper Axe", 
     "item.sassot.copper_hoe": "Copper Hoe",
 
+    "item.sassot.copper_fused_fishing_rod": "Copper Fused Fishing Rod", 
+    "item.sassot.iron_fused_fishing_rod": "Iron Fused Fishing Rod", 
+    "item.sassot.gold_fused_fishing_rod": "Gold Fused Fishing Rod", 
+    "item.sassot.diamond_fused_fishing_rod": "Diamond Fused Fishing Rod", 
+    "item.sassot.netherite_fused_fishing_rod": "Netherite Fused Fishing Rod", 
+    
+    "item.sassot.carrot_on_a_copper_fused_stick": "Carrot on a Copper Fused Stick", 
+    "item.sassot.carrot_on_an_iron_fused_stick": "Carrot on an Iron Fused Stick", 
+    "item.sassot.carrot_on_a_gold_fused_stick": "Carrot on a Gold Fused Stick", 
+    "item.sassot.carrot_on_a_diamond_fused_stick": "Carrot on a Diamond Fused Stick", 
+    "item.sassot.carrot_on_a_netherite_fused_stick": "Carrot on a Netherite Fused Stick", 
+
+    "item.sassot.warped_fungus_on_a_copper_fused_stick": "Warped Fungus on a Copper Fused Stick", 
+    "item.sassot.warped_fungus_on_an_iron_fused_stick": "Warped Fungus on an Iron Fused Stick", 
+    "item.sassot.warped_fungus_on_a_gold_fused_stick": "Warped Fungus on a Gold Fused Stick", 
+    "item.sassot.warped_fungus_on_a_diamond_fused_stick": "Warped Fungus on a Diamond Fused Stick", 
+    "item.sassot.warped_fungus_on_a_netherite_fused_stick": "Warped Fungus on a Netherite Fused Stick", 
+
     "item.sassot.elder_guardian_spike_shard": "Elder Guardian Spike Shard", 
     "item.sassot.elder_guardian_spike_bone_shard": "Elder Guardian Spike Bone Shard", 
 
     "item.shield_framing_smithing_template": "Smithing Template", 
 
-    "item.sassot.smithing_template.shield_framing.additions_slot_description": "Put an ingot here",
+    "item.sassot.smithing_template.shield_framing.additions_slot_description": "Put an ingot or crystal here",
     "item.sassot.smithing_template.shield_framing.applies_to": "Wooden Shields", 
     "item.sassot.smithing_template.shield_framing.base_slot_description": "Put a Wooden Shield here",
     "item.sassot.smithing_template.shield_framing.ingredients": "Ingots",
     "item.sassot.smithing_template.shield_framing": "Shield Framing: ", 
 
     "upgrade.sassot.shield_framing": "Shield Framing", 
+
+    "item.fishing_rod_fusion_smithing_template": "Smithing Template", 
+
+    "item.sassot.smithing_template.fishing_rod_fusion.additions_slot_description": "Put an ingot here",
+    "item.sassot.smithing_template.fishing_rod_fusion.applies_to": "Fishing Rods", 
+    "item.sassot.smithing_template.fishing_rod_fusion.base_slot_description": "Put a Fishing Rod here",
+    "item.sassot.smithing_template.fishing_rod_fusion.ingredients": "Ingots",
+    "item.sassot.smithing_template.fishing_rod_fusion": "Fishing Rod Fusion: ", 
+
+    "upgrade.sassot.fishing_rod_fusion": "Fishing Rod Fusion", 
 
     "enchantment.sassot.hacking": "Hacking",
     "enchantment.sassot.cloaking": "Cloaking",
@@ -326,7 +354,8 @@
     "subtitles.sassot.wither_skeleton_spear_throw": "Wither Skeleton throws Spear", 
     "subtitles.sassot.wither_skeleton_blazearm_throw": "Wither Skeleton throws Blazearm", 
     "subtitles.sassot.piglin_spear_throw": "Piglin throws Spear", 
-    "subtitles.sassot.villager_spear_throw": "Villager throws Spear"
+    "subtitles.sassot.villager_spear_throw": "Villager throws Spear", 
+    "subtitles.sassot.villager_attack": "Villager attacks"
     
 
 }

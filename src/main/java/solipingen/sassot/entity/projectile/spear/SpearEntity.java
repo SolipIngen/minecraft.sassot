@@ -64,7 +64,6 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
         super(entityType, world);
         this.damageAmount = damageAmount;
         this.launchSpeed = launchSpeed;
-        this.brokeBlock = false;
     }
 
     public SpearEntity(EntityType<? extends SpearEntity> entityType, LivingEntity owner, float damageAmount, float launchSpeed, ItemStack stack, World world) {
@@ -72,7 +71,10 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
         this.damageAmount = damageAmount;
         this.launchSpeed = launchSpeed;
         this.spearStack = stack.copy();
+        this.dealtDamage = false;
         this.brokeBlock = false;
+        this.returnTimer = 0;
+        this.impactFactor = 1.0f;
         this.dataTracker.set(LOYALTY, (byte)EnchantmentHelper.getLevel(Enchantments.LOYALTY, spearStack));
         this.dataTracker.set(SKEWERING, (byte)EnchantmentHelper.getLevel(ModEnchantments.SKEWERING, spearStack));
         this.dataTracker.set(GROUNDSHAKING, (byte)EnchantmentHelper.getLevel(ModEnchantments.GROUNDSHAKING, spearStack));
@@ -90,6 +92,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
 
     @Override
     public void tick() {
+        super.tick();
         this.attemptTickInVoid();
         if (this.inGroundTime > 2) {
             this.dealtDamage = true;
@@ -97,7 +100,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
         this.impactFactor = Math.max(MathHelper.square((float)this.getVelocity().length()/this.launchSpeed), MathHelper.sqrt((float)this.getVelocity().length()/this.launchSpeed));
         Entity entity = this.getOwner();
         byte i = this.dataTracker.get(LOYALTY);
-        if (i > 0 && (this.dealtDamage || this.brokeBlock || this.isNoClip()) && entity != null) {
+        if (i > 0 && entity != null && (this.dealtDamage || this.brokeBlock || this.inGroundTime > 0 || this.isNoClip())) {
             this.setNoClip(true);
             Vec3d vec3d = entity.getEyePos().subtract(this.getPos());
             this.setPos(this.getX(), this.getY() + vec3d.y * 0.015 * (double)i, this.getZ());
@@ -111,7 +114,6 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
             }
             ++this.returnTimer;
         }
-        super.tick();
     }
 
     private boolean isOwnerAlive() {
@@ -153,8 +155,9 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
         if (this.world.isClient) return;
         Entity entity2 = this.getOwner();
         Entity entity = entityHitResult.getEntity();
-        float entityImpactFactor = this.dealtDamage ? this.impactFactor : (float)Math.max(this.impactFactor, 1.0f);
+        float entityImpactFactor = this.dealtDamage ? this.impactFactor : Math.max(this.impactFactor, 1.0f);
         float f = this.damageAmount*entityImpactFactor;
+        this.dealtDamage = entity != null;
         if (this.hasSkewering()) {
             Vec3d vec3d = this.getPos();
             Vec3d velocity3d = this.getVelocity();
@@ -171,7 +174,6 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
             }
         }
         DamageSource damageSource = this.getDamageSources().trident(this, entity2 == null ? this : entity2);
-        this.dealtDamage = true;
         SoundEvent soundEvent = ModSoundEvents.SPEAR_HIT_ENTITY;
         if (entity.damage(damageSource, f)) {
             if (entity.getType() == EntityType.ENDERMAN) {
@@ -208,12 +210,13 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
     protected void onBlockHit(BlockHitResult blockHitResult) {
         super.onBlockHit(blockHitResult);
         if (this.world.isClient) return;
-        if (this.hasGroundshaking()) {
+        if (this.hasGroundshaking() && !(this.brokeBlock || this.dealtDamage)) {
             BlockPos inBlockPos = blockHitResult.getBlockPos();
             float strength = this.damageAmount*this.impactFactor;
             int range = MathHelper.ceil(this.damageAmount*this.impactFactor);
             Iterable<BlockPos> blockPosIterable = BlockPos.iterateOutwards(inBlockPos, range, range, range);
             this.shakeGround(inBlockPos, inBlockPos, strength);
+            this.brokeBlock = true;
             for (BlockPos currentBlockPos : blockPosIterable) {
                 if (currentBlockPos.getSquaredDistance(inBlockPos) > MathHelper.square(range)) continue;
                 this.shakeGround(currentBlockPos, inBlockPos, strength);
@@ -292,9 +295,6 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
                 this.world.emitGameEvent(null, GameEvent.ENTITY_DIE, currentBlockPos);
             }
             if (this.world.breakBlock(currentBlockPos, true)) {
-                if (!this.brokeBlock) {
-                    this.brokeBlock = true;
-                }
                 blocksBroken++;
                 this.world.emitGameEvent(null, GameEvent.BLOCK_DESTROY, currentBlockPos);
             }
@@ -383,7 +383,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
 
     @Override
     protected float getDragInWater() {
-        return 0.6f;
+        return 0.67f;
     }
 
 }

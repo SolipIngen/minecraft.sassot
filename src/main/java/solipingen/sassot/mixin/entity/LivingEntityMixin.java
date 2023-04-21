@@ -15,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -26,7 +25,6 @@ import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -46,10 +44,10 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
 import solipingen.sassot.enchantment.ModEnchantments;
 import solipingen.sassot.entity.projectile.BlazearmEntity;
 import solipingen.sassot.entity.projectile.spear.SpearEntity;
@@ -74,8 +72,8 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
     private boolean isUsingWhirlwind;
     private boolean isUsingFlare;
 
-    @Invoker("playHurtSound")
-    public abstract void invokePlayHurtSound(DamageSource source);
+    @Invoker("applyDamage")
+    public abstract void invokeApplyDamage(DamageSource source, float amount);
 
 
     public LivingEntityMixin(EntityType<?> type, World world) {
@@ -256,37 +254,10 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
                 entity.setVelocity(vec3d2);
             }
             if (echoingLevel > 0 && (source.isIn(DamageTypeTags.BYPASSES_SHIELD) || source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS)) && !(source.isIn(DamageTypeTags.BYPASSES_RESISTANCE) || source.isIn(DamageTypeTags.BYPASSES_EFFECTS))) {
-                float health = ((LivingEntity)(Object)this).getHealth();
                 float damagef = (float)Math.pow(0.5, echoingLevel)*amount;
-                int i = EnchantmentHelper.getProtectionAmount(this.getArmorItems(), source);
-                if (((LivingEntity)(Object)this).hasStatusEffect(StatusEffects.RESISTANCE)) {
-                    damagef *= 1.0f - 0.2f*(1 + ((LivingEntity)(Object)this).getStatusEffect(StatusEffects.RESISTANCE).getAmplifier());
-                }
-                damagef = Math.max(damagef, 0.0f);
-                if (i > 0 && !source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
-                    damagef = DamageUtil.getInflictedDamage(damagef, i);
-                }
-                if (((LivingEntity)(Object)this).getAbsorptionAmount() > 0.0f) {
-                    if (damagef >= ((LivingEntity)(Object)this).getAbsorptionAmount()) {
-                        float r = damagef - ((LivingEntity)(Object)this).getAbsorptionAmount();
-                        ((LivingEntity)(Object)this).setAbsorptionAmount(0.0f);
-                        ((LivingEntity)(Object)this).setHealth(health - r);
-                    } 
-                    else {
-                        ((LivingEntity)(Object)this).setAbsorptionAmount(((LivingEntity)(Object)this).getAbsorptionAmount() - damagef);
-                    }
-                    ((LivingEntity)(Object)this).getDamageTracker().onDamage(source, health, damagef);
-                    this.emitGameEvent(GameEvent.ENTITY_DAMAGE);
-                    this.invokePlayHurtSound(source);
-                }
-                else {
-                    ((LivingEntity)(Object)this).setHealth(health - damagef);
-                    ((LivingEntity)(Object)this).getDamageTracker().onDamage(source, health, damagef);
-                    this.emitGameEvent(GameEvent.ENTITY_DAMAGE);
-                    this.invokePlayHurtSound(source);
-                }
+                this.invokeApplyDamage(source, damagef);
                 float distance = this.distanceTo(entity);
-                float distanceModifier = (float)Math.max(Math.pow(distance, 2), 1.0);
+                float distanceModifier = Math.max(MathHelper.square(distance), 1.0f);
                 if (entity != null && entity instanceof LivingEntity) {
                     ((LivingEntity)entity).damage(this.getDamageSources().sonicBoom(entity), (amount - damagef)/distanceModifier);
                 }
@@ -298,7 +269,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
                 for (Entity otherEntity : otherEntityList) {
                     if (otherEntity instanceof LivingEntity) {
                         float otherDistance = this.distanceTo(otherEntity);
-                        float otherDistanceModifier = (float)Math.max(Math.pow(otherDistance, 2), 1.0);
+                        float otherDistanceModifier = Math.max(MathHelper.square(otherDistance), 1.0f);
                         ((LivingEntity)otherEntity).damage(this.getDamageSources().sonicBoom(entity), (amount - damagef)/otherDistanceModifier);
                     }
                 }
@@ -339,10 +310,10 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
             vec3d3 = new Vec3d(vec3d3.x, 0.0, vec3d3.z);
             double shieldingRangeDotProduct = vec3d3.length()*vec3d2.length()*Math.cos((90 - 15*shieldingLevel) * Math.PI/180);
             double vectorDotProduct = vec3d3.dotProduct(vec3d2);
-            if ((source.isIn(DamageTypeTags.BYPASSES_SHIELD) || source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS)) && echoingLevel > 0) {
+            if ((source.isOf(DamageTypes.FALLING_ANVIL) || source.isOf(DamageTypes.FALLING_STALACTITE) || source.isOf(DamageTypes.STALAGMITE)) && shieldingLevel > 0) {
                 cbireturn.setReturnValue(vectorDotProduct < shieldingRangeDotProduct);
             }
-            if ((source.isOf(DamageTypes.FALLING_ANVIL) || source.isOf(DamageTypes.FALLING_STALACTITE) || source.isOf(DamageTypes.STALAGMITE)) && shieldingLevel > 0) {
+            if ((source.isIn(DamageTypeTags.BYPASSES_SHIELD) || source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS)) && !(source.isOf(DamageTypes.FALLING_ANVIL) || source.isOf(DamageTypes.FALLING_STALACTITE) || source.isOf(DamageTypes.STALAGMITE)) && echoingLevel > 0) {
                 cbireturn.setReturnValue(vectorDotProduct < shieldingRangeDotProduct);
             }
             if (entity != null && entity instanceof ProjectileEntity) {
@@ -380,7 +351,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
             modifiedStrength *= 0.8;
         }
         else if (this.activeItemStack.isOf(ModItems.DIAMOND_SHIELD)) {
-            modifiedStrength *= 0.5;
+            modifiedStrength *= 0.67;
         }
         else if (this.activeItemStack.isOf(ModItems.NETHERITE_SHIELD)) {
             modifiedStrength *= 0.33;

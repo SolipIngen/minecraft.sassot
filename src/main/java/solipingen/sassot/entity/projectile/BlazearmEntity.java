@@ -66,6 +66,9 @@ public class BlazearmEntity extends PersistentProjectileEntity {
     public BlazearmEntity(World world, LivingEntity owner, ItemStack stack) {
         super(ModEntityTypes.BLAZEARM_ENTITY, owner, world);
         this.blazearmStack = stack.copy();
+        this.dealtDamage = false;
+        this.returnTimer = 0;
+        this.impactFactor = 1.0f;
         this.dataTracker.set(LOYALTY, (byte)EnchantmentHelper.getLevel(Enchantments.LOYALTY, stack));
         this.dataTracker.set(SKEWERING, (byte)EnchantmentHelper.getLevel(ModEnchantments.SKEWERING, stack));
         this.dataTracker.set(ENCHANTED, stack.hasGlint());
@@ -81,6 +84,7 @@ public class BlazearmEntity extends PersistentProjectileEntity {
 
     @Override
     public void tick() {
+        super.tick();
         this.attemptTickInVoid();
         if (this.inGroundTime > 2) {
             this.dealtDamage = true;
@@ -103,7 +107,6 @@ public class BlazearmEntity extends PersistentProjectileEntity {
             ++this.returnTimer;
         }
         this.world.addParticle(ParticleTypes.FLAME, this.getParticleX(1.0), this.getRandomBodyY(), this.getParticleZ(1.0), 0.6*(this.random.nextDouble() - 0.5) + this.getVelocity().x, 0.6*(this.random.nextDouble() - 0.5) + this.getVelocity().y, 0.6*(this.random.nextDouble() - 0.5) + this.getVelocity().z);
-        super.tick();
     }
 
     private boolean isOwnerAlive() {
@@ -145,8 +148,9 @@ public class BlazearmEntity extends PersistentProjectileEntity {
         if (this.world.isClient) return;
         Entity entity2 = this.getOwner();
         Entity entity = entityHitResult.getEntity();
-        float entityImpactFactor = this.dealtDamage ? this.impactFactor : (float)Math.max(this.impactFactor, 1.0f);
+        float entityImpactFactor = this.dealtDamage ? this.impactFactor : Math.max(this.impactFactor, 1.0f);
         float f = 9.0f*entityImpactFactor;
+        this.dealtDamage = entity != null;
         if (this.hasSkewering()) {
             Vec3d vec3d = this.getPos();
             Vec3d velocity3d = this.getVelocity();
@@ -171,7 +175,6 @@ public class BlazearmEntity extends PersistentProjectileEntity {
             }
         }
         DamageSource damageSource = this.getDamageSources().trident(this, entity2 == null ? this : entity2);
-        this.dealtDamage = true;
         SoundEvent soundEvent = ModSoundEvents.BLAZEARM_HIT_ENTITY;
         if (entity.damage(damageSource, f)) {
             if (entity.getType() == EntityType.ENDERMAN) {
