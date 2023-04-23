@@ -6,18 +6,13 @@
           "items": [
             {
               "items": [
-                "sassot:copper_framed_wooden_shield"
+                "sassot:copper_framed_wooden_shield",
+                "sassot:gold_framed_wooden_shield",
+                "sassot:iron_framed_wooden_shield",
+                "sassot:emerald_framed_wooden_shield",
+                "sassot:diamond_framed_wooden_shield",
+                "sassot:netherite_framed_wooden_shield"
               ]
-            },
-            {
-                "items": [
-                  "sassot:gold_framed_wooden_shield"
-                ]
-            },
-            {
-                "items": [
-                  "sassot:iron_framed_wooden_shield"
-                ]
             }
           ]
         },
@@ -32,7 +27,7 @@
       "frame": "task",
       "hidden": false,
       "icon": {
-        "item": "sassot:iron_framed_wooden_shield",
+        "item": "sassot:copper_framed_wooden_shield",
         "nbt": "{Damage:0}"
       },
       "show_toast": true,

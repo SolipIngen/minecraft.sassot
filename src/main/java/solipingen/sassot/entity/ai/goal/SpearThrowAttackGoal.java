@@ -6,15 +6,17 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.ProjectileAttackGoal;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import solipingen.sassot.entity.ai.SpearThrowingMob;
 
-public class SpearThrowAttackGoal extends Goal {
+
+public class SpearThrowAttackGoal extends ProjectileAttackGoal {
     private final MobEntity mob;
     private final SpearThrowingMob owner;
-    @Nullable
-    protected LivingEntity target;
+    @Nullable protected LivingEntity target;
     private int updateCountdownTicks = -1;
     private final double mobSpeed;
     private int seenTargetTicks;
@@ -29,6 +31,7 @@ public class SpearThrowAttackGoal extends Goal {
     }
     
     public SpearThrowAttackGoal(SpearThrowingMob mob, double mobSpeed, int minIntervalTicks, int maxIntervalTicks, float maxShootRange) {
+        super(mob, mobSpeed, minIntervalTicks, maxIntervalTicks, maxShootRange);
         if (!(mob instanceof LivingEntity)) {
             throw new IllegalArgumentException("SpearThrowAttackGoal requires a living Mob");
         }
@@ -87,11 +90,17 @@ public class SpearThrowAttackGoal extends Goal {
             }
             float f = (float)Math.sqrt(d) / this.maxShootRange;
             float g = MathHelper.clamp(f, 0.1f, 1.0f);
-            this.owner.spearAttack(this.target, g);
-            this.updateCountdownTicks = MathHelper.floor(f * (float)(this.maxIntervalTicks - this.minIntervalTicks) + (float)this.minIntervalTicks);
+            if (d > this.mob.squaredAttackRange(target)) {
+                this.owner.spearAttack(this.target, g);
+                this.updateCountdownTicks = MathHelper.floor(f * (float)(this.maxIntervalTicks - this.minIntervalTicks) + (float)this.minIntervalTicks);
+            }
+            else {
+                this.mob.swingHand(Hand.MAIN_HAND);
+                this.mob.tryAttack(target);
+            }
         } 
         else if (this.updateCountdownTicks < 0) {
-            this.updateCountdownTicks = MathHelper.floor(MathHelper.lerp(Math.sqrt(d) / (double)this.maxShootRange, (double)this.minIntervalTicks, (double)this.maxIntervalTicks));
+            this.updateCountdownTicks = d <= this.mob.squaredAttackRange(target) ? 20 : MathHelper.floor(MathHelper.lerp(Math.sqrt(d) / (double)this.maxShootRange, (double)this.minIntervalTicks, (double)this.maxIntervalTicks));
         }
     }
 }

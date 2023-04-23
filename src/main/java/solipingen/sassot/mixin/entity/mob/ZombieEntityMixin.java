@@ -84,5 +84,7 @@ public abstract class ZombieEntityMixin extends HostileEntity {
             this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
         }
     }
+
+
     
 }

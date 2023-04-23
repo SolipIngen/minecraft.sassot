@@ -19,6 +19,9 @@ import solipingen.sassot.sound.ModBlockSoundGroup;
 public class ModBlocks {
     
     // Echo Crystal
+    public static final Block ECHO_CRYSTAL_BLOCK = ModBlocks.registerBlock("echo_crystal_block", 
+        new EchoCrystalBlock(FabricBlockSettings.copy(Blocks.AMETHYST_BLOCK).strength(2.0f).luminance(state -> 12).sounds(ModBlockSoundGroup.ECHO_CRYSTAL_BLOCK)), true);
+
     public static final Block ECHO_CRYSTAL_CLUSTER = ModBlocks.registerBlock("echo_crystal_cluster", 
         new EchoCrystalClusterBlock(7, 3, FabricBlockSettings.copy(Blocks.AMETHYST_CLUSTER).strength(2.0f).luminance(state -> 10).sounds(ModBlockSoundGroup.ECHO_CLUSTER)), true);
     

@@ -10,9 +10,9 @@ import net.minecraft.entity.ai.brain.task.LookTargetUtil;
 import net.minecraft.entity.ai.brain.task.MultiTickTask;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import solipingen.sassot.entity.ai.SpearThrowingMob;
-import solipingen.sassot.item.BlazearmItem;
 import solipingen.sassot.item.ModItems;
 import solipingen.sassot.item.SpearItem;
 
@@ -41,11 +41,11 @@ public class SpearThrowAttackTask<E extends MobEntity, T extends LivingEntity> e
     @Override
     protected boolean shouldRun(ServerWorld serverWorld, E mobEntity) {
         LivingEntity livingEntity = SpearThrowAttackTask.getAttackTarget(mobEntity);
-        boolean spearBl = (((LivingEntity)mobEntity).getMainHandStack().getItem() instanceof SpearItem || (((LivingEntity)mobEntity).getOffHandStack().getItem() instanceof SpearItem || ((LivingEntity)mobEntity).getMainHandStack().getItem() instanceof BlazearmItem));
+        boolean spearBl = mobEntity.getMainHandStack().getItem() instanceof SpearItem || mobEntity.getOffHandStack().getItem() instanceof SpearItem || mobEntity.getMainHandStack().isOf(ModItems.BLAZEARM) || mobEntity.getOffHandStack().isOf(ModItems.BLAZEARM);
         if (spearBl) {
             this.tickState(mobEntity, livingEntity);
         }
-        return (((LivingEntity)mobEntity).getMainHandStack().getItem() instanceof SpearItem || ((LivingEntity)mobEntity).getMainHandStack().isOf(ModItems.BLAZEARM)) && LookTargetUtil.isVisibleInMemory(mobEntity, livingEntity) && LookTargetUtil.isTargetWithinAttackRange(mobEntity, livingEntity, 0);
+        return spearBl && LookTargetUtil.isVisibleInMemory(mobEntity, livingEntity) && LookTargetUtil.isTargetWithinAttackRange(mobEntity, livingEntity, 0);
     }
 
     @Override
@@ -86,11 +86,17 @@ public class SpearThrowAttackTask<E extends MobEntity, T extends LivingEntity> e
             }
             float f = (float)Math.sqrt(d) / this.maxShootRange;
             float g = MathHelper.clamp(f, 0.1f, 1.0f);
-            ((SpearThrowingMob)entity).spearAttack(target, g);
-            this.updateCountdownTicks = MathHelper.floor(f * (float)(this.maxIntervalTicks - this.minIntervalTicks) + (float)this.minIntervalTicks);
+            if (d > entity.squaredAttackRange(target)) {
+                ((SpearThrowingMob)entity).spearAttack(target, g);
+                this.updateCountdownTicks = MathHelper.floor(f * (float)(this.maxIntervalTicks - this.minIntervalTicks) + (float)this.minIntervalTicks);
+            }
+            else {
+                entity.swingHand(Hand.MAIN_HAND);
+                entity.tryAttack(target);
+            }
         } 
         else if (this.updateCountdownTicks < 0) {
-            this.updateCountdownTicks = MathHelper.floor(MathHelper.lerp(Math.sqrt(d) / (double)this.maxShootRange, (double)this.minIntervalTicks, (double)this.maxIntervalTicks));
+            this.updateCountdownTicks = d <= entity.squaredAttackRange(target) ? 20 : MathHelper.floor(MathHelper.lerp(Math.sqrt(d) / (double)this.maxShootRange, (double)this.minIntervalTicks, (double)this.maxIntervalTicks));
         }
     }
 

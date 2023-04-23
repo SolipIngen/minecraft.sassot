@@ -27,7 +27,18 @@ import net.minecraft.entity.InteractionObserver;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.Activity;
 import net.minecraft.entity.ai.brain.Brain;
+import net.minecraft.entity.ai.brain.MemoryModuleType;
+import net.minecraft.entity.ai.brain.task.CelebrateRaidWinTask;
+import net.minecraft.entity.ai.brain.task.EndRaidTask;
+import net.minecraft.entity.ai.brain.task.FindWalkTargetTask;
+import net.minecraft.entity.ai.brain.task.LookAtMobTask;
+import net.minecraft.entity.ai.brain.task.RandomTask;
+import net.minecraft.entity.ai.brain.task.SeekSkyTask;
 import net.minecraft.entity.ai.brain.task.Task;
+import net.minecraft.entity.ai.brain.task.TaskTriggerer;
+import net.minecraft.entity.ai.brain.task.Tasks;
+import net.minecraft.entity.ai.brain.task.VillagerWalkTowardsTask;
+import net.minecraft.entity.ai.brain.task.WaitTask;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.RevengeGoal;
@@ -47,6 +58,7 @@ import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.raid.RaiderEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
@@ -57,6 +69,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TimeHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerData;
@@ -64,6 +77,7 @@ import net.minecraft.village.VillagerDataContainer;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.village.VillagerType;
 import net.minecraft.village.TradeOffers.Factory;
+import net.minecraft.village.raid.Raid;
 import net.minecraft.world.World;
 import solipingen.sassot.entity.ai.SpearThrowingMob;
 import solipingen.sassot.entity.ai.goal.SpearThrowAttackGoal;
@@ -80,6 +94,7 @@ import solipingen.sassot.entity.projectile.spear.SpearEntity;
 import solipingen.sassot.entity.projectile.spear.StoneSpearEntity;
 import solipingen.sassot.entity.projectile.spear.WoodenSpearEntity;
 import solipingen.sassot.item.ModItems;
+import solipingen.sassot.item.ModMiningLevels;
 import solipingen.sassot.item.SpearItem;
 import solipingen.sassot.sound.ModSoundEvents;
 import solipingen.sassot.village.ModVillagerProfessions;
@@ -140,6 +155,9 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
                         brain.setTaskList(activity, indexedTasks);
                     }
                 }
+                else if (activity == Activity.RAID && this.world instanceof ServerWorld) {
+                    brain.setTaskList(activity, VillagerEntityMixin.createFighterRaidTasks((ServerWorld)this.world, ((VillagerEntity)(Object)this), 0.67f));
+                }
                 else {
                     brain.setTaskList(activity, indexedTasks);
                 }
@@ -180,9 +198,6 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
         if (!itemStack.isEmpty()) {
             this.goalSelector.add(3, this.spearThrowAttackGoal);
         }
-        else {
-            this.goalSelector.add(3, this.meleeAttackGoal);
-        }
         this.targetSelector.add(1, this.villagerTrackTargetGoal);
         this.targetSelector.add(2, new RevengeGoal(this, MerchantEntity.class, IronGolemEntity.class).setGroupRevenge(new Class[0]));
         this.targetSelector.add(3, new ActiveTargetGoal<PlayerEntity>((MobEntity)this, PlayerEntity.class, false, this::shouldAngerAt));
@@ -190,10 +205,32 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
         this.targetSelector.add(3, new ActiveTargetGoal<ZombieEntity>((MobEntity)this, ZombieEntity.class, true, this::shouldBeTargetedMob));
         this.targetSelector.add(3, new ActiveTargetGoal<VexEntity>((MobEntity)this, VexEntity.class, false, this::shouldBeTargetedMob));
     }
+
+    private static ImmutableList<Pair<Integer, ? extends Task<? super VillagerEntity>>> createFighterRaidTasks(ServerWorld world, VillagerEntity villager, float speed) {
+        return ImmutableList.of(Pair.of(0, TaskTriggerer.runIf(TaskTriggerer.predicate(VillagerEntityMixin::wonRaid), Tasks.pickRandomly(ImmutableList.of(Pair.of(SeekSkyTask.create(speed), 5), Pair.of(FindWalkTargetTask.create(speed * 1.1f), 2))))), 
+            Pair.of(0, new CelebrateRaidWinTask(600, 600)), 
+            Pair.of(2, TaskTriggerer.runIf(TaskTriggerer.predicate(VillagerEntityMixin::hasActiveRaid), VillagerWalkTowardsTask.create(MemoryModuleType.JOB_SITE, speed, 1, 100, 1200))), 
+            VillagerEntityMixin.createBusyFollowTask(), Pair.of(99, EndRaidTask.create()));
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static Pair<Integer, Task<LivingEntity>> createBusyFollowTask() {
+        return Pair.of(5, new RandomTask(ImmutableList.of(Pair.of(LookAtMobTask.create(EntityType.VILLAGER, 8.0f), 2), Pair.of(LookAtMobTask.create(EntityType.PLAYER, 8.0f), 2), Pair.of(new WaitTask(30, 60), 8))));
+    }
+
+    private static boolean hasActiveRaid(ServerWorld world, LivingEntity entity) {
+        Raid raid = world.getRaidAt(entity.getBlockPos());
+        return raid != null && raid.isActive() && !raid.hasWon() && !raid.hasLost();
+    }
+
+    private static boolean wonRaid(ServerWorld world, LivingEntity livingEntity) {
+        Raid raid = world.getRaidAt(livingEntity.getBlockPos());
+        return raid != null && raid.hasWon();
+    }
     
     private void initFighterAttackDamageAddition() {
         long levelledAttackDamageAddition = Math.round(Math.pow(1.5, this.getVillagerData().getLevel()));
-        EntityAttributeModifier attackDamageModifier = new EntityAttributeModifier("levelled_attack_damage", (double)levelledAttackDamageAddition, EntityAttributeModifier.Operation.ADDITION);
+        EntityAttributeModifier attackDamageModifier = new EntityAttributeModifier("Villager attack damage bonus", (double)levelledAttackDamageAddition, EntityAttributeModifier.Operation.ADDITION);
         this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).clearModifiers();
         this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).addPersistentModifier(attackDamageModifier);
     }
@@ -286,7 +323,10 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
     private Int2ObjectMap<TradeOffers.Factory[]> modifiedFilledRecipes(Int2ObjectMap<TradeOffers.Factory[]> int2ObjectMap) {
         VillagerData villagerData = this.getVillagerData();
         Map<VillagerProfession, Int2ObjectMap<Factory[]>> tradeOffers = TradeOffers.PROFESSION_TO_LEVELED_TRADE;
-        if (villagerData.getProfession() == VillagerProfession.TOOLSMITH) {
+        if (villagerData.getProfession() == VillagerProfession.FISHERMAN) {
+            ModVillagerProfessions.replaceFishermanProfessionToLeveledTrade(tradeOffers);
+        }
+        else if (villagerData.getProfession() == VillagerProfession.TOOLSMITH) {
             ModVillagerProfessions.replaceToolsmithProfessionToLeveledTrade(tradeOffers);
         }
         else if (villagerData.getProfession() == VillagerProfession.WEAPONSMITH) {
@@ -344,71 +384,52 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
         this.world.spawnEntity(spearEntity);
     }
 
-    @Inject(method = "talkWithVillager", at = @At("TAIL"))
+    @Inject(method = "talkWithVillager", at = @At("TAIL"), cancellable = true)
     private void injectedTalkWithVillager(ServerWorld world, VillagerEntity villager, long time, CallbackInfo cbi) {
         if (villager.getVillagerData().getProfession() == VillagerProfession.WEAPONSMITH) {
+            if (this.getMainHandStack().hasEnchantments()) {
+                cbi.cancel();
+            }
+            int level = this.getVillagerData().getLevel();
+            int weaponsmithLevel = villager.getVillagerData().getLevel();
             if (this.getVillagerData().getProfession() == ModVillagerProfessions.SWORDSMAN) {
-                ItemStack mainHandStack = this.getMainHandStack();
-                if (mainHandStack.getItem() instanceof SwordItem) {
-                    SwordItem swordItem = (SwordItem)mainHandStack.getItem();
-                    int level = this.getVillagerData().getLevel();
-                    int weaponsmithLevel = villager.getVillagerData().getLevel();
-                    int materialLevel = swordItem.getMaterial().getMiningLevel();
-                    if (materialLevel < level) {
-                        if (level == 1 && weaponsmithLevel >= 1) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
-                        }
-                    }
-                    if (materialLevel < level - 1) {
-                        if (level == 2 && weaponsmithLevel >= 2) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.COPPER_SWORD));
-                        }
-                        if (level == 3 && weaponsmithLevel >= 3) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
-                        }
-                    }
-                    if (materialLevel < level - 2) {
-                        if (level == 4 && weaponsmithLevel >= 4) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
-                        }
-                        if (level == 5 && weaponsmithLevel == 5) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
-                        }
-                    }
+                int materialLevel = ((SwordItem)this.getMainHandStack().getItem()).getMaterial().getMiningLevel();
+                if (level >= 1 && weaponsmithLevel >= 1 && materialLevel < ModMiningLevels.STONE) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
+                }
+                if (level >= 2 && weaponsmithLevel >= 2 && materialLevel < ModMiningLevels.COPPER) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.COPPER_SWORD));
+                }
+                if (level >= 3 && weaponsmithLevel >= 3 && materialLevel < ModMiningLevels.STONE) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
+                }
+                if (level >= 4 && weaponsmithLevel >= 4 && materialLevel < ModMiningLevels.IRON) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+                }
+                if (level == 5 && weaponsmithLevel == 5 && materialLevel < ModMiningLevels.DIAMOND) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
                 }
             }
             else if (this.getVillagerData().getProfession() == ModVillagerProfessions.SPEARMAN) {
-                ItemStack mainHandStack = this.getMainHandStack();
-                if (mainHandStack.getItem() instanceof SpearItem) {
-                    SpearItem spearItem = (SpearItem)mainHandStack.getItem();
-                    int level = this.getVillagerData().getLevel();
-                    int weaponsmithLevel = villager.getVillagerData().getLevel();
-                    int materialLevel = spearItem.getMaterial().getMiningLevel();
-                    if (materialLevel < level) {
-                        if (level == 1 && weaponsmithLevel >= 1) {
-                            int randomInt = this.random.nextInt(3);
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.STONE_SPEAR));
-                            if (randomInt == 0) {
-                                this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.FLINT_SPEAR));
-                            }
-                        }
+                int materialLevel = ((SpearItem)this.getMainHandStack().getItem()).getMaterial().getMiningLevel();
+                if (level >= 1 && weaponsmithLevel >= 1 && materialLevel < ModMiningLevels.STONE) {
+                    int randomInt = this.random.nextInt(3);
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.STONE_SPEAR));
+                    if (randomInt == 0) {
+                        this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.FLINT_SPEAR));
                     }
-                    if (materialLevel < level - 1) {
-                        if (level == 2 && weaponsmithLevel >= 2) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.COPPER_SPEAR));
-                        }
-                        if (level == 3 && weaponsmithLevel >= 3) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOLDEN_SPEAR));
-                        }
-                    }
-                    if (materialLevel < level - 2) {
-                        if (level == 4 && weaponsmithLevel >= 4) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.IRON_SPEAR));
-                        }
-                        if (level == 5 && weaponsmithLevel == 5) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.DIAMOND_SPEAR));
-                        }
-                    }
+                }
+                if (level >= 2 && weaponsmithLevel >= 2 && materialLevel < ModMiningLevels.COPPER) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.COPPER_SPEAR));
+                }
+                if (level >= 3 && weaponsmithLevel >= 3 && materialLevel < ModMiningLevels.STONE) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOLDEN_SPEAR));
+                }
+                if (level >= 4 && weaponsmithLevel >= 4 && materialLevel < ModMiningLevels.IRON) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.IRON_SPEAR));
+                }
+                if (level == 5 && weaponsmithLevel == 5 && materialLevel < ModMiningLevels.DIAMOND) {
+                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.DIAMOND_SPEAR));
                 }
             }
         }
@@ -432,11 +453,10 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
     @Override
     public void setAngryAt(@Nullable UUID angryAt) {
         VillagerProfession profession = this.getVillagerData().getProfession();
-        if (this.world instanceof ServerWorld && angryAt != null && (profession == ModVillagerProfessions.SWORDSMAN || profession == ModVillagerProfessions.SPEARMAN)) {
-            if (this.getAngryAt() == angryAt) return;
+        if (this.world instanceof ServerWorld && (profession == ModVillagerProfessions.SWORDSMAN || profession == ModVillagerProfessions.SPEARMAN)) {
+            if (angryAt != null && this.getAngryAt() == angryAt) return;
             this.angryAt = angryAt;
             ((VillagerEntity)(Object)this).reinitializeBrain((ServerWorld)this.world);
-            this.playSound(SoundEvents.ENTITY_VILLAGER_NO, this.getSoundVolume(), this.getSoundPitch());
         }
     }
 
@@ -454,6 +474,18 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
             return ((VexEntity)livingEntity).getOwner() instanceof RaiderEntity;
         }
         return false;
+    }
+
+    @Override
+    public double squaredAttackRange(LivingEntity target) {
+        Item mainHandItem = this.getMainHandStack().getItem();
+        if (mainHandItem instanceof SwordItem) {
+            return (double)MathHelper.square(this.getWidth() * 2.0f + 1.0f + target.getWidth());
+        }
+        else if (mainHandItem instanceof SpearItem || this.getMainHandStack().isOf(ModItems.BLAZEARM)) {
+            return (double)MathHelper.square(this.getWidth() * 2.0f + 2.0f + target.getWidth());
+        }
+        return super.squaredAttackRange(target);
     }
 
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
@@ -485,6 +517,9 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
             super.start();
             this.villager.setAttacking(true);
             this.villager.setCurrentHand(Hand.MAIN_HAND);
+            if (this.villager.world instanceof ServerWorld) {
+                this.villager.playSound(ModSoundEvents.VILLAGER_ATTACK, 1.0f, this.villager.getSoundPitch());
+            }
         }
 
         @Override
@@ -505,8 +540,19 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
     }
 
     class VillagerMeleeAttackGoal extends MeleeAttackGoal {
+        private final VillagerEntity villager;
+
         public VillagerMeleeAttackGoal(VillagerEntity villager) {
             super(villager, 0.67, false);
+            this.villager = villager;
+        }
+
+        @Override
+        public void start() {
+            super.start();
+            if (this.villager.world instanceof ServerWorld) {
+                this.villager.playSound(ModSoundEvents.VILLAGER_ATTACK, 1.0f, this.villager.getSoundPitch());
+            }
         }
 
         @Override

@@ -1,6 +1,10 @@
 package solipingen.sassot.item;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.entity.passive.StriderEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.PickaxeItem;
@@ -60,6 +64,15 @@ public class ModItems {
     
     public static final Item IRON_FRAMED_WOODEN_SHIELD = ModItems.registerItem("iron_framed_wooden_shield", 
         new ModShieldItem(ToolMaterials.IRON, 1.0f, true, 60, 0.05f, new FabricItemSettings()));
+
+    public static final Item DIAMOND_FRAMED_WOODEN_SHIELD = ModItems.registerItem("diamond_framed_wooden_shield", 
+        new ModShieldItem(ToolMaterials.DIAMOND, 1.0f, true, 60, 0.05f, new FabricItemSettings()));
+
+    public static final Item EMERALD_FRAMED_WOODEN_SHIELD = ModItems.registerItem("emerald_framed_wooden_shield", 
+        new ModShieldItem(ModToolMaterials.EMERALD, 1.0f, true, 60, 0.05f, new FabricItemSettings()));
+
+    public static final Item NETHERITE_FRAMED_WOODEN_SHIELD = ModItems.registerItem("netherite_framed_wooden_shield", 
+        new ModShieldItem(ToolMaterials.NETHERITE, 1.0f, true, 60, 0.05f, new FabricItemSettings()));
     
     public static final Item COPPER_SHIELD = ModItems.registerItem("copper_shield", 
         new ModShieldItem(ModToolMaterials.COPPER, 3.0f, false, 70, 0.075f, new FabricItemSettings()));
@@ -94,9 +107,62 @@ public class ModItems {
         (Item)HoeItemInvoker.invokeHoeItem(ModToolMaterials.COPPER, 2, -2.3f, new FabricItemSettings()));
 
     
+    // Fishing Rods
+    public static final Item COPPER_FUSED_FISHING_ROD = ModItems.registerItem("copper_fused_fishing_rod", 
+        (Item)new ModFishingRodItem(new FabricItemSettings(), ModToolMaterials.COPPER));
+    
+    public static final Item IRON_FUSED_FISHING_ROD = ModItems.registerItem("iron_fused_fishing_rod", 
+        (Item)new ModFishingRodItem(new FabricItemSettings(), ToolMaterials.IRON));
+
+    public static final Item GOLD_FUSED_FISHING_ROD = ModItems.registerItem("gold_fused_fishing_rod", 
+        (Item)new ModFishingRodItem(new FabricItemSettings(), ToolMaterials.GOLD));
+
+    public static final Item DIAMOND_FUSED_FISHING_ROD = ModItems.registerItem("diamond_fused_fishing_rod", 
+        (Item)new ModFishingRodItem(new FabricItemSettings(), ToolMaterials.DIAMOND));
+
+    public static final Item NETHERITE_FUSED_FISHING_ROD = ModItems.registerItem("netherite_fused_fishing_rod", 
+        (Item)new ModFishingRodItem(new FabricItemSettings().fireproof(), ToolMaterials.NETHERITE));
+
+
+    // On A Stick Items
+    public static final Item CARROT_ON_A_COPPER_FUSED_STICK = ModItems.registerItem("carrot_on_a_copper_fused_stick", 
+        (Item)new ModOnAStickItem<PigEntity>(new FabricItemSettings().maxDamage(25), EntityType.PIG, ModToolMaterials.COPPER, 7));
+
+    public static final Item WARPED_FUNGUS_ON_A_COPPER_FUSED_STICK = ModItems.registerItem("warped_fungus_on_a_copper_fused_stick", 
+        (Item)new ModOnAStickItem<StriderEntity>(new FabricItemSettings().maxDamage(100), EntityType.STRIDER, ModToolMaterials.COPPER, 1));
+
+    public static final Item CARROT_ON_AN_IRON_FUSED_STICK = ModItems.registerItem("carrot_on_an_iron_fused_stick", 
+        (Item)new ModOnAStickItem<PigEntity>(new FabricItemSettings().maxDamage(25), EntityType.PIG, ToolMaterials.IRON, 7));
+        
+    public static final Item WARPED_FUNGUS_ON_AN_IRON_FUSED_STICK = ModItems.registerItem("warped_fungus_on_an_iron_fused_stick", 
+        (Item)new ModOnAStickItem<StriderEntity>(new FabricItemSettings().maxDamage(100), EntityType.STRIDER, ToolMaterials.IRON, 1));
+
+    public static final Item CARROT_ON_A_GOLD_FUSED_STICK = ModItems.registerItem("carrot_on_a_gold_fused_stick", 
+        (Item)new ModOnAStickItem<PigEntity>(new FabricItemSettings().maxDamage(25), EntityType.PIG, ToolMaterials.GOLD, 7));
+        
+    public static final Item WARPED_FUNGUS_ON_A_GOLD_FUSED_STICK = ModItems.registerItem("warped_fungus_on_a_gold_fused_stick", 
+        (Item)new ModOnAStickItem<StriderEntity>(new FabricItemSettings().maxDamage(100), EntityType.STRIDER, ToolMaterials.GOLD, 1));
+
+    public static final Item CARROT_ON_A_DIAMOND_FUSED_STICK = ModItems.registerItem("carrot_on_a_diamond_fused_stick", 
+        (Item)new ModOnAStickItem<PigEntity>(new FabricItemSettings().maxDamage(25), EntityType.PIG, ToolMaterials.DIAMOND, 7));
+        
+    public static final Item WARPED_FUNGUS_ON_A_DIAMOND_FUSED_STICK = ModItems.registerItem("warped_fungus_on_a_diamond_fused_stick", 
+        (Item)new ModOnAStickItem<StriderEntity>(new FabricItemSettings().maxDamage(100), EntityType.STRIDER, ToolMaterials.DIAMOND, 1));
+
+    public static final Item CARROT_ON_A_NETHERITE_FUSED_STICK = ModItems.registerItem("carrot_on_a_netherite_fused_stick", 
+        (Item)new ModOnAStickItem<PigEntity>(new FabricItemSettings().maxDamage(25).fireproof(), EntityType.PIG, ToolMaterials.NETHERITE, 7));
+        
+    public static final Item WARPED_FUNGUS_ON_A_NETHERITE_FUSED_STICK = ModItems.registerItem("warped_fungus_on_a_netherite_fused_stick", 
+        (Item)new ModOnAStickItem<StriderEntity>(new FabricItemSettings().maxDamage(100).fireproof(), EntityType.STRIDER, ToolMaterials.NETHERITE, 1));
+    
+    
     // Shield Framing Template
     public static final Item SHIELD_FRAMING_SMITHING_TEMPLATE = ModItems.registerItem("shield_framing_smithing_template", 
         (Item)ShieldFramingTemplateItem.createShieldFramingTemplate());
+    
+    // Fishing Rod Fusion Template
+    public static final Item FISHING_ROD_FUSION_SMITHING_TEMPLATE = ModItems.registerItem("fishing_rod_fusion_smithing_template", 
+        (Item)FishingRodFusionTemplateItem.createFishingRodFusionTemplate());
 
 
     // Elder Guardian Spike
@@ -107,10 +173,15 @@ public class ModItems {
         new Item(new FabricItemSettings()));
 
 
-    
     // Registering Methods
     private static Item registerItem(String name, Item item) {
         return Registry.register(Registries.ITEM, new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, name), item);
+    }
+
+    public static void registerFuelItems() {
+        FuelRegistry.INSTANCE.add(WOODEN_SHIELD, 600);
+        FuelRegistry.INSTANCE.add(WOODEN_SPEAR, 300);
+        FuelRegistry.INSTANCE.add(BAMBOO_SPEAR, 300);
     }
 
     public static void registerModItems() {

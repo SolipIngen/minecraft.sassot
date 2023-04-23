@@ -84,7 +84,7 @@ public class ModEntityTypes {
 
 
     public static void registerModEntityTypes() {
-        SpearsAxesSwordsShieldsAndOtherTools.LOGGER.debug("Registering Mod Items for " + SpearsAxesSwordsShieldsAndOtherTools.MOD_ID);
+        SpearsAxesSwordsShieldsAndOtherTools.LOGGER.debug("Registering Mod Entity Types for " + SpearsAxesSwordsShieldsAndOtherTools.MOD_ID);
     }
 
 }

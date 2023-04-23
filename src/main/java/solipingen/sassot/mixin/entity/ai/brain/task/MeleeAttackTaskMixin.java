@@ -17,7 +17,7 @@ public abstract class MeleeAttackTaskMixin {
 
     @Inject(method = "isHoldingUsableRangedWeapon", at = @At("HEAD"), cancellable = true)
     private static void injectedIsHoldingUsableRangedWeapon(MobEntity mob, CallbackInfoReturnable<Boolean> cbireturn) {
-        boolean spearBl = mob.getMainHandStack().getItem() instanceof SpearItem || mob.isHolding(ModItems.BLAZEARM);
+        boolean spearBl = mob.getMainHandStack().getItem() instanceof SpearItem || mob.getOffHandStack().getItem() instanceof SpearItem || mob.isHolding(ModItems.BLAZEARM);
         if (spearBl) {
             cbireturn.setReturnValue(spearBl);
         }

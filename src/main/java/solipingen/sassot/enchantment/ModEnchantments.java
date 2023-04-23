@@ -13,7 +13,7 @@ import solipingen.sassot.enchantment.shield.ProjectileDeflectionEnchantment;
 import solipingen.sassot.enchantment.shield.ShieldingEnchantment;
 import solipingen.sassot.enchantment.shield.ShockReboundEnchantment;
 import solipingen.sassot.enchantment.shield.UnyieldingEnchantment;
-import solipingen.sassot.enchantment.spear.GroundbreakingEnchantment;
+import solipingen.sassot.enchantment.spear.GroundshakingEnchantment;
 import solipingen.sassot.enchantment.spear.SkeweringEnchantment;
 import solipingen.sassot.enchantment.spear.ThrustingEnchantment;
 import solipingen.sassot.enchantment.spear.WhirlwindEnchantment;
@@ -57,8 +57,8 @@ public class ModEnchantments {
     public static final Enchantment THRUSTING = ModEnchantments.registerEnchantment("thrusting", 
         new ThrustingEnchantment(Enchantment.Rarity.UNCOMMON, EquipmentSlot.MAINHAND));
 
-    public static final Enchantment GROUNDBREAKING = ModEnchantments.registerEnchantment("groundbreaking", 
-        new GroundbreakingEnchantment(Enchantment.Rarity.VERY_RARE, EquipmentSlot.MAINHAND));
+    public static final Enchantment GROUNDSHAKING = ModEnchantments.registerEnchantment("groundshaking", 
+        new GroundshakingEnchantment(Enchantment.Rarity.VERY_RARE, EquipmentSlot.MAINHAND));
     
     public static final Enchantment LEANING = ModEnchantments.registerEnchantment("leaning", 
         new LeaningEnchantment(Enchantment.Rarity.RARE, EquipmentSlot.MAINHAND));

@@ -33,6 +33,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import solipingen.sassot.advancement.ModCriteria;
@@ -61,6 +62,7 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntity impl
 
     @Inject(method = "<init>(Lnet/minecraft/world/World;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;)V", at = @At("TAIL"))
     private void injectedInit(World world, LivingEntity owner, ItemStack stack, CallbackInfo cbi) {
+        this.impactFactor = 1.0f;
         this.dataTracker.set(SKEWERING, (byte)EnchantmentHelper.getLevel(ModEnchantments.SKEWERING, stack));
     }
 
@@ -68,15 +70,20 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntity impl
     private void injectedInitDataTracker(CallbackInfo cbi) {
         this.dataTracker.startTracking(SKEWERING, (byte)0);
     }
+
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void injectedSuperTick(CallbackInfo cbi) {
+        super.tick();
+    }
     
     @ModifyConstant(method = "tick", constant = @Constant(intValue = 4))
-    private int injectedInGroundTime(int inGroundTime) {
+    private int modifiedInGroundTime(int inGroundTime) {
         return 2;
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/TridentEntity;getOwner()Lnet/minecraft/entity/Entity;"))
     private void injectedTick(CallbackInfo cbi) {
-        this.impactFactor = (float)this.getVelocity().length()/2.5f;
+        this.impactFactor = Math.max(MathHelper.square((float)this.getVelocity().length()/2.5f), MathHelper.sqrt((float)this.getVelocity().length()/2.5f));
     }
 
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/TridentEntity;asItemStack()Lnet/minecraft/item/ItemStack;"))
@@ -93,16 +100,21 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntity impl
         return 0.1;
     }
 
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;tick()V"))
+    private void redirectedSuperTick(PersistentProjectileEntity persistentProjectileEntity) {
+    }
+
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
         super.onBlockHit(blockHitResult);
-        Entity entity2 = this.getOwner() != null ? this.getOwner() : this;
-        BlockPos blockPos;
-        LightningEntity lightningEntity;
-        if (this.world instanceof ServerWorld && this.world.isRaining() && ((TridentEntity)(Object)this).hasChanneling() && this.world.isSkyVisible(blockPos = this.getBlockPos()) && (lightningEntity = EntityType.LIGHTNING_BOLT.create(this.world)) != null) {
+        if (this.world.isClient) return;
+        Entity owner = this.getOwner() != null ? this.getOwner() : this;
+        BlockPos blockPos = this.getBlockPos();
+        LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(this.world);
+        if (this.world instanceof ServerWorld && this.world.isRaining() && ((TridentEntity)(Object)this).hasChanneling() && this.world.isSkyVisible(blockPos) && lightningEntity != null) {
             this.world.setThunderGradient(1.0f);
             lightningEntity.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(blockPos));
-            lightningEntity.setChanneler(entity2 instanceof ServerPlayerEntity ? (ServerPlayerEntity)entity2 : null);
+            lightningEntity.setChanneler(owner instanceof ServerPlayerEntity ? (ServerPlayerEntity)owner : null);
             this.world.spawnEntity(lightningEntity);
             this.playSound(SoundEvents.ITEM_TRIDENT_THUNDER, 5.0f, 1.0f);
         }
@@ -110,7 +122,7 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntity impl
 
     @ModifyVariable(method = "onEntityHit", at = @At("STORE"), ordinal = 0)
     private float injectedAttackDamage(float f, EntityHitResult entityHitResult) {
-        float entityImpactFactor = this.dealtDamage ? this.impactFactor : (float)Math.max(this.impactFactor, 1.0f);
+        float entityImpactFactor = this.dealtDamage ? this.impactFactor : Math.max(this.impactFactor, 1.0f);
         float baseDamage = 9.0f*entityImpactFactor;
         Entity targetEntity = entityHitResult.getEntity();
         float additionalDamage = EnchantmentHelper.getAttackDamage(this.tridentStack, EntityGroup.DEFAULT);
@@ -200,7 +212,7 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntity impl
     private void injectedAge(CallbackInfo cbi) {
         byte i = this.dataTracker.get(LOYALTY);
         if (this.pickupType == PersistentProjectileEntity.PickupPermission.ALLOWED || (i > 0 && this.inGround)) {
-            if (this.random.nextInt((int)i) == 0) {
+            if (this.random.nextInt((int)i + 1) == 0) {
                 super.age();
             }
         }

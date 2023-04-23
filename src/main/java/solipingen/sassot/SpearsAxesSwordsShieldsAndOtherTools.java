@@ -17,7 +17,6 @@ import solipingen.sassot.village.ModVillagerProfessions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class SpearsAxesSwordsShieldsAndOtherTools implements ModInitializer {
 
 	public static final String MOD_ID = "sassot";
@@ -32,6 +31,7 @@ public class SpearsAxesSwordsShieldsAndOtherTools implements ModInitializer {
 		ModEnchantments.registerModEnchantments();
 		ModEntityTypes.registerModEntityTypes();
 		ModItems.registerModItems();
+		ModItems.registerFuelItems();
 		ModItemGroups.registerModItemsToVanillaGroups();
 		ModRecipes.registerModRecipes();
 		ModSoundEvents.registerModSoundEvents();

@@ -31,7 +31,7 @@ public abstract class VindicatorEntityMixin extends IllagerEntity {
         super(entityType, world);
     }
 
-    @Inject(method = "initialize", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "initialize", at = @At("TAIL"), cancellable = true)
     private void injectedInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> cbireturn) {
         if (spawnReason == SpawnReason.STRUCTURE || this.isPatrolLeader()) {
             float axeEquipFloat = this.random.nextFloat();

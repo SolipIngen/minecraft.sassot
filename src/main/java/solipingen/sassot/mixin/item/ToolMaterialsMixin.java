@@ -27,7 +27,9 @@ public abstract class ToolMaterialsMixin implements ToolMaterial {
             if (this.miningSpeed >= 12.0f) {
                 cbireturn.setReturnValue(ModMiningLevels.STONE);
             }
-            cbireturn.setReturnValue(ModMiningLevels.WOOD);
+            else {
+                cbireturn.setReturnValue(ModMiningLevels.WOOD);
+            }
         }
         else if (this.miningLevel == MiningLevels.STONE) {
             cbireturn.setReturnValue(ModMiningLevels.STONE);
@@ -49,7 +51,9 @@ public abstract class ToolMaterialsMixin implements ToolMaterial {
             if (this.itemDurability <= 32) {
                 cbireturn.setReturnValue(123);
             }
-            cbireturn.setReturnValue(42);
+            else {
+                cbireturn.setReturnValue(42);
+            }
         }
         else if (this.miningLevel == MiningLevels.STONE) {
             cbireturn.setReturnValue(169);

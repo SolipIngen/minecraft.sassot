@@ -1,7 +1,19 @@
 {
-    "variants": {
-      "": {
-        "model": "sassot:block/swordsman_marker"
-      }
+  "variants": {
+    "facing=east": {
+      "model": "sassot:block/swordsman_marker",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "sassot:block/swordsman_marker"
+    },
+    "facing=south": {
+      "model": "sassot:block/swordsman_marker",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "sassot:block/swordsman_marker",
+      "y": 270
     }
+  }
 }

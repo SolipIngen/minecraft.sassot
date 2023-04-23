@@ -20,9 +20,9 @@
     "spear_return": {
         "subtitle": "subtitles.sassot.spear_return",
         "sounds": [
-            "sassot:spear_return_ver1", 
-            "sassot:spear_return_ver2", 
-            "sassot:spear_return_ver3"
+            "minecraft:item/trident/return1", 
+            "minecraft:item/trident/return2", 
+            "minecraft:item/trident/return3"
         ]
     },
     "spear_whirlwind_1": {
@@ -74,9 +74,9 @@
     "blazearm_return": {
         "subtitle": "subtitles.sassot.blazearm_return",
         "sounds": [
-            "sassot:spear_return_ver1", 
-            "sassot:spear_return_ver2", 
-            "sassot:spear_return_ver3"
+            "minecraft:item/trident/return1", 
+            "minecraft:item/trident/return2", 
+            "minecraft:item/trident/return3"
         ]
     },
     "blazearm_flare_1": {
@@ -96,7 +96,16 @@
         "sounds": [
             "sassot:blazearm_flare_3"
         ]
-    },
+    }, 
+    "echo_crystal_block_break": {
+        "subtitle": "subtitles.sassot.echo_crystal_block_break", 
+        "sounds": [
+            "sassot:echo_crystal_cluster_break_ver1", 
+            "sassot:echo_crystal_cluster_break_ver2", 
+            "sassot:echo_crystal_cluster_break_ver3", 
+            "sassot:echo_crystal_cluster_break_ver4"
+        ]
+    }, 
     "echo_crystal_cluster_break": {
         "subtitle": "subtitles.sassot.echo_crystal_cluster_break", 
         "sounds": [
@@ -172,10 +181,10 @@
             "sassot:netherite_shield_block"
         ]
     }, 
-    "groundbreaking": {
-        "subtitle": "subtitles.sassot.groundbreaking", 
+    "groundshaking": {
+        "subtitle": "subtitles.sassot.groundshaking", 
         "sounds": [
-            "sassot:groundbreaking"
+            "sassot:groundshaking"
         ]
     }, 
     "pillager_spear_throw": {
@@ -206,6 +215,14 @@
         "subtitle": "subtitles.sassot.villager_spear_throw", 
         "sounds": [
             "sassot:spear_throw"
+        ]
+    }, 
+    "villager_attack": {
+        "subtitle": "subtitles.sassot.villager_attack", 
+        "sounds": [
+            "minecraft:mob/villager/no1", 
+            "minecraft:mob/villager/no2", 
+            "minecraft:mob/villager/no3"
         ]
     }
 
