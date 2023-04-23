@@ -14,7 +14,7 @@
   },
 
   "license": "MIT License",
-  "icon": "assets/sassot/icon.png",
+  "icon": "assets/sassot/sassot_icon.png",
 
   "environment": "*",
   "entrypoints": {
