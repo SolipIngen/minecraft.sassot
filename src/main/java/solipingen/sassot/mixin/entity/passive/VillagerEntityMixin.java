@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -27,7 +28,9 @@ import net.minecraft.entity.InteractionObserver;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.Activity;
 import net.minecraft.entity.ai.brain.Brain;
+import net.minecraft.entity.ai.brain.MemoryModuleState;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
+import net.minecraft.entity.ai.brain.Schedule;
 import net.minecraft.entity.ai.brain.task.CelebrateRaidWinTask;
 import net.minecraft.entity.ai.brain.task.EndRaidTask;
 import net.minecraft.entity.ai.brain.task.FindWalkTargetTask;
@@ -37,6 +40,7 @@ import net.minecraft.entity.ai.brain.task.SeekSkyTask;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.ai.brain.task.TaskTriggerer;
 import net.minecraft.entity.ai.brain.task.Tasks;
+import net.minecraft.entity.ai.brain.task.VillagerTaskListProvider;
 import net.minecraft.entity.ai.brain.task.VillagerWalkTowardsTask;
 import net.minecraft.entity.ai.brain.task.WaitTask;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
@@ -82,7 +86,7 @@ import net.minecraft.world.World;
 import solipingen.sassot.entity.ai.SpearThrowingMob;
 import solipingen.sassot.entity.ai.goal.SpearThrowAttackGoal;
 import solipingen.sassot.entity.ai.goal.VillagerTrackTargetGoal;
-import solipingen.sassot.entity.passive.AngerableVillager;
+import solipingen.sassot.entity.passive.AngerableFighterVillager;
 import solipingen.sassot.entity.projectile.spear.BambooSpearEntity;
 import solipingen.sassot.entity.projectile.spear.CopperSpearEntity;
 import solipingen.sassot.entity.projectile.spear.DiamondSpearEntity;
@@ -101,7 +105,7 @@ import solipingen.sassot.village.ModVillagerProfessions;
 
 
 @Mixin(VillagerEntity.class)
-public abstract class VillagerEntityMixin extends MerchantEntity implements AngerableVillager, InteractionObserver, SpearThrowingMob, VillagerDataContainer {
+public abstract class VillagerEntityMixin extends MerchantEntity implements AngerableFighterVillager, InteractionObserver, SpearThrowingMob, VillagerDataContainer {
     private static final UniformIntProvider ANGER_TIME_RANGE = TimeHelper.betweenSeconds(60, 90);
     private int angerTime;
     @Nullable private UUID angryAt;
@@ -140,31 +144,29 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
         }
     }
 
-    @Redirect(method = "initBrain", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/brain/Brain;setTaskList(Lnet/minecraft/entity/ai/brain/Activity;Lcom/google/common/collect/ImmutableList;)V"))
-    private void redirectedSetTaskList(Brain<VillagerEntity> brain, Activity activity, ImmutableList<? extends Pair<Integer, ? extends Task<? super VillagerEntity>>> indexedTasks) {
+    @Inject(method = "initBrain", at = @At("HEAD"), cancellable = true)
+    private void injectedSetTaskList(Brain<VillagerEntity> brain, CallbackInfo cbi) {
         VillagerProfession villagerProfession = this.getVillagerData().getProfession();
         if (villagerProfession == ModVillagerProfessions.SWORDSMAN || villagerProfession == ModVillagerProfessions.SPEARMAN) {
-            if (activity == Activity.REST) {
-                if (this.getTarget() == null && this.random.nextInt(4) > this.world.getDifficulty().getId() - 1) {
-                    brain.setTaskList(activity, indexedTasks);
-                }
+            brain.setSchedule(Schedule.VILLAGER_DEFAULT);
+            brain.setTaskList(Activity.WORK, VillagerTaskListProvider.createWorkTasks(villagerProfession, 0.5f), ImmutableSet.of(Pair.of(MemoryModuleType.JOB_SITE, MemoryModuleState.VALUE_PRESENT)));
+            brain.setTaskList(Activity.CORE, VillagerTaskListProvider.createCoreTasks(villagerProfession, 0.5f));
+            brain.setTaskList(Activity.MEET, VillagerTaskListProvider.createMeetTasks(villagerProfession, 0.5f), ImmutableSet.of(Pair.of(MemoryModuleType.MEETING_POINT, MemoryModuleState.VALUE_PRESENT)));
+            if (this.getFighterTarget() == null && this.random.nextInt(4) > this.world.getDifficulty().getId() - 1) {
+                brain.setTaskList(Activity.REST, VillagerTaskListProvider.createRestTasks(villagerProfession, 0.5f));
             }
-            if (!(activity == Activity.PANIC || activity == Activity.HIDE || activity == Activity.REST)) {
-                if (activity == Activity.IDLE) {
-                    if (this.getTarget() == null || (this.getTarget() != null && !this.getTarget().isAlive())) {
-                        brain.setTaskList(activity, indexedTasks);
-                    }
-                }
-                else if (activity == Activity.RAID && this.world instanceof ServerWorld) {
-                    brain.setTaskList(activity, VillagerEntityMixin.createFighterRaidTasks((ServerWorld)this.world, ((VillagerEntity)(Object)this), 0.67f));
-                }
-                else {
-                    brain.setTaskList(activity, indexedTasks);
-                }
+            if (this.getFighterTarget() == null || (this.getFighterTarget() != null && !this.getFighterTarget().isAlive())) {
+                brain.setTaskList(Activity.IDLE, VillagerTaskListProvider.createIdleTasks(villagerProfession, 0.5f));
             }
-        }
-        else {
-           brain.setTaskList(activity, indexedTasks);
+            brain.setTaskList(Activity.PRE_RAID, VillagerTaskListProvider.createPreRaidTasks(villagerProfession, 0.5f));
+            if (this.world instanceof ServerWorld) {
+                brain.setTaskList(Activity.RAID, VillagerEntityMixin.createFighterRaidTasks((ServerWorld)this.world, ((VillagerEntity)(Object)this), 0.67f));
+            }
+            brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
+            brain.setDefaultActivity(Activity.IDLE);
+            brain.doExclusively(Activity.IDLE);
+            brain.refreshActivities(this.world.getTimeOfDay(), this.world.getTime());
+            cbi.cancel();
         }
     }
 
@@ -181,7 +183,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
         }
         this.targetSelector.add(1, this.villagerTrackTargetGoal);
         this.targetSelector.add(2, new RevengeGoal(this, MerchantEntity.class, IronGolemEntity.class).setGroupRevenge(new Class[0]));
-        this.targetSelector.add(3, new ActiveTargetGoal<PlayerEntity>((MobEntity)this, PlayerEntity.class, false, this::shouldAngerAt));
+        this.targetSelector.add(3, new ActiveTargetGoal<PlayerEntity>((MobEntity)this, PlayerEntity.class, false, this::shouldFighterAngerAt));
         this.targetSelector.add(3, new ActiveTargetGoal<RaiderEntity>((MobEntity)this, RaiderEntity.class, true));
         this.targetSelector.add(3, new ActiveTargetGoal<ZombieEntity>((MobEntity)this, ZombieEntity.class, true, this::shouldBeTargetedMob));
         this.targetSelector.add(3, new ActiveTargetGoal<VexEntity>((MobEntity)this, VexEntity.class, false, this::shouldBeTargetedMob));
@@ -200,7 +202,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
         }
         this.targetSelector.add(1, this.villagerTrackTargetGoal);
         this.targetSelector.add(2, new RevengeGoal(this, MerchantEntity.class, IronGolemEntity.class).setGroupRevenge(new Class[0]));
-        this.targetSelector.add(3, new ActiveTargetGoal<PlayerEntity>((MobEntity)this, PlayerEntity.class, false, this::shouldAngerAt));
+        this.targetSelector.add(3, new ActiveTargetGoal<PlayerEntity>((MobEntity)this, PlayerEntity.class, false, this::shouldFighterAngerAt));
         this.targetSelector.add(3, new ActiveTargetGoal<RaiderEntity>((MobEntity)this, RaiderEntity.class, true));
         this.targetSelector.add(3, new ActiveTargetGoal<ZombieEntity>((MobEntity)this, ZombieEntity.class, true, this::shouldBeTargetedMob));
         this.targetSelector.add(3, new ActiveTargetGoal<VexEntity>((MobEntity)this, VexEntity.class, false, this::shouldBeTargetedMob));
@@ -274,11 +276,11 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
     @Inject(method = "onInteractionWith", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/passive/VillagerEntity;gossip:Lnet/minecraft/village/VillagerGossips;", opcode = Opcodes.GETFIELD))
     private void onInteractionWith(EntityInteraction interaction, Entity entity, CallbackInfo cbi) {
         if (interaction == EntityInteraction.VILLAGER_HURT) {
-            this.setAngryAt(entity.getUuid());
+            this.setFighterAngryAt(entity.getUuid());
             List<Entity> hurtNearbyEntities = this.world.getOtherEntities(this, this.getBoundingBox().expand(8.0));
             for (Entity nearbyEntity : hurtNearbyEntities) {
                 if (nearbyEntity instanceof VillagerEntity) {
-                    ((AngerableVillager)nearbyEntity).setAngryAt(entity.getUuid());
+                    ((AngerableFighterVillager)nearbyEntity).setFighterAngryAt(entity.getUuid());
                 }
                 else if (nearbyEntity instanceof IronGolemEntity) {
                     ((Angerable)nearbyEntity).setAngryAt(entity.getUuid());
@@ -289,7 +291,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
             List<Entity> killedNearbyEntities = this.world.getOtherEntities(this, this.getBoundingBox().expand(16.0));
             for (Entity nearbyEntity : killedNearbyEntities) {
                 if (nearbyEntity instanceof VillagerEntity) {
-                    ((AngerableVillager)nearbyEntity).setAngryAt(entity.getUuid());
+                    ((AngerableFighterVillager)nearbyEntity).setFighterAngryAt(entity.getUuid());
                 }
                 else if (nearbyEntity instanceof IronGolemEntity) {
                     ((Angerable)nearbyEntity).setAngryAt(entity.getUuid());
@@ -301,7 +303,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
     @Inject(method = "mobTick", at = @At("TAIL"))
     private void injectedMobTick(CallbackInfo cbi) {
         if (!this.world.isClient) {
-            this.tickAngerLogic((ServerWorld)this.world, true);
+            this.tickFighterAngerLogic((ServerWorld)this.world, true);
         }
         VillagerProfession villagerProfession = this.getVillagerData().getProfession();
         long currentTimeOfDay = this.world.getTimeOfDay();
@@ -436,25 +438,25 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
     }
 
     @Override
-    public void chooseRandomAngerTime() {
-        this.setAngerTime(ANGER_TIME_RANGE.get(this.random));
+    public void chooseRandomFighterAngerTime() {
+        this.setFighterAngerTime(ANGER_TIME_RANGE.get(this.random));
     }
 
     @Override
-    public void setAngerTime(int angerTime) {
+    public void setFighterAngerTime(int angerTime) {
         this.angerTime = angerTime;
     }
 
     @Override
-    public int getAngerTime() {
+    public int getFighterAngerTime() {
         return this.angerTime;
     }
 
     @Override
-    public void setAngryAt(@Nullable UUID angryAt) {
+    public void setFighterAngryAt(@Nullable UUID angryAt) {
         VillagerProfession profession = this.getVillagerData().getProfession();
         if (this.world instanceof ServerWorld && (profession == ModVillagerProfessions.SWORDSMAN || profession == ModVillagerProfessions.SPEARMAN)) {
-            if (angryAt != null && this.getAngryAt() == angryAt) return;
+            if (angryAt != null && this.getFighterAngryAt() == angryAt) return;
             this.angryAt = angryAt;
             ((VillagerEntity)(Object)this).reinitializeBrain((ServerWorld)this.world);
         }
@@ -462,8 +464,35 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
 
     @Override
     @Nullable
-    public UUID getAngryAt() {
+    public UUID getFighterAngryAt() {
         return this.angryAt;
+    }
+
+    @Override
+    public boolean canFighterTarget(LivingEntity target) {
+        return this.shouldBeTargetedMob(target);
+    }
+
+    @Override
+    @Nullable
+    public LivingEntity getFighterTarget() {
+        return this.getTarget();
+    }
+
+    @Override
+    public void setFighterTarget(@Nullable LivingEntity target) {
+        this.setTarget(target);
+    }
+
+    @Override
+    @Nullable
+    public LivingEntity getFighterAttacker() {
+        return this.getAttacker();
+    }
+
+    @Override
+    public void setFighterAttacker(@Nullable LivingEntity attacker) {
+        this.setAttacker(attacker);
     }
 
     private boolean shouldBeTargetedMob(LivingEntity livingEntity) {
@@ -490,12 +519,12 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
 
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
     private void injectedWriteCustomDataToNbt(NbtCompound nbt, CallbackInfo cbi) {
-        this.writeAngerToNbt(nbt);
+        this.writeFighterAngerToNbt(nbt);
     }
 
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
     private void injectedReadCustomDataFromNbt(NbtCompound nbt, CallbackInfo cbi) {
-        this.readAngerFromNbt(this.world, nbt);
+        this.readFighterAngerFromNbt(this.world, nbt);
     }
 
 

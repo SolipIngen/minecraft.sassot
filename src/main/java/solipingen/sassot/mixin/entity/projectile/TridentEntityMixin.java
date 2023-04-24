@@ -107,6 +107,7 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntity impl
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
         super.onBlockHit(blockHitResult);
+        this.setSound(SoundEvents.ITEM_TRIDENT_HIT_GROUND);
         if (this.world.isClient) return;
         Entity owner = this.getOwner() != null ? this.getOwner() : this;
         BlockPos blockPos = this.getBlockPos();

@@ -213,6 +213,7 @@ public class BlazearmEntity extends PersistentProjectileEntity {
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
         super.onBlockHit(blockHitResult);
+        this.setSound(ModSoundEvents.BLAZEARM_HIT_BLOCK);
         if (this.world.isClient || this.isWet()) return;
         float impactSpeed = (float)this.getVelocity().length();
         BlockPos inBlockPos = blockHitResult.getBlockPos();
