@@ -24,7 +24,7 @@ public abstract class StatusEffectsMixin {
     private static void injectedRegister(int rawId, String id, StatusEffect entry, CallbackInfoReturnable<StatusEffect> cbireturn) {
         if (entry instanceof DamageModifierStatusEffect) {
             boolean weaknessBl = entry.getCategory() == StatusEffectCategory.HARMFUL;
-            DamageModifierStatusEffect statusEffect = DamageModifierStatusEffectInvoker.invokeDamageModifierStatusEffect(entry.getCategory(), entry.getColor(), weaknessBl ? -1.0 : 1.0);
+            DamageModifierStatusEffect statusEffect = DamageModifierStatusEffectInvoker.invokeDamageModifierStatusEffect(entry.getCategory(), entry.getColor(), 0.0);
             String uuid = weaknessBl ? "22653B89-116E-49DC-9B6B-9971489B5BE5" : "648D7064-6A60-4F59-8ABE-C2C23A6DD7A9";
             statusEffect.addAttributeModifier(EntityAttributes.GENERIC_ATTACK_DAMAGE, uuid, weaknessBl ? -0.15 : 0.2, EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
             cbireturn.setReturnValue(Registry.register(Registries.STATUS_EFFECT, rawId, id, statusEffect));
