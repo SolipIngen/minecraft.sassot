@@ -51,11 +51,9 @@ public abstract class DrownedEntityMixin extends ZombieEntity implements RangedA
 
     @Redirect(method = "initEquipment", at = @At(value = "FIELD", target = "Lnet/minecraft/item/Items;FISHING_ROD:Lnet/minecraft/item/Item;", opcode = Opcodes.GETSTATIC))
     private Item redirectedFishingRod(Random random, LocalDifficulty localDifficulty) {
-        float randomf = 1.0f;
         int i = 0;
         for (int j = 0; j < 4; j++) {
-            randomf *= random.nextFloat();
-            if (randomf < localDifficulty.getClampedLocalDifficulty()) {
+            if (random.nextFloat() < localDifficulty.getClampedLocalDifficulty()) {
                 i++;
             }
             else {
