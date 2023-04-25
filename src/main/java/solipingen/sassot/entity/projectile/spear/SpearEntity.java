@@ -209,6 +209,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
         super.onBlockHit(blockHitResult);
+        this.setSound(ModSoundEvents.SPEAR_HIT_BLOCK);
         if (this.world.isClient) return;
         if (this.hasGroundshaking() && !(this.brokeBlock || this.dealtDamage)) {
             BlockPos inBlockPos = blockHitResult.getBlockPos();

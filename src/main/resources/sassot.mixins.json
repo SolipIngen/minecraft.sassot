@@ -1,5 +1,5 @@
 {
-  "required": true,
+  "required": false,
   "minVersion": "0.8", 
   "package": "solipingen.sassot.mixin", 
   "compatibilityLevel": "JAVA_17", 
@@ -38,7 +38,6 @@
     "entity.passive.VillagerEntityMixin", 
     "entity.player.PlayerEntityMixin", 
     "entity.projectile.FishingBobberEntityMixin", 
-    "entity.projectile.PersistentProjectileEntityMixin", 
     "entity.projectile.TridentEntityMixin", 
     "entity.EntityMixin", 
     "entity.LivingEntityMixin", 
@@ -56,7 +55,6 @@
     "server.network.ServerPlayNetworkHandlerMixin"
   ],
   "client": [
-    "client.gui.screen.ingame.SmithingScreenMixin", 
     "client.gui.InGameHudMixin", 
     "client.network.ClientPlayerInteractionManagerMixin", 
     "client.render.entity.feature.HeldItemFeatureRendererMixin", 
