@@ -1,7 +1,7 @@
 # Spears, Axes, Swords, Shields, and Other Tools: A Minecraft Mod
 
 
-![sassot_icon](https://user-images.githubusercontent.com/117603129/234380368-6f81e87b-7466-4c1c-ab67-1c86923855ca.png)
+![sassot_icon](https://user-images.githubusercontent.com/117603129/234380286-cfcb97b9-65d9-44b3-b751-b0aa82294160.png)
 
 Welcome to Spears, Axes, Swords, Shields, and Other Tools, a mod that reworks many aspects to do with melee combat in Minecraft. Please report any technical issues you find here, while I ask you to make content-related feedback on the mod's CurseForge page.
 
