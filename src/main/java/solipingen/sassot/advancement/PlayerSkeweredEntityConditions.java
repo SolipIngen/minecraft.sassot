@@ -11,6 +11,7 @@ import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
+
 public class PlayerSkeweredEntityConditions extends AbstractCriterionConditions {
     static final Identifier ID = PlayerSkeweredEntityCriterion.ID;
     private final DamagePredicate damage;

@@ -11,6 +11,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import solipingen.sassot.SpearsAxesSwordsShieldsAndOtherTools;
 
+
 public class ThrowSpearCriterion extends AbstractCriterion<ThrowSpearConditions> {
     static final Identifier ID = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "throw_spear");
 

@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 
-@SuppressWarnings("all")
+@SuppressWarnings("deprecation")
 public class EchoCrystalClusterBlock extends EchoCrystalBlock implements Waterloggable {
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
     public static final DirectionProperty FACING = Properties.FACING;
@@ -49,6 +49,7 @@ public class EchoCrystalClusterBlock extends EchoCrystalBlock implements Waterlo
         this.westShape = Block.createCuboidShape(16 - height, xzOffset, xzOffset, 16.0, 16 - xzOffset, 16 - xzOffset);
     }
 
+    @SuppressWarnings("incomplete-switch")
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         Direction direction = state.get(FACING);
