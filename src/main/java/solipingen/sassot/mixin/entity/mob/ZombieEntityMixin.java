@@ -4,7 +4,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -34,7 +33,7 @@ public abstract class ZombieEntityMixin extends HostileEntity {
         float f2 = this.world.getDifficulty() == Difficulty.HARD ? 0.5f : 0.25f;
         if (f < f2) {
             int i = random.nextInt(3);
-            float f3 = random.nextFloat() * localDifficulty.getClampedLocalDifficulty();
+            float f3 = random.nextFloat()*localDifficulty.getClampedLocalDifficulty();
             if (i == 0) {
                 if (f3 > 0.999f) {
                     this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.DIAMOND_SPEAR));
