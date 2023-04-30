@@ -8,7 +8,6 @@ import net.minecraft.item.TridentItem;
 import solipingen.sassot.item.SpearItem;
 
 
-
 public class ThrustingEnchantment extends Enchantment {
 
     
