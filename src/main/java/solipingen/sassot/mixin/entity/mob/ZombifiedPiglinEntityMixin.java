@@ -27,7 +27,7 @@ public abstract class ZombifiedPiglinEntityMixin extends ZombieEntity implements
 
     @Redirect(method = "initEquipment", at = @At(value = "FIELD", target = "Lnet/minecraft/item/Items;GOLDEN_SWORD:Lnet/minecraft/item/Item;", opcode = Opcodes.GETSTATIC))
     private Item redirectedGoldenSword(Random random, LocalDifficulty localDifficulty) {
-        if (this.random.nextFloat() < 0.33f) {
+        if (random.nextFloat() < 0.33f) {
             float spearRandomf = this.random.nextFloat()*this.world.getDifficulty().getId() + 0.1f*localDifficulty.getClampedLocalDifficulty();
             if (spearRandomf < 0.15f) {
                 return ModItems.WOODEN_SPEAR;
@@ -41,7 +41,7 @@ public abstract class ZombifiedPiglinEntityMixin extends ZombieEntity implements
             return ModItems.GOLDEN_SPEAR;
         }
         else {
-            float swordRandomf = this.random.nextFloat()*this.world.getDifficulty().getId() + 0.1f*localDifficulty.getClampedLocalDifficulty();
+            float swordRandomf = random.nextFloat()*this.world.getDifficulty().getId() + 0.1f*localDifficulty.getClampedLocalDifficulty();
             if (swordRandomf < 0.15f) {
                 return Items.WOODEN_SWORD;
             }

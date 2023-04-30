@@ -33,8 +33,8 @@ public abstract class PatrolEntityMixin extends HostileEntity {
     @Nullable
     @Inject(method = "initialize", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/PatrolEntity;equipStack(Lnet/minecraft/entity/EquipmentSlot;Lnet/minecraft/item/ItemStack;)V"), cancellable = true)
     private void injectedInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> cbireturn) {
-        if (((PatrolEntity)(Object)this) instanceof PillagerEntity && this.random.nextInt(3) == 0) {
-            float meleeEquipFloat = this.random.nextFloat();
+        if (((PatrolEntity)(Object)this) instanceof PillagerEntity && world.getRandom().nextInt(3) == 0) {
+            float meleeEquipFloat = world.getRandom().nextFloat();
             if (meleeEquipFloat >= 0.4f) {
                 this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
             }

@@ -1,37 +1,30 @@
 package solipingen.sassot.mixin.entity.mob;
 
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.ZombieVillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.TridentItem;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import solipingen.sassot.enchantment.ModEnchantments;
 import solipingen.sassot.item.BlazearmItem;
@@ -39,8 +32,12 @@ import solipingen.sassot.item.ModItems;
 import solipingen.sassot.item.ModShieldItem;
 import solipingen.sassot.item.SpearItem;
 
+
 @Mixin(MobEntity.class)
 public abstract class MobEntityMixin extends LivingEntity {
+
+    @Invoker("updateEnchantments")
+    public abstract void invokeUpdateEnchantments(Random random, LocalDifficulty localDifficulty);
 
 
     protected MobEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
@@ -78,38 +75,6 @@ public abstract class MobEntityMixin extends LivingEntity {
             }
             else {
                 cbireturn.setReturnValue(((MobEntity)(Object)this).prefersNewDamageableItem(newStack, oldStack));
-            }
-        }
-    }
-
-    @Nullable
-    @Inject(method = "initialize", at = @At("TAIL"), cancellable = true)
-    private void injectedInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> cbireturn) {
-        if (((MobEntity)(Object)this) instanceof ZombieVillagerEntity && spawnReason == SpawnReason.STRUCTURE) {
-            if (world.getRandom().nextInt(3) == 0) {
-                float meleeEquipThreshold = 0.15f*world.getDifficulty().getId() + 0.15f*difficulty.getClampedLocalDifficulty();
-                if (world.getRandom().nextFloat() < meleeEquipThreshold) {
-                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.WOODEN_SPEAR));
-                    Iterable<BlockPos> blockPosIterable = BlockPos.iterateOutwards(this.getBlockPos(), 4, 1, 4);
-                    for (BlockPos blockPos : blockPosIterable) {
-                        if (this.world.getBlockState(blockPos).isOf(Blocks.BAMBOO)) {
-                            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.BAMBOO_SPEAR));
-                            break;
-                        }
-                    }
-                    if (world.getRandom().nextBoolean()) {
-                        this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.STONE_SPEAR));
-                    }
-                }
-                else {
-                    this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.WOODEN_SWORD));
-                    if (world.getRandom().nextBoolean()) {
-                        this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
-                    }
-                }
-            }
-            else {
-                this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
             }
         }
     }

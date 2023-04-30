@@ -34,8 +34,8 @@ public abstract class VindicatorEntityMixin extends IllagerEntity {
     @Inject(method = "initialize", at = @At("TAIL"), cancellable = true)
     private void injectedInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> cbireturn) {
         if (spawnReason == SpawnReason.STRUCTURE || this.isPatrolLeader()) {
-            float axeEquipFloat = this.random.nextFloat();
-            if (axeEquipFloat > 0.96f - 0.005f*(this.world.getDifficulty().getId() - 1)) {
+            float axeEquipFloat = world.getRandom().nextFloat();
+            if (axeEquipFloat > 0.96f - 0.005f*(world.getDifficulty().getId() - 1)) {
                 this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_AXE));
             }
             else {
