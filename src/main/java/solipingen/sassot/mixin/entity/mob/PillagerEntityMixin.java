@@ -61,10 +61,10 @@ public abstract class PillagerEntityMixin extends IllagerEntity implements Cross
     private void injectedInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> cbireturn) {
         this.updateAttackType();
         if (spawnReason == SpawnReason.STRUCTURE || this.isPatrolLeader()) {
-            if (this.random.nextInt(3) == 0) {
-                float meleeEquipFloat = this.random.nextFloat();
+            if (world.getRandom().nextInt(3) == 0) {
+                float meleeEquipFloat = world.getRandom().nextFloat();
                 if (meleeEquipFloat >= 0.4f) {
-                    float swordEquipFloat = this.random.nextFloat();
+                    float swordEquipFloat = world.getRandom().nextFloat();
                     if (swordEquipFloat > 0.67f - 0.15f*(this.world.getDifficulty().getId() - 1)) {
                         this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
                     }
@@ -73,7 +73,7 @@ public abstract class PillagerEntityMixin extends IllagerEntity implements Cross
                     }
                 }
                 else if (meleeEquipFloat < 0.4f) {
-                    float spearEquipFloat = this.random.nextFloat();
+                    float spearEquipFloat = world.getRandom().nextFloat();
                     if (spearEquipFloat > 0.67f - (this.world.getDifficulty().getId() - 1)*0.15f) {
                         this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.IRON_SPEAR));
                     }
