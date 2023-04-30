@@ -3,6 +3,7 @@ package solipingen.sassot.advancement;
 import net.minecraft.advancement.criterion.Criteria;
 import solipingen.sassot.SpearsAxesSwordsShieldsAndOtherTools;
 
+
 public class ModCriteria {
 
     public static final ThrowSpearCriterion THROW_SPEAR = Criteria.register(new ThrowSpearCriterion());

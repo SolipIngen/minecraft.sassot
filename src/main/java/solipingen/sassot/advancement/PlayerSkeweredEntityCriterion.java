@@ -13,6 +13,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import solipingen.sassot.SpearsAxesSwordsShieldsAndOtherTools;
 
+
 public class PlayerSkeweredEntityCriterion extends AbstractCriterion<PlayerSkeweredEntityConditions> {
     static final Identifier ID = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "player_skewered_entity");
 
