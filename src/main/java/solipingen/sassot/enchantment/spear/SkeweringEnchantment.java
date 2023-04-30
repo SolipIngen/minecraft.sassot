@@ -2,6 +2,7 @@ package solipingen.sassot.enchantment.spear;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TridentItem;
@@ -39,7 +40,7 @@ public class SkeweringEnchantment extends Enchantment {
 
     @Override
     public boolean canAccept(Enchantment other) {
-        return super.canAccept(other) && other != ModEnchantments.WHIRLWIND;
+        return super.canAccept(other) && other != ModEnchantments.WHIRLWIND && other != Enchantments.RIPTIDE && other != ModEnchantments.FLARE;
     }
     
     
