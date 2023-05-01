@@ -2,6 +2,7 @@ package solipingen.sassot.util.interfaces.mixin.entity;
 
 import net.minecraft.entity.damage.DamageSource;
 
+
 public interface LivingEntityInterface {
     
     public boolean getIsSkewered();
