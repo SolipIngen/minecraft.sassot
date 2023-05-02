@@ -9,6 +9,7 @@ import net.minecraft.item.ShieldItem;
 
 public class ShieldingEnchantment extends Enchantment {
 
+    
     public ShieldingEnchantment(Rarity weight, EquipmentSlot ...slotTypes) {
         super(weight, EnchantmentTarget.BREAKABLE, slotTypes);
     }

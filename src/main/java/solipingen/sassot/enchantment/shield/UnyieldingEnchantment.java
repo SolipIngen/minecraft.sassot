@@ -9,6 +9,7 @@ import net.minecraft.item.ShieldItem;
 
 public class UnyieldingEnchantment extends Enchantment {
 
+    
     public UnyieldingEnchantment(Rarity weight, EquipmentSlot ...slotTypes) {
         super(weight, EnchantmentTarget.BREAKABLE, slotTypes);
     }

@@ -9,6 +9,7 @@ import net.minecraft.item.ShieldItem;
 
 public class EchoingEnchantment extends Enchantment {
 
+    
     public EchoingEnchantment(Rarity weight, EquipmentSlot ...slotTypes) {
         super(weight, EnchantmentTarget.BREAKABLE, slotTypes);
     }

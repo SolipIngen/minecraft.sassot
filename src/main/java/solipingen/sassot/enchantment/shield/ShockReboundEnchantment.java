@@ -10,6 +10,7 @@ import solipingen.sassot.enchantment.ModEnchantments;
 
 public class ShockReboundEnchantment extends Enchantment {
 
+    
     public ShockReboundEnchantment(Enchantment.Rarity weight, EquipmentSlot ... slotTypes) {
         super(weight, EnchantmentTarget.BREAKABLE, slotTypes);
     }
