@@ -50,12 +50,10 @@ public class EchoingShieldRecipe extends SpecialCraftingRecipe {
         if (!(itemStack.getItem() instanceof ShieldItem)) {
             return ItemStack.EMPTY;
         }
-
         int echoingLevel = EnchantmentHelper.getLevel(ModEnchantments.ECHOING, itemStack);
         if (echoingLevel >= 3) {
             return ItemStack.EMPTY;
         }
-
         Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(itemStack);
         if (echoingLevel <= 0) {
             enchantments.put(ModEnchantments.ECHOING, echoingLevel + 1);

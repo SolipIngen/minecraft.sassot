@@ -6,6 +6,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
+import solipingen.sassot.enchantment.ModEnchantments;
 import solipingen.sassot.item.BlazearmItem;
 
 public class HackingEnchantment extends Enchantment {
@@ -35,7 +36,7 @@ public class HackingEnchantment extends Enchantment {
 
     @Override
     public boolean canAccept(Enchantment other) {
-        return super.canAccept(other) && other != Enchantments.SWEEPING;
+        return super.canAccept(other) && other != Enchantments.SWEEPING && other != ModEnchantments.THRUSTING;
     }
 
 

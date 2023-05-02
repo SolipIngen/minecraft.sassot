@@ -10,6 +10,7 @@ import solipingen.sassot.enchantment.ModEnchantments;
 
 public class CloakingEnchantment extends Enchantment {
 
+    
     public CloakingEnchantment(Rarity weight, EquipmentSlot ...slotTypes) {
         super(weight, EnchantmentTarget.BREAKABLE, slotTypes);
     }
