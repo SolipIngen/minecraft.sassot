@@ -135,7 +135,7 @@ public class ModVillagerProfessions {
                     new SellEnchantedToolFactory(Items.DIAMOND_PICKAXE, 18, 3, 15), 
                     new SellEnchantedToolFactory(Items.DIAMOND_SHOVEL, 10, 3, 15), 
                     new SellEnchantedToolFactory(Items.DIAMOND_HOE, 8, 3, 15), 
-                    new SellEnchantedToolFactory(Items.DIAMOND_AXE, 17, 3, 15)}
+                    new SellEnchantedToolFactory(Items.DIAMOND_AXE, 19, 3, 15)}
             )));
     }
 
@@ -151,12 +151,12 @@ public class ModVillagerProfessions {
                     new SellItemFactory(ModItems.COPPER_SWORD, 2, 1, 5), 
                     new SellItemFactory(ModItems.COPPER_SPEAR, 2, 1, 5), 
                     new SellItemFactory(ModItems.COPPER_AXE, 2, 1, 5), 
-                    new SellItemFactory(ModItems.COPPER_FRAMED_WOODEN_SHIELD, 3, 1, 5), new SellItemFactory(ModItems.COPPER_SHIELD, 4, 1, 5)}, 
+                    new SellItemFactory(ModItems.COPPER_FRAMED_WOODEN_SHIELD, 3, 1, 5), new SellItemFactory(ModItems.COPPER_SHIELD, 6, 1, 5)}, 
                 3, new Factory[]{new BuyForOneEmeraldFactory(Items.GOLD_INGOT, 2, 12, 20),  
                     new SellItemFactory(Items.GOLDEN_SWORD, 3, 1, 10), 
                     new SellItemFactory(ModItems.GOLDEN_SPEAR, 3, 1, 10), 
                     new SellItemFactory(Items.GOLDEN_AXE, 3, 1, 10), 
-                    new SellItemFactory(ModItems.GOLD_FRAMED_WOODEN_SHIELD, 6, 1, 10), new SellItemFactory(ModItems.GOLDEN_SHIELD, 8, 1, 10)}, 
+                    new SellItemFactory(ModItems.GOLD_FRAMED_WOODEN_SHIELD, 6, 1, 10), new SellItemFactory(ModItems.GOLDEN_SHIELD, 12, 1, 10)}, 
                 4, new Factory[]{new BuyForOneEmeraldFactory(Items.IRON_INGOT, 4, 12, 30), new BuyForOneEmeraldFactory(Items.LAVA_BUCKET, 1, 12, 30), 
                     new SellItemFactory(Items.IRON_SWORD, 3, 1, 15), 
                     new SellItemFactory(ModItems.IRON_SPEAR, 3, 1, 15), 
@@ -164,9 +164,10 @@ public class ModVillagerProfessions {
                     new SellItemFactory(ModItems.IRON_FRAMED_WOODEN_SHIELD, 5, 1, 15), new SellItemFactory(ModItems.IRON_SHIELD, 12, 1, 15)}, 
                 5, new Factory[]{new BuyForOneEmeraldFactory(Items.DIAMOND, 1, 12, 30), 
                     new SellEnchantedToolFactory(Items.DIAMOND_SWORD, 17, 3, 15), 
-                    new SellEnchantedToolFactory(ModItems.DIAMOND_SPEAR, 17, 3, 15), 
-                    new SellEnchantedToolFactory(Items.DIAMOND_AXE, 17, 3, 15), 
-                    new SellEnchantedToolFactory(ModItems.DIAMOND_FRAMED_WOODEN_SHIELD, 15, 3, 15), new SellEnchantedToolFactory(ModItems.EMERALD_FRAMED_WOODEN_SHIELD, 10, 3, 15), new SellEnchantedToolFactory(ModItems.DIAMOND_SHIELD, 24, 3, 15)}
+                    new SellEnchantedToolFactory(ModItems.DIAMOND_SPEAR, 19, 3, 15), 
+                    new SellEnchantedToolFactory(Items.DIAMOND_AXE, 19, 3, 15), 
+                    new SellEnchantedToolFactory(ModItems.DIAMOND_FRAMED_WOODEN_SHIELD, 15, 3, 15), new SellEnchantedToolFactory(ModItems.EMERALD_FRAMED_WOODEN_SHIELD, 18, 3, 15), 
+                    new SellEnchantedToolFactory(ModItems.DIAMOND_SHIELD, 24, 3, 15)}
             )));
     }
 
