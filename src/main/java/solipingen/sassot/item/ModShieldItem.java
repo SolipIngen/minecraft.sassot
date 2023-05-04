@@ -20,6 +20,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import solipingen.sassot.sound.ModSoundEvents;
 
@@ -36,7 +37,7 @@ public class ModShieldItem extends ShieldItem {
 
     
     public ModShieldItem(ToolMaterial material, float minBreakDamage, boolean isFramedShield, int disabledTicks, float unyieldingModifier, Item.Settings settings) {
-        super(settings.maxDamageIfAbsent(Math.round((isFramedShield ? 1.15f :1.85f)*material.getDurability())));
+        super(settings.maxDamageIfAbsent(MathHelper.ceil((isFramedShield ? 1.25f : 2.0f)*material.getDurability())));
         this.minDamageToBreak = minBreakDamage;
         this.isFramed = isFramedShield;
         this.enchantability = material.getEnchantability();
