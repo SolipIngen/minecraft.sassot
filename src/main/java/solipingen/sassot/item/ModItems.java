@@ -54,7 +54,7 @@ public class ModItems {
     
     // Shields
     public static final Item WOODEN_SHIELD = ModItems.registerItem("wooden_shield", 
-        new ModShieldItem(ToolMaterials.WOOD, 3.0f, false, 60, 0.05f, new FabricItemSettings()));
+        new ModShieldItem(ToolMaterials.WOOD, 2.0f, false, 60, 0.05f, new FabricItemSettings()));
     
     public static final Item COPPER_FRAMED_WOODEN_SHIELD = ModItems.registerItem("copper_framed_wooden_shield", 
         new ModShieldItem(ModToolMaterials.COPPER, 3.0f, true, 60, 0.05f, new FabricItemSettings()));
@@ -81,13 +81,13 @@ public class ModItems {
         new ModShieldItem(ToolMaterials.GOLD, 5.0f, false, 80, 0.075f, new FabricItemSettings()));
     
     public static final Item IRON_SHIELD = ModItems.registerItem("iron_shield", 
-        new ModShieldItem(ToolMaterials.IRON, 7.0f, false, 100, 0.1f, new FabricItemSettings()));
+        new ModShieldItem(ToolMaterials.IRON, 6.0f, false, 100, 0.1f, new FabricItemSettings()));
     
     public static final Item DIAMOND_SHIELD = ModItems.registerItem("diamond_shield", 
-        new ModShieldItem(ToolMaterials.DIAMOND, 10.0f, false, 120, 0.15f, new FabricItemSettings()));
+        new ModShieldItem(ToolMaterials.DIAMOND, 8.0f, false, 120, 0.15f, new FabricItemSettings()));
     
     public static final Item NETHERITE_SHIELD = ModItems.registerItem("netherite_shield", 
-        new ModShieldItem(ToolMaterials.DIAMOND, 12.0f, false, 140, 0.175f, new FabricItemSettings().fireproof()));
+        new ModShieldItem(ToolMaterials.DIAMOND, 9.0f, false, 140, 0.175f, new FabricItemSettings().fireproof()));
 
     
     // Copper Tools

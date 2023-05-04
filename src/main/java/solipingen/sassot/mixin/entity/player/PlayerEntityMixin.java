@@ -151,8 +151,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                             otherEntity.setVelocity(vec3d.x - vec3d2.x, vec3d.y, vec3d.z - vec3d2.z);
                         }
                     }
-                    else if (!livingOtherEntity.isWet() && EnchantmentHelper.getLevel(ModEnchantments.FLARE, riptideStack) > 0) {
-                        if (otherEntity instanceof BlazeEntity) return;
+                    else if (!livingOtherEntity.isWet() && EnchantmentHelper.getLevel(ModEnchantments.FLARE, riptideStack) > 0 && !(otherEntity instanceof BlazeEntity)) {
                         livingOtherEntity.damage(this.getDamageSources().playerAttack((PlayerEntity)(Object)this), damageAmount);
                         if (!livingOtherEntity.isOnFire()) {
                             livingOtherEntity.setOnFireFor((int)Math.ceil(3.0*j*distanceModifier));
@@ -294,20 +293,20 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         int thrustLevel = EnchantmentHelper.getEquipmentLevel(ModEnchantments.THRUSTING, this);
         int hackLevel = EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this);
         if (sweepLevel > 0) {
-            cbireturn.setReturnValue((float)(1.0 / (this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED) + 0.1*sweepLevel) * 20.0));
+            cbireturn.setReturnValue((float)(1.0/(this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED) + 0.1*sweepLevel)*20.0));
         }
         if (thrustLevel > 0) {
-            cbireturn.setReturnValue((float)(1.0 / (this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED) + 0.1*thrustLevel) * 20.0)); 
+            cbireturn.setReturnValue((float)(1.0/(this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED) + 0.1*thrustLevel)*20.0)); 
         }
         if (hackLevel > 0) {
-            cbireturn.setReturnValue((float)(1.0 / (this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED) + 0.1*hackLevel) * 20.0));
+            cbireturn.setReturnValue((float)(1.0/(this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED) + 0.1*hackLevel)*20.0));
         }
     }
 
     @Inject(method = "damageShield", at = @At("HEAD"), cancellable = true)
     private void injectedDamageShield(float amount, CallbackInfo cbi) {
         if (!(this.activeItemStack.getItem() instanceof ShieldItem)) {
-            return;
+            cbi.cancel();
         }
         if (!this.world.isClient) {
             ((PlayerEntity)(Object)this).incrementStat(Stats.USED.getOrCreateStat(this.activeItemStack.getItem()));
@@ -337,24 +336,24 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         float f = 0.0f;
         Item mainHandItem = this.getMainHandStack().getItem();
         if (mainHandItem instanceof SwordItem) {
-            f += 0.02f * (1.0f + EnchantmentHelper.getSweepingMultiplier(this)) * ((SwordItem)mainHandItem).getAttackDamage();
+            f += 0.02f*(1.0f + EnchantmentHelper.getSweepingMultiplier(this)) * ((SwordItem)mainHandItem).getAttackDamage();
         }
         else if (mainHandItem instanceof TridentItem) {
             if (this.isWet()) {
-                f += 0.05f * (1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(Enchantments.IMPALING, this)) * TridentItem.ATTACK_DAMAGE;
+                f += 0.05f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(Enchantments.IMPALING, this))*TridentItem.ATTACK_DAMAGE;
             }
             else {
-                f += 0.03f * (1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.THRUSTING, this)) * TridentItem.ATTACK_DAMAGE;
+                f += 0.03f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.THRUSTING, this))*TridentItem.ATTACK_DAMAGE;
             }
         }
         else if (mainHandItem instanceof SpearItem) {
-            f += 0.03f * (1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.THRUSTING, this)) * ((SpearItem)mainHandItem).getAttackDamage();
+            f += 0.03f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.THRUSTING, this))*((SpearItem)mainHandItem).getAttackDamage();
         }
         else if (mainHandItem instanceof BlazearmItem) {
-            f += 0.03f * (1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this)) * ((BlazearmItem)mainHandItem).getAttackDamage();
+            f += 0.03f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this))*((BlazearmItem)mainHandItem).getAttackDamage();
         }
         else if (mainHandItem instanceof AxeItem) {
-            f += 0.04f * (1.0f + 0.33f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this)) * ((AxeItem)mainHandItem).getAttackDamage();
+            f += 0.04f*(1.0f + 0.33f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this))*((AxeItem)mainHandItem).getAttackDamage();
         }
         boolean criticalBl = ((PlayerEntity)(Object)this).getAttackCooldownProgress(0.5f) > 0.9f && this.fallDistance > 0.0f && !this.onGround && !this.isClimbing() && !this.isTouchingWater() && !this.hasVehicle() && !this.isSprinting();
         if (this.isSprinting() || criticalBl) {

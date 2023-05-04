@@ -6,11 +6,13 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.BannerItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.item.ToolMaterials;
@@ -29,6 +31,7 @@ public class ModShieldItem extends ShieldItem {
     public static final int field_30918 = 5;
     public final float minDamageToBreak;
     public static final String BASE_KEY = "Base";
+    private final ToolMaterial material;
     private final int enchantability;
     private final boolean isFramed;
     private final Ingredient repairIngredient;
@@ -38,10 +41,11 @@ public class ModShieldItem extends ShieldItem {
     
     public ModShieldItem(ToolMaterial material, float minBreakDamage, boolean isFramedShield, int disabledTicks, float unyieldingModifier, Item.Settings settings) {
         super(settings.maxDamageIfAbsent(MathHelper.ceil((isFramedShield ? 1.125f : 1.85f)*material.getDurability())));
+        this.material = material;
         this.minDamageToBreak = minBreakDamage;
         this.isFramed = isFramedShield;
-        this.enchantability = material.getEnchantability();
-        this.repairIngredient = this.isFramed ? ToolMaterials.WOOD.getRepairIngredient() : material.getRepairIngredient();
+        this.enchantability = this.material.getEnchantability();
+        this.repairIngredient = this.isFramed ? ToolMaterials.WOOD.getRepairIngredient() : this.material.getRepairIngredient();
         this.disabledTicks = disabledTicks;
         this.unyieldingModifier = unyieldingModifier;
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSER_BEHAVIOR);
@@ -110,6 +114,17 @@ public class ModShieldItem extends ShieldItem {
     public static DyeColor getColor(ItemStack stack) {
         NbtCompound nbtCompound = BlockItem.getBlockEntityNbt(stack);
         return nbtCompound != null ? DyeColor.byId(nbtCompound.getInt(BASE_KEY)) : DyeColor.WHITE;
+    }
+
+    @Override
+    public void onItemEntityDestroyed(ItemEntity entity) {
+        if (this.isFramed && this.material == ToolMaterials.NETHERITE) {
+            World world = entity.getWorld();
+            world.spawnEntity(new ItemEntity(world, entity.getX(), entity.getY(), entity.getZ(), new ItemStack(Items.NETHERITE_SCRAP, 4)));
+        }
+        else {
+            super.onItemEntityDestroyed(entity);
+        }
     }
 
 
