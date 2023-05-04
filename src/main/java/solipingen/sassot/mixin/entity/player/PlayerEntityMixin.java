@@ -313,8 +313,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             ((PlayerEntity)(Object)this).incrementStat(Stats.USED.getOrCreateStat(this.activeItemStack.getItem()));
         }
         int unyieldingLevel = EnchantmentHelper.getLevel(ModEnchantments.UNYIELDING, this.activeItemStack);
-        if (this.activeItemStack.getItem() instanceof ModShieldItem && amount >= ((ModShieldItem)this.activeItemStack.getItem()).getMinDamageToBreak()) {
-            int i = 1 + MathHelper.floor((1.0f - 0.25f*unyieldingLevel)*amount);
+        if (this.activeItemStack.getItem() instanceof ShieldItem && amount >= ((ModShieldItem)this.activeItemStack.getItem()).getMinDamageToBreak()) {
+            int i = MathHelper.ceil((1.0f - 0.25f*unyieldingLevel)*(amount - ((ModShieldItem)this.activeItemStack.getItem()).getMinDamageToBreak()));
             Hand hand = this.getActiveHand();
             this.activeItemStack.damage(i, this, player -> player.sendToolBreakStatus(hand));
         }

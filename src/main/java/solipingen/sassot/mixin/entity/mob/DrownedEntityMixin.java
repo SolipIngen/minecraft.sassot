@@ -46,7 +46,7 @@ public abstract class DrownedEntityMixin extends ZombieEntity implements RangedA
 
     @ModifyConstant(method = "initEquipment", constant = @Constant(intValue = 10))
     private int modifiedTridentThreshold(int originalInt, Random random, LocalDifficulty localDifficulty) {
-        return originalInt + Math.round(this.world.getDifficulty().getId()*localDifficulty.getClampedLocalDifficulty());
+        return 6 + Math.round(this.world.getDifficulty().getId()*(1.0f + localDifficulty.getClampedLocalDifficulty()));
     }
 
     @Redirect(method = "initEquipment", at = @At(value = "FIELD", target = "Lnet/minecraft/item/Items;FISHING_ROD:Lnet/minecraft/item/Item;", opcode = Opcodes.GETSTATIC))
