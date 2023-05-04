@@ -37,7 +37,7 @@ public class ModShieldItem extends ShieldItem {
 
     
     public ModShieldItem(ToolMaterial material, float minBreakDamage, boolean isFramedShield, int disabledTicks, float unyieldingModifier, Item.Settings settings) {
-        super(settings.maxDamageIfAbsent(MathHelper.ceil((isFramedShield ? 1.15f : 1.8f)*material.getDurability())));
+        super(settings.maxDamageIfAbsent(MathHelper.ceil((isFramedShield ? 1.125f : 1.85f)*material.getDurability())));
         this.minDamageToBreak = minBreakDamage;
         this.isFramed = isFramedShield;
         this.enchantability = material.getEnchantability();
