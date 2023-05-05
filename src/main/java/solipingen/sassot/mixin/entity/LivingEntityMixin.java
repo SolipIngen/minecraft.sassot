@@ -250,10 +250,13 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
                 ((LivingEntity)(Object)this).takeKnockback(0.01*Math.max((4 - shockReboundLevel), 0)*amount, entity.getX() - this.getX(), entity.getZ() - this.getZ());
             }
             if (deflectionLevel > 0 && entity != null && entity instanceof ProjectileEntity) {
-                amount *= 1.0f - 0.25f*deflectionLevel;
                 Vec3d initialVelocity = entity.getVelocity();
                 Vec3d vec3d2 = initialVelocity.multiply(Math.pow(1.0 + 0.25*deflectionLevel + this.random.nextDouble()/3.0, deflectionLevel));
                 entity.setVelocity(vec3d2);
+                if (entity instanceof PersistentProjectileEntity) {
+                    ((PersistentProjectileEntity)entity).setDamage(((PersistentProjectileEntity)entity).getDamage());
+                }
+                amount *= 1.0f - 0.15f*deflectionLevel;
             }
             if (echoingLevel > 0 && (source.isIn(DamageTypeTags.BYPASSES_SHIELD) || source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS)) && !(source.isIn(DamageTypeTags.BYPASSES_RESISTANCE) || source.isIn(DamageTypeTags.BYPASSES_EFFECTS))) {
                 float damagef = (float)Math.pow(2.0/3.0, echoingLevel)*amount;
