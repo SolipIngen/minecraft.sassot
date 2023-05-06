@@ -87,7 +87,7 @@ public class ModItems {
         new ModShieldItem(ToolMaterials.DIAMOND, 8.0f, false, 120, 0.15f, new FabricItemSettings()));
     
     public static final Item NETHERITE_SHIELD = ModItems.registerItem("netherite_shield", 
-        new ModShieldItem(ToolMaterials.DIAMOND, 9.0f, false, 140, 0.175f, new FabricItemSettings().fireproof()));
+        new ModShieldItem(ToolMaterials.NETHERITE, 9.0f, false, 140, 0.175f, new FabricItemSettings().fireproof()));
 
     
     // Copper Tools
@@ -178,13 +178,11 @@ public class ModItems {
         return Registry.register(Registries.ITEM, new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, name), item);
     }
 
-    public static void registerFuelItems() {
-        FuelRegistry.INSTANCE.add(WOODEN_SHIELD, 600);
+    public static void registerModItems() {
+        FuelRegistry.INSTANCE.add(WOODEN_SHIELD, 700);
         FuelRegistry.INSTANCE.add(WOODEN_SPEAR, 300);
         FuelRegistry.INSTANCE.add(BAMBOO_SPEAR, 300);
-    }
 
-    public static void registerModItems() {
         SpearsAxesSwordsShieldsAndOtherTools.LOGGER.debug("Registering Mod Items for " + SpearsAxesSwordsShieldsAndOtherTools.MOD_ID);
     }
     
