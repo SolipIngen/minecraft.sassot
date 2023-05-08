@@ -3,16 +3,19 @@
     "category": "equipment",
     "key": {
       "o": {
-        "item": "minecraft:stick"
+        "tag": "sassot:shield_framing_smithing_template_ingots"
+      }, 
+      "p": {
+        "tag": "minecraft:planks"
       }, 
       "#": {
         "item": "sassot:wooden_shield"
       }
     },
     "pattern": [
-      " o ",
+      "pop",
       "o#o",
-      "ooo"
+      "pop"
     ],
     "result": {
       "item": "sassot:shield_framing_smithing_template"

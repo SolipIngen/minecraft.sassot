@@ -368,13 +368,13 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
         }
         double modifiedStrength = strength*(1.0 - ((LivingEntity)(Object)this).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*(1.0 - 0.2*EnchantmentHelper.getLevel(ModEnchantments.UNYIELDING, this.activeItemStack));
         if (this.activeItemStack.isOf(ModItems.IRON_SHIELD)) {
-            modifiedStrength *= 0.8;
+            modifiedStrength *= 0.75;
         }
         else if (this.activeItemStack.isOf(ModItems.DIAMOND_SHIELD)) {
             modifiedStrength *= 0.67;
         }
         else if (this.activeItemStack.isOf(ModItems.NETHERITE_SHIELD)) {
-            modifiedStrength *= 0.33;
+            modifiedStrength *= 0.5;
         }
         this.velocityDirty = true;
         Vec3d vec3d = this.getVelocity();

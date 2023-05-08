@@ -24,7 +24,7 @@ public abstract class ItemStackMixin implements FabricItemStack {
 
 
     @Redirect(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAttributeBaseValue(Lnet/minecraft/entity/attribute/EntityAttribute;)D"))
-    private double redireectedGetAttributeBaseValue(PlayerEntity player, EntityAttribute originalEntityAttribute) {
+    private double redirectedGetAttributeBaseValue(PlayerEntity player, EntityAttribute originalEntityAttribute) {
         double addition = player.getAttributeBaseValue(originalEntityAttribute);
         if (originalEntityAttribute == EntityAttributes.GENERIC_ATTACK_SPEED) {
             if (((ItemStack)(Object)this).getItem() instanceof SwordItem) {
