@@ -48,17 +48,14 @@ public abstract class VindicatorEntityMixin extends IllagerEntity {
     @Inject(method = "initEquipment", at = @At("TAIL"))
     private void injectedInitEquipment(Random random, LocalDifficulty localDifficulty, CallbackInfo cbi) {
         float axeEquipFloat = random.nextFloat();
-        if (axeEquipFloat > 0.97f - 0.005f*(this.world.getDifficulty().getId() - 1) - 0.01f*localDifficulty.getClampedLocalDifficulty()) {
+        if (axeEquipFloat > 0.97f - 0.01f*(this.world.getDifficulty().getId() - 1) - 0.01f*localDifficulty.getClampedLocalDifficulty()) {
             this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_AXE));
         }
-        else if (axeEquipFloat <= 0.97f - 0.005f*(this.world.getDifficulty().getId() - 1) - 0.01f*localDifficulty.getClampedLocalDifficulty() && axeEquipFloat > 0.5f - 0.05f*(this.world.getDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty()) {
+        else if (axeEquipFloat <= 0.97f - 0.01f*(this.world.getDifficulty().getId() - 1) - 0.01f*localDifficulty.getClampedLocalDifficulty() && axeEquipFloat > 0.33f - 0.1f*(this.world.getDifficulty().getId() - 1) - 0.1f*localDifficulty.getClampedLocalDifficulty()) {
             this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
         }
-        else if (axeEquipFloat <= 0.5f - 0.05f*(this.world.getDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty() && axeEquipFloat > 0.2f - 0.05f*(this.world.getDifficulty().getId() - 1) - 0.1f*localDifficulty.getClampedLocalDifficulty()) {
-            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.COPPER_AXE));
-        }
         else {
-            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_AXE));
+            this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.COPPER_AXE));
         }
     }
 

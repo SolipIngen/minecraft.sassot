@@ -13,6 +13,8 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FishingBobberEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -94,7 +96,8 @@ public abstract class FishingBobberEntityMixin extends ProjectileEntity implemen
     @ModifyConstant(method = "use", constant = @Constant(intValue = 5))
     private int modifiedEntityPullDurability(int originalInt) {
         if (this.hookedEntity != null) {
-            return MathHelper.ceil(Math.max(this.hookedEntity.getWidth(), this.hookedEntity.getHeight()));
+            double pullResistanceFactor = this.hookedEntity instanceof LivingEntity ? 1.0 - ((LivingEntity)this.hookedEntity).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE) : 1.0;
+            return MathHelper.ceil(1.0/pullResistanceFactor);
         }
         return 0;
     }
@@ -127,14 +130,15 @@ public abstract class FishingBobberEntityMixin extends ProjectileEntity implemen
 
     @ModifyConstant(method = "pullHookedEntity", constant = @Constant(doubleValue = 0.1))
     private double modifiedPullSpeedFactor(double originald, Entity entity) {
+        double pullResistanceFactor = entity instanceof LivingEntity ? 1.0 - ((LivingEntity)entity).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE) : 1.0;
         if (this.fishingRodStack != null && this.fishingRodStack.getItem() instanceof ModFishingRodItem) {
             ToolMaterial material = ((ModFishingRodItem)this.fishingRodStack.getItem()).getMaterial();
             if (entity instanceof ItemEntity) {
                 return (material.getMiningLevel()/6.0 + 1.0)*0.15;
             }
-            return (2.0/3.0*material.getMiningLevel() + 1.0)*0.15/Math.max(entity.getWidth(), entity.getHeight());
+            return pullResistanceFactor*(2.0/3.0*material.getMiningLevel() + 1.0)*0.15;
         }
-        return 0.15/Math.max(entity.getWidth(), entity.getHeight());
+        return pullResistanceFactor*0.15;
     }
 
     @Override

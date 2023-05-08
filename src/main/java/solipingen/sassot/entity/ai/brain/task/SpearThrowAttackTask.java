@@ -41,7 +41,7 @@ public class SpearThrowAttackTask<E extends MobEntity, T extends LivingEntity> e
     @Override
     protected boolean shouldRun(ServerWorld serverWorld, E mobEntity) {
         LivingEntity livingEntity = SpearThrowAttackTask.getAttackTarget(mobEntity);
-        boolean spearBl = mobEntity.getMainHandStack().getItem() instanceof SpearItem || mobEntity.getOffHandStack().getItem() instanceof SpearItem || mobEntity.getMainHandStack().isOf(ModItems.BLAZEARM) || mobEntity.getOffHandStack().isOf(ModItems.BLAZEARM);
+        boolean spearBl = mobEntity.isHolding((stack) -> stack.getItem() instanceof SpearItem || stack.isOf(ModItems.BLAZEARM));
         if (spearBl) {
             this.tickState(mobEntity, livingEntity);
         }
