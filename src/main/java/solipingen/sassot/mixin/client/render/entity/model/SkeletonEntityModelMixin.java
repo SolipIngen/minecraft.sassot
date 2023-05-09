@@ -40,15 +40,19 @@ public abstract class SkeletonEntityModelMixin<T extends MobEntity> extends Bipe
         }
     }
 
-    @Inject(method = "setAngles", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEmpty()Z"))
+    @Inject(method = "setAngles", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEmpty()Z"), cancellable = true)
     private void injectedSetAngles(T mobEntity, float f, float g, float h, float i, float j, CallbackInfo cbi) {
-        if (this.leftArmPose == BipedEntityModel.ArmPose.THROW_SPEAR) {
-            this.leftArm.pitch = this.leftArm.pitch * 0.5f - (float)Math.PI;
-            this.leftArm.yaw = 0.0f;
-        }
-        if (this.rightArmPose == BipedEntityModel.ArmPose.THROW_SPEAR) {
-            this.rightArm.pitch = this.rightArm.pitch * 0.5f - (float)Math.PI;
-            this.rightArm.yaw = 0.0f;
+        ItemStack itemStack = ((LivingEntity)mobEntity).getMainHandStack();
+        if ((itemStack.getItem() instanceof SpearItem || itemStack.getItem() instanceof BlazearmItem) && ((MobEntity)mobEntity).isAttacking()) {
+            if (this.leftArmPose == BipedEntityModel.ArmPose.THROW_SPEAR) {
+                this.leftArm.pitch = this.leftArm.pitch*0.5f - (float)Math.PI;
+                this.leftArm.yaw = 0.0f;
+            }
+            if (this.rightArmPose == BipedEntityModel.ArmPose.THROW_SPEAR) {
+                this.rightArm.pitch = this.rightArm.pitch*0.5f - (float)Math.PI;
+                this.rightArm.yaw = 0.0f;
+            }
+            cbi.cancel();
         }
     }
 

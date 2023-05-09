@@ -331,31 +331,51 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                 this.equipStack(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
             }
             this.activeItemStack = ItemStack.EMPTY;
-            this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8f, 0.8f + this.world.random.nextFloat() * 0.4f);
+            this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8f, 0.8f + this.world.random.nextFloat()*0.4f);
+        }
+        cbi.cancel();
+    }
+
+    @Inject(method = "takeShieldHit", at = @At("HEAD"), cancellable = true)
+    private void injectedPlayerTakeShieldHit(LivingEntity attacker, CallbackInfo cbi) {
+        super.takeShieldHit(attacker);
+        boolean disableBl = attacker.disablesShield();
+        Item activeShieldItem = this.activeItemStack.getItem();
+        float amount = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        float damageReductionf = activeShieldItem instanceof ModShieldItem ? ((ModShieldItem)activeShieldItem).getMinDamageToBreak() : 3.0f;
+        float f = (float)Math.exp(-MathHelper.square(Math.max(amount - damageReductionf, 0.0f)/((4 - this.world.getDifficulty().getId())*20.0)));
+        disableBl &= this.random.nextFloat() > f;
+        if (disableBl) {
+            ((PlayerEntity)(Object)this).disableShield(disableBl);
         }
         cbi.cancel();
     }
 
     @Override
     public boolean disablesShield() {
-        float f = 0.0f;
+        float f = 1.0f - (float)Math.exp(-MathHelper.square(1.0/20.0));
         Item mainHandItem = this.getMainHandStack().getItem();
         if (mainHandItem instanceof SwordItem) {
-            f += 0.02f*(1.0f + EnchantmentHelper.getSweepingMultiplier(this)) * ((SwordItem)mainHandItem).getAttackDamage();
+            f += 0.02f*(1.0f + EnchantmentHelper.getSweepingMultiplier(this))*((SwordItem)mainHandItem).getAttackDamage();
         }
         else if (mainHandItem instanceof TridentItem) {
             if (this.isWet()) {
-                f += 0.05f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(Enchantments.IMPALING, this))*TridentItem.ATTACK_DAMAGE;
+                f += 0.05f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(Enchantments.IMPALING, this))*9.0f;
             }
             else {
-                f += 0.03f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.THRUSTING, this))*TridentItem.ATTACK_DAMAGE;
+                f += 0.03f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.THRUSTING, this))*9.0f;
             }
         }
         else if (mainHandItem instanceof SpearItem) {
             f += 0.03f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.THRUSTING, this))*((SpearItem)mainHandItem).getAttackDamage();
         }
         else if (mainHandItem instanceof BlazearmItem) {
-            f += 0.03f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this))*((BlazearmItem)mainHandItem).getAttackDamage();
+            if (this.isOnFire() || this.isInLava()) {
+                f += 0.05f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this))*((BlazearmItem)mainHandItem).getAttackDamage();
+            }
+            else {
+                f += 0.03f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this))*((BlazearmItem)mainHandItem).getAttackDamage();
+            }
         }
         else if (mainHandItem instanceof AxeItem) {
             f += 0.04f*(1.0f + 0.33f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this))*((AxeItem)mainHandItem).getAttackDamage();
@@ -367,10 +387,10 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         return this.random.nextFloat() < f;
     }
 
-    @Redirect(method = "takeShieldHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;disableShield(Z)V"))
-    private void unyieldingDisableShield(PlayerEntity playerEntity, boolean dummyBl) {
+    @Inject(method = "disableShield", at = @At("HEAD"), cancellable = true)
+    private void injectedUnyieldingDisableShield(boolean sprinting, CallbackInfo cbi) {
         if ((this.activeItemStack.getItem() instanceof ShieldItem)) {
-            float f;
+            float f = 0.0f;
             Item activeShieldItem = this.activeItemStack.getItem();
             int unyieldingLevel = EnchantmentHelper.getLevel(ModEnchantments.UNYIELDING, this.activeItemStack);
             float randomf = this.random.nextFloat();
@@ -391,6 +411,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                     this.world.sendEntityStatus(this, EntityStatuses.BREAK_SHIELD);
                 }
             }
+            cbi.cancel();
         }
     }
 

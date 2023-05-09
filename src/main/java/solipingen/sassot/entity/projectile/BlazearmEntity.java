@@ -20,10 +20,8 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.BlazeEntity;
-import net.minecraft.entity.mob.WitherSkeletonEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
@@ -190,11 +188,6 @@ public class BlazearmEntity extends PersistentProjectileEntity {
                     livingEntity2.setOnFireFor(8*(1 + EnchantmentHelper.getLevel(Enchantments.FIRE_ASPECT, this.blazearmStack)) + this.random.nextBetween(0, 8));
                 }
                 this.onHit(livingEntity2);
-            }
-        }
-        if (entity2 instanceof WitherSkeletonEntity && entity instanceof LivingEntity) {
-            if (!(entity instanceof PlayerEntity && ((PlayerEntity)entity).isCreative())) {
-                ((LivingEntity)entity).addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 200), entity2);
             }
         }
         if (!this.hasSkewering() || this.getLoyalty() > 0) {

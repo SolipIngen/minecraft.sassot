@@ -102,7 +102,6 @@ public abstract class WitherSkeletonEntityMixin extends AbstractSkeletonEntity i
         if (spearStack.isOf(ModItems.FLINT_SPEAR)) {
             spearEntity = (PersistentProjectileEntity)new FlintSpearEntity(this.world, (LivingEntity)this, new ItemStack(ModItems.FLINT_SPEAR));
             speed = 1.8f + 0.2f*strengthLevel - 0.2f*weaknessLevel;
-            soundEvent = ModSoundEvents.WITHER_SKELETON_BLAZEARM_THROW;
         }
         else if (spearStack.isOf(ModItems.BLAZEARM)) {
             spearEntity = (PersistentProjectileEntity)new BlazearmEntity(this.world, (LivingEntity)this, new ItemStack(ModItems.BLAZEARM));
@@ -122,6 +121,7 @@ public abstract class WitherSkeletonEntityMixin extends AbstractSkeletonEntity i
     static class WitherSkeletonSpearThrowAttackGoal extends SpearThrowAttackGoal {
         private final WitherSkeletonEntity witherSkeleton;
 
+
         public WitherSkeletonSpearThrowAttackGoal(SpearThrowingMob spearThrowingMob, double d, int i, float f) {
             super(spearThrowingMob, d, i, f);
             this.witherSkeleton = (WitherSkeletonEntity)spearThrowingMob;
@@ -129,7 +129,7 @@ public abstract class WitherSkeletonEntityMixin extends AbstractSkeletonEntity i
 
         @Override
         public boolean canStart() {
-            return super.canStart() && (this.witherSkeleton.getMainHandStack().getItem() instanceof SpearItem || this.witherSkeleton.getMainHandStack().isOf(ModItems.BLAZEARM));
+            return super.canStart() && (this.witherSkeleton.isHolding((stack) -> stack.getItem() instanceof SpearItem) || this.witherSkeleton.isHolding((stack) -> stack.isOf(ModItems.BLAZEARM)));
         }
 
         @Override

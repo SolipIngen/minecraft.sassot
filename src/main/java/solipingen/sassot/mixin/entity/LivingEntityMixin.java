@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.gen.Invoker;
@@ -16,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -34,6 +36,7 @@ import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.TridentItem;
@@ -48,6 +51,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 import solipingen.sassot.enchantment.ModEnchantments;
 import solipingen.sassot.entity.projectile.BlazearmEntity;
 import solipingen.sassot.entity.projectile.spear.SpearEntity;
@@ -64,6 +68,7 @@ import solipingen.sassot.village.ModVillagerProfessions;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements LivingEntityInterface {
     private static final TrackedData<Boolean> IS_SKEWERED = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    @Shadow @Final protected static int USING_ITEM_FLAG;
     @Shadow protected ItemStack activeItemStack;
     @Shadow private int lastAttackedTime;
     @Shadow private long lastDamageTime;
@@ -74,6 +79,9 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
 
     @Invoker("applyDamage")
     public abstract void invokeApplyDamage(DamageSource source, float amount);
+
+    @Invoker("setLivingFlag")
+    public abstract void invokeSetLivingFlag(int mask, boolean value);
 
 
     public LivingEntityMixin(EntityType<?> type, World world) {
@@ -236,27 +244,65 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
         }
         Vec3d vec3d = source.getPosition();
         Entity entity = source.getSource();
-        ItemStack activeStack = this.activeItemStack;
-        int echoingLevel = EnchantmentHelper.getLevel(ModEnchantments.ECHOING, activeStack);
-        int shockReboundLevel = EnchantmentHelper.getLevel(ModEnchantments.SHOCK_REBOUND, activeStack);
-        int deflectionLevel = EnchantmentHelper.getLevel(ModEnchantments.PROJECTILE_DEFLECTION, activeStack);
+        int echoingLevel = EnchantmentHelper.getLevel(ModEnchantments.ECHOING, this.activeItemStack);
+        int shockReboundLevel = EnchantmentHelper.getLevel(ModEnchantments.SHOCK_REBOUND, this.activeItemStack);
+        int deflectionLevel = EnchantmentHelper.getLevel(ModEnchantments.PROJECTILE_DEFLECTION, this.activeItemStack);
         if (((LivingEntity)(Object)this).isBlocking() && vec3d != null) {
             if (shockReboundLevel > 0 && entity != null && entity instanceof LivingEntity) {
                 LivingEntity livingEntity = (LivingEntity)entity;
                 float knockbackResistance = (float)livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE);
-                float reboundDamage = livingEntity.disablesShield() ? 0.2f*shockReboundLevel*amount : 0.2f*shockReboundLevel*amount*knockbackResistance;
+                float reboundDamage = 0.2f*shockReboundLevel*amount*knockbackResistance;
                 livingEntity.damage(this.getDamageSources().thorns(this), reboundDamage);
-                livingEntity.takeKnockback(0.04*shockReboundLevel*amount, this.getX() - entity.getX(), this.getZ() - entity.getZ());
-                ((LivingEntity)(Object)this).takeKnockback(0.01*Math.max((4 - shockReboundLevel), 0)*amount, entity.getX() - this.getX(), entity.getZ() - this.getZ());
+                livingEntity.takeKnockback(0.2*shockReboundLevel*reboundDamage, this.getX() - entity.getX(), this.getZ() - entity.getZ());
+                ((LivingEntity)(Object)this).takeKnockback(0.02*Math.max((4 - shockReboundLevel), 0)*amount, entity.getX() - this.getX(), entity.getZ() - this.getZ());
             }
-            if (deflectionLevel > 0 && entity != null && entity instanceof ProjectileEntity) {
-                Vec3d initialVelocity = entity.getVelocity();
-                Vec3d vec3d2 = initialVelocity.multiply(Math.pow(1.0 + 0.25*deflectionLevel + this.random.nextDouble()/3.0, deflectionLevel));
-                entity.setVelocity(vec3d2);
-                if (entity instanceof PersistentProjectileEntity) {
-                    ((PersistentProjectileEntity)entity).setDamage(((PersistentProjectileEntity)entity).getDamage());
+            if (entity != null && entity instanceof ProjectileEntity) {
+                if (deflectionLevel > 0) {
+                    Vec3d initialVelocity = entity.getVelocity();
+                    Vec3d vec3d2 = initialVelocity.multiply(Math.pow(1.0 + 0.25*deflectionLevel + this.random.nextDouble()/3.0, deflectionLevel));
+                    entity.setVelocity(vec3d2);
+                    if (entity instanceof PersistentProjectileEntity) {
+                        ((PersistentProjectileEntity)entity).setDamage(((PersistentProjectileEntity)entity).getDamage());
+                    }
+                    amount *= 1.0f - 0.15f*deflectionLevel;
                 }
-                amount *= 1.0f - 0.15f*deflectionLevel;
+                if (((LivingEntity)(Object)this) instanceof PlayerEntity) {
+                    Item activeShieldItem = this.activeItemStack.getItem();
+                    float damageReductionf = activeShieldItem instanceof ModShieldItem ? ((ModShieldItem)activeShieldItem).getMinDamageToBreak() : 3.0f;
+                    float f = (float)Math.exp(-MathHelper.square(Math.max(amount - damageReductionf, 0.0f)/((4 - this.world.getDifficulty().getId())*20.0)));
+                    f -= 0.05f*this.world.getLocalDifficulty(this.getBlockPos()).getClampedLocalDifficulty();
+                    int unyieldingLevel = EnchantmentHelper.getLevel(ModEnchantments.UNYIELDING, this.activeItemStack);
+                    float randomf = this.random.nextFloat();
+                    if (this.activeItemStack.isOf(Items.SHIELD)) {
+                        f += 0.05f*unyieldingLevel;
+                        if (randomf > f) {
+                            ((PlayerEntity)(Object)this).getItemCooldownManager().set(activeShieldItem, 60 - 20*unyieldingLevel);
+                            if (!this.world.isClient) {
+                                boolean bl = ((LivingEntity)(Object)this).isUsingItem();
+                                this.invokeSetLivingFlag(USING_ITEM_FLAG, false);
+                                if (bl) {
+                                    ((LivingEntity)(Object)this).emitGameEvent(GameEvent.ITEM_INTERACT_FINISH);
+                                }
+                            }
+                            this.world.sendEntityStatus(this, EntityStatuses.BREAK_SHIELD);
+                        }
+                    }
+                    else if (this.activeItemStack.getItem() instanceof ModShieldItem) {
+                        ModShieldItem modShieldItem = (ModShieldItem)this.activeItemStack.getItem();
+                        f += modShieldItem.getUnyieldingModifier()*unyieldingLevel;
+                        if (randomf > f) {
+                            ((PlayerEntity)(Object)this).getItemCooldownManager().set(activeShieldItem, modShieldItem.getDisabledTicks() - 20*unyieldingLevel);
+                            if (!this.world.isClient) {
+                                boolean bl = ((LivingEntity)(Object)this).isUsingItem();
+                                this.invokeSetLivingFlag(USING_ITEM_FLAG, false);
+                                if (bl) {
+                                    this.emitGameEvent(GameEvent.ITEM_INTERACT_FINISH);
+                                }
+                            }
+                            this.world.sendEntityStatus(this, EntityStatuses.BREAK_SHIELD);
+                        }
+                    }
+                }
             }
             if (echoingLevel > 0 && (source.isIn(DamageTypeTags.BYPASSES_SHIELD) || source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS)) && !(source.isIn(DamageTypeTags.BYPASSES_RESISTANCE) || source.isIn(DamageTypeTags.BYPASSES_EFFECTS))) {
                 float damagef = (float)Math.pow(2.0/3.0, echoingLevel)*amount;
@@ -320,10 +366,9 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
     @Inject(method = "blockedByShield", at = @At("HEAD"), cancellable = true)
     private void injectedBlockedByShield(DamageSource source, CallbackInfoReturnable<Boolean> cbireturn) {
         Entity entity = source.getSource();
-        ItemStack activeStack = this.activeItemStack;
         Vec3d vec3d = source.getPosition();
-        int shieldingLevel = EnchantmentHelper.getLevel(ModEnchantments.SHIELDING, activeStack);
-        int echoingLevel = EnchantmentHelper.getLevel(ModEnchantments.ECHOING, activeStack);
+        int shieldingLevel = EnchantmentHelper.getLevel(ModEnchantments.SHIELDING, this.activeItemStack);
+        int echoingLevel = EnchantmentHelper.getLevel(ModEnchantments.ECHOING, this.activeItemStack);
         if (((LivingEntity)(Object)this).isBlocking() && vec3d != null) {
             Vec3d vec3d2 = this.getRotationVec(1.0f);
             Vec3d vec3d3 = vec3d.relativize(this.getPos()).normalize();
@@ -423,25 +468,20 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
     private void injectedDisablesShield(CallbackInfoReturnable<Boolean> cbireturn) {
         ItemStack mainHandStack = ((LivingEntity)(Object)this).getMainHandStack();
         Item mainHandItem = mainHandStack.getItem();
-        float randomf = this.world.getRandom().nextFloat();
-        float localDifficultyAdjustment = 0.05f*this.world.getLocalDifficulty(this.getBlockPos()).getClampedLocalDifficulty();
+        float randomf = this.random.nextFloat();
+        float thresholdf = 1.0f - (float)Math.exp(-MathHelper.square(((LivingEntity)(Object)this).getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)/((4 - this.world.getDifficulty().getId())*20.0)));
+        float difficultyAdjustment = 0.05f*this.world.getLocalDifficulty(this.getBlockPos()).getClampedLocalDifficulty()*this.world.getDifficulty().getId();
         if (mainHandItem instanceof SwordItem) {
-            if (randomf < (0.075f + localDifficultyAdjustment) * this.world.getDifficulty().getId()) {
-                cbireturn.setReturnValue(true);
-            }
+            cbireturn.setReturnValue(randomf < thresholdf + 0.075f + difficultyAdjustment);
         }
         else if (mainHandStack.getItem() instanceof SpearItem || mainHandItem instanceof TridentItem || mainHandItem instanceof BlazearmItem) {
-            if (randomf < (0.15f + localDifficultyAdjustment) * this.world.getDifficulty().getId()) {
-                cbireturn.setReturnValue(true);
-            }
+            cbireturn.setReturnValue(randomf < thresholdf + 0.15f + difficultyAdjustment);
         }
         else if (mainHandItem instanceof AxeItem) {
-            if (randomf < (0.25f + localDifficultyAdjustment) * this.world.getDifficulty().getId()) {
-                cbireturn.setReturnValue(true);
-            }
+            cbireturn.setReturnValue(randomf < thresholdf + 0.25f + difficultyAdjustment);
         }
         else {
-            cbireturn.setReturnValue(false);
+            cbireturn.setReturnValue(randomf < thresholdf + difficultyAdjustment);
         }
     }
 

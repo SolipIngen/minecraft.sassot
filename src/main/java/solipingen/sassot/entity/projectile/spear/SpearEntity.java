@@ -17,9 +17,6 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.WitherSkeletonEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
@@ -186,11 +183,6 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
                     EnchantmentHelper.onTargetDamaged((LivingEntity)entity2, livingEntity2);
                 }
                 this.onHit(livingEntity2);
-            }
-        }
-        if (entity2 instanceof WitherSkeletonEntity && entity instanceof LivingEntity) {
-            if (!(entity instanceof PlayerEntity && ((PlayerEntity)entity).isCreative())) {
-                ((LivingEntity)entity).addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 200), entity2);
             }
         }
         if (!this.hasSkewering() || this.getLoyalty() > 0) {
