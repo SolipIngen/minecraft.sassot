@@ -203,7 +203,7 @@ public abstract class PillagerEntityMixin extends IllagerEntity implements Cross
 
         @Override
         public boolean canStart() {
-            return super.canStart() && this.pillager.getMainHandStack().getItem() instanceof SpearItem;
+            return super.canStart() && this.pillager.isHolding((stack) -> stack.getItem() instanceof SpearItem);
         }
 
         @Override
