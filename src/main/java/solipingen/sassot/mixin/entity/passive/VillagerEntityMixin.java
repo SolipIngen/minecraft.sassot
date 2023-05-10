@@ -509,10 +509,10 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
     public double squaredAttackRange(LivingEntity target) {
         Item mainHandItem = this.getMainHandStack().getItem();
         if (mainHandItem instanceof SwordItem) {
-            return (double)MathHelper.square(this.getWidth() * 2.0f + 1.0f + target.getWidth());
+            return (double)MathHelper.square(this.getWidth()*2.0f + 0.5f + target.getWidth());
         }
         else if (mainHandItem instanceof SpearItem || this.getMainHandStack().isOf(ModItems.BLAZEARM)) {
-            return (double)MathHelper.square(this.getWidth() * 2.0f + 2.0f + target.getWidth());
+            return (double)MathHelper.square(this.getWidth()*2.0f + 1.0f + target.getWidth());
         }
         return super.squaredAttackRange(target);
     }

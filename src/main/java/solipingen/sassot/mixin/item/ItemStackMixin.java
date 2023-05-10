@@ -10,13 +10,9 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.TridentItem;
 import solipingen.sassot.enchantment.ModEnchantments;
-import solipingen.sassot.item.BlazearmItem;
-import solipingen.sassot.item.SpearItem;
+import solipingen.sassot.registry.tag.ModItemTags;
 
 
 @Mixin(ItemStack.class)
@@ -27,15 +23,15 @@ public abstract class ItemStackMixin implements FabricItemStack {
     private double redirectedGetAttributeBaseValue(PlayerEntity player, EntityAttribute originalEntityAttribute) {
         double addition = player.getAttributeBaseValue(originalEntityAttribute);
         if (originalEntityAttribute == EntityAttributes.GENERIC_ATTACK_SPEED) {
-            if (((ItemStack)(Object)this).getItem() instanceof SwordItem) {
+            if (((ItemStack)(Object)this).isIn(ModItemTags.SWEEPING_WEAPONS)) {
                 int sweepLevel = EnchantmentHelper.getLevel(Enchantments.SWEEPING, ((ItemStack)(Object)this));
                 addition += 0.1*sweepLevel;
             }
-            else if (((ItemStack)(Object)this).getItem() instanceof SpearItem || ((ItemStack)(Object)this).getItem() instanceof TridentItem) {
+            else if (((ItemStack)(Object)this).isIn(ModItemTags.THRUSTING_WEAPONS)) {
                 int thrustLevel = EnchantmentHelper.getLevel(ModEnchantments.THRUSTING, ((ItemStack)(Object)this));
                 addition += 0.1*thrustLevel;
             }
-            else if (((ItemStack)(Object)this).getItem() instanceof AxeItem || ((ItemStack)(Object)this).getItem() instanceof BlazearmItem) {
+            else if (((ItemStack)(Object)this).isIn(ModItemTags.HACKING_WEAPONS)) {
                 int hackLevel = EnchantmentHelper.getLevel(ModEnchantments.HACKING, ((ItemStack)(Object)this));
                 addition += 0.1*hackLevel;
             }

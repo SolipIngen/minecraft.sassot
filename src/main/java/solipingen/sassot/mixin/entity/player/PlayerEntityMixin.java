@@ -1,5 +1,6 @@
 package solipingen.sassot.mixin.entity.player;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.spongepowered.asm.mixin.Final;
@@ -24,6 +25,7 @@ import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.effect.StatusEffects;
@@ -32,13 +34,10 @@ import net.minecraft.entity.mob.DrownedEntity;
 import net.minecraft.entity.mob.FlyingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShieldItem;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.TridentItem;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
@@ -52,9 +51,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import solipingen.sassot.enchantment.ModEnchantments;
-import solipingen.sassot.item.BlazearmItem;
+import solipingen.sassot.item.ModItems;
 import solipingen.sassot.item.ModShieldItem;
-import solipingen.sassot.item.SpearItem;
+import solipingen.sassot.registry.tag.ModItemTags;
 import solipingen.sassot.util.interfaces.mixin.entity.EntityInterface;
 import solipingen.sassot.util.interfaces.mixin.entity.LivingEntityInterface;
 
@@ -223,40 +222,53 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @ModifyVariable(method = "attack", at = @At("STORE"), ordinal = 1)
     private float injectedAttackDamageAddition(float originalAdditionf, Entity target) {
         ItemStack mainHandStack = this.getMainHandStack();
+        float attackDamage = 0.0f;
+        float newAdditionf = originalAdditionf;
         boolean criticalBl = ((PlayerEntity)(Object)this).getAttackCooldownProgress(0.5f) > 0.9f && this.fallDistance > 0.0f && !this.onGround && !this.isClimbing() && !this.isTouchingWater() && !this.hasVehicle() && target instanceof LivingEntity && !this.isSprinting();
-        if (mainHandStack.getItem() instanceof AxeItem && ((this.isSprinting() && !((!this.onGround && this.isTouchingWater()) || this.isSubmergedInWater() || this.isInLava() || this.isInSwimmingPose())) || criticalBl)) {
+        if (mainHandStack.isIn(ModItemTags.THRUSTING_WEAPONS)) {
+            int thrustLevel = EnchantmentHelper.getLevel(ModEnchantments.THRUSTING, mainHandStack);
+            Collection<EntityAttributeModifier> attackModifiers = mainHandStack.getItem().getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+            for (EntityAttributeModifier attackModifier : attackModifiers) {
+                attackDamage += (float)attackModifier.getValue();
+                if (attackDamage > 0.0f) break;
+            }
+            newAdditionf += this.onGround && !(this.isSprinting() || this.isSneaking() || criticalBl) ? thrustLevel*0.2f*attackDamage : 0.0f;
+            if (mainHandStack.isOf(Items.TRIDENT) && target.isWet()) {
+                int impalingLevel = EnchantmentHelper.getLevel(Enchantments.IMPALING, mainHandStack);
+                newAdditionf += 1.25f*impalingLevel;
+            }
+            return newAdditionf;
+        }
+        else if (mainHandStack.isIn(ModItemTags.HACKING_WEAPONS)) {
             int hackLevel = EnchantmentHelper.getLevel(ModEnchantments.HACKING, mainHandStack);
-            float hackAdditionf = (float)hackLevel*Math.round(0.1f*(((AxeItem)mainHandStack.getItem()).getAttackDamage() + originalAdditionf));
-            float newAdditionf = hackAdditionf + originalAdditionf;
-            return newAdditionf;
-        }
-        else if (mainHandStack.getItem() instanceof TridentItem && target.isWet()) {
-            int impalingLevel = EnchantmentHelper.getLevel(Enchantments.IMPALING, mainHandStack);
-            float newAdditionf = 1.25f*impalingLevel + originalAdditionf;
-            return newAdditionf;
-        }
-        else if (mainHandStack.getItem() instanceof BlazearmItem) {
-            float newAdditionf = originalAdditionf;
-            BlockState targetEntityMagmaBlockState = Blocks.AIR.getDefaultState();
-            Iterable<BlockPos> targetEntityBlockPosIterable = BlockPos.iterateOutwards(target.getBlockPos(), 1, 1, 1);
-            for (BlockPos targetEntityBlockPos : targetEntityBlockPosIterable) {
-                if (targetEntityBlockPos.getManhattanDistance(target.getBlockPos()) > 1) continue;
-                targetEntityMagmaBlockState = world.getBlockState(targetEntityBlockPos);
-                if (targetEntityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK)) break;
+            Collection<EntityAttributeModifier> attackModifiers = mainHandStack.getItem().getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+            for (EntityAttributeModifier attackModifier : attackModifiers) {
+                attackDamage += (float)attackModifier.getValue();
+                if (attackDamage > 0.0f) break;
             }
-            if (target.isOnFire() || target.isInLava() || target.isFireImmune() || targetEntityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK) || (target instanceof LivingEntity && ((LivingEntity)target).hasStatusEffect(StatusEffects.FIRE_RESISTANCE))) {
-                int fellingLevel = EnchantmentHelper.getLevel(ModEnchantments.LEANING, mainHandStack);
-                newAdditionf += 1.25f*fellingLevel;
-                newAdditionf *= target instanceof BlazeEntity ? 0.0f : 1.0f;
-            }
-            if (((this.isSprinting() && !((!this.onGround && this.isTouchingWater()) || this.isSubmergedInWater() || this.isInSwimmingPose())) || criticalBl)) {
-                int hackLevel = EnchantmentHelper.getLevel(ModEnchantments.HACKING, mainHandStack);
-                float hackAdditionf = (float)hackLevel*Math.round(0.1f*(((BlazearmItem)mainHandStack.getItem()).getAttackDamage() + originalAdditionf));
-                newAdditionf += hackAdditionf;
+            newAdditionf += ((this.isSprinting() && !((!this.onGround && this.isTouchingWater()) || this.isSubmergedInWater() || this.isInLava() || this.isInSwimmingPose())) || criticalBl) ? hackLevel*0.2f*attackDamage : 0.0f;
+            if (mainHandStack.isOf(ModItems.BLAZEARM)) {
+                BlockState targetEntityMagmaBlockState = Blocks.AIR.getDefaultState();
+                Iterable<BlockPos> targetEntityBlockPosIterable = BlockPos.iterateOutwards(target.getBlockPos(), 1, 1, 1);
+                for (BlockPos targetEntityBlockPos : targetEntityBlockPosIterable) {
+                    if (targetEntityBlockPos.getManhattanDistance(target.getBlockPos()) > 1) continue;
+                    targetEntityMagmaBlockState = world.getBlockState(targetEntityBlockPos);
+                    if (targetEntityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK)) break;
+                }
+                if (target.isOnFire() || target.isInLava() || target.isFireImmune() || targetEntityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK) || (target instanceof LivingEntity && ((LivingEntity)target).hasStatusEffect(StatusEffects.FIRE_RESISTANCE))) {
+                    int leaningLevel = EnchantmentHelper.getLevel(ModEnchantments.LEANING, mainHandStack);
+                    newAdditionf += 1.25f*leaningLevel;
+                    newAdditionf *= target instanceof BlazeEntity ? 0.0f : 1.0f;
+                }
             }
             return newAdditionf;
         }
         return originalAdditionf;
+    }
+
+    @ModifyConstant(method = "attack", constant = @Constant(floatValue = 1.5f))
+    private float modifiedCriticalMultiplier(float originalf) {
+        return Math.min(MathHelper.square(1.0f + 0.1f*Math.max(this.getHeight(), 1.0f)*this.fallDistance), originalf);
     }
 
     @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setSprinting(Z)V"))
@@ -271,14 +283,14 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
     @ModifyConstant(method = "attack", constant = @Constant(doubleValue = 9.0))
-    private double modifiedSweepingRange(double originalRange) {
-        return MathHelper.square(originalRange + 1.0);
+    private double modifiedSweepingRange(double originalRangeSquared) {
+        return MathHelper.square(Math.sqrt(originalRangeSquared) + 0.5);
     }
 
     @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;takeKnockback(DDD)V"))
     private void redirectedTakeKnockbackWithFireAspect(LivingEntity livingEntity, double originalStrength, double originalX, double originalZ) {
         int fireAspectLevel = EnchantmentHelper.getFireAspect(this);
-        if (this.getMainHandStack().getItem() instanceof SwordItem && fireAspectLevel > 0) {
+        if (this.getMainHandStack().isIn(ModItemTags.SWEEPING_WEAPONS) && fireAspectLevel > 0) {
             livingEntity.setOnFireFor(4*fireAspectLevel);
             livingEntity.takeKnockback(originalStrength, originalX, originalZ);
         }
@@ -353,32 +365,28 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Override
     public boolean disablesShield() {
-        float f = 1.0f - (float)Math.exp(-MathHelper.square(1.0/20.0));
+        float f = 1.0f - (float)Math.exp(-MathHelper.square(this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)/20.0));
         Item mainHandItem = this.getMainHandStack().getItem();
-        if (mainHandItem instanceof SwordItem) {
-            f += 0.02f*(1.0f + EnchantmentHelper.getSweepingMultiplier(this))*((SwordItem)mainHandItem).getAttackDamage();
+        float attackDamage = 0.0f;
+        Collection<EntityAttributeModifier> attackModifiers = mainHandItem.getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        for (EntityAttributeModifier attackModifier : attackModifiers) {
+            attackDamage += (float)attackModifier.getValue();
+            if (attackDamage > 0.0f) break;
         }
-        else if (mainHandItem instanceof TridentItem) {
+        if (this.getMainHandStack().isIn(ModItemTags.SWEEPING_WEAPONS)) {
+            f += 0.02f*(1.0f + EnchantmentHelper.getSweepingMultiplier(this))*attackDamage;
+        }
+        else if (this.getMainHandStack().isIn(ModItemTags.THRUSTING_WEAPONS)) {
             if (this.isWet()) {
-                f += 0.05f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(Enchantments.IMPALING, this))*9.0f;
+                f += 0.05f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(Enchantments.IMPALING, this))*attackDamage;
             }
-            else {
-                f += 0.03f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.THRUSTING, this))*9.0f;
-            }
+            f += 0.03f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.THRUSTING, this))*attackDamage;
         }
-        else if (mainHandItem instanceof SpearItem) {
-            f += 0.03f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.THRUSTING, this))*((SpearItem)mainHandItem).getAttackDamage();
-        }
-        else if (mainHandItem instanceof BlazearmItem) {
+        else if (this.getMainHandStack().isIn(ModItemTags.HACKING_WEAPONS)) {
             if (this.isOnFire() || this.isInLava()) {
-                f += 0.05f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this))*((BlazearmItem)mainHandItem).getAttackDamage();
+                f += 0.05f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.LEANING, this))*attackDamage;
             }
-            else {
-                f += 0.03f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this))*((BlazearmItem)mainHandItem).getAttackDamage();
-            }
-        }
-        else if (mainHandItem instanceof AxeItem) {
-            f += 0.04f*(1.0f + 0.33f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this))*((AxeItem)mainHandItem).getAttackDamage();
+            f += 0.04f*(1.0f + 0.33f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this))*attackDamage;
         }
         boolean criticalBl = ((PlayerEntity)(Object)this).getAttackCooldownProgress(0.5f) > 0.9f && this.fallDistance > 0.0f && !this.onGround && !this.isClimbing() && !this.isTouchingWater() && !this.hasVehicle() && !this.isSprinting();
         if (this.isSprinting() || criticalBl) {

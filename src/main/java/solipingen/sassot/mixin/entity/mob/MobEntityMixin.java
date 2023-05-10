@@ -13,11 +13,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShieldItem;
-import net.minecraft.item.SwordItem;
 import net.minecraft.item.TridentItem;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.math.MathHelper;
@@ -29,6 +27,7 @@ import solipingen.sassot.item.BlazearmItem;
 import solipingen.sassot.item.ModItems;
 import solipingen.sassot.item.ModShieldItem;
 import solipingen.sassot.item.SpearItem;
+import solipingen.sassot.registry.tag.ModItemTags;
 
 
 @Mixin(MobEntity.class)
@@ -114,12 +113,12 @@ public abstract class MobEntityMixin extends LivingEntity {
 
     @Inject(method = "squaredAttackRange", at = @At("HEAD"), cancellable = true)
     private void injectedSquaredAttackRange(LivingEntity target, CallbackInfoReturnable<Double> cbireturn) {
-        Item mainHandItem = this.getMainHandStack().getItem();
-        if (mainHandItem instanceof SwordItem) {
-            cbireturn.setReturnValue((double)MathHelper.square(this.getWidth()*2.0f + 1.0f + target.getWidth()));
+        ItemStack mainHandStack = this.getMainHandStack();
+        if (mainHandStack.isIn(ModItemTags.SWEEPING_WEAPONS)) {
+            cbireturn.setReturnValue((double)MathHelper.square(this.getWidth()*2.0f + 0.5f + target.getWidth()));
         }
-        else if (mainHandItem instanceof SpearItem || this.getMainHandStack().isOf(ModItems.BLAZEARM)) {
-            cbireturn.setReturnValue((double)MathHelper.square(this.getWidth()*2.0f + 2.0f + target.getWidth()));
+        else if (mainHandStack.isIn(ModItemTags.THRUSTING_WEAPONS) || mainHandStack.isOf(ModItems.BLAZEARM)) {
+            cbireturn.setReturnValue((double)MathHelper.square(this.getWidth()*2.0f + 1.0f + target.getWidth()));
         }
     }
     
