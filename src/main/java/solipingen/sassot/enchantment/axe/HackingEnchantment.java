@@ -4,10 +4,10 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import solipingen.sassot.enchantment.ModEnchantments;
-import solipingen.sassot.item.BlazearmItem;
+import solipingen.sassot.registry.tag.ModItemTags;
+
 
 public class HackingEnchantment extends Enchantment {
     public HackingEnchantment(Enchantment.Rarity weight, EquipmentSlot ... slotTypes) {
@@ -31,7 +31,7 @@ public class HackingEnchantment extends Enchantment {
 
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
-        return stack.getItem() instanceof AxeItem || stack.getItem() instanceof BlazearmItem;
+        return stack.isIn(ModItemTags.HACKING_WEAPONS);
     }
 
     @Override

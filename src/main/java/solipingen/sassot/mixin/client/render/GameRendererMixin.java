@@ -10,14 +10,10 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.TridentItem;
 import net.minecraft.util.math.MathHelper;
-import solipingen.sassot.enchantment.ModEnchantments;
-import solipingen.sassot.item.BlazearmItem;
-import solipingen.sassot.item.SpearItem;
+import solipingen.sassot.item.ModItems;
+import solipingen.sassot.registry.tag.ModItemTags;
 
 
 @Mixin(GameRenderer.class)
@@ -30,13 +26,11 @@ public abstract class GameRendererMixin implements AutoCloseable {
     private double modifiedAttackReachConstant(double originalReach) {
         ClientPlayerEntity clientPlayerEntity = this.client.player;
         ItemStack mainHandStack = clientPlayerEntity.getMainHandStack();
-        if (mainHandStack.getItem() instanceof SwordItem) {
-            return originalReach + 1.0;
+        if (mainHandStack.isIn(ModItemTags.SWEEPING_WEAPONS)) {
+            return originalReach + 0.5;
         }
-        else if (mainHandStack.getItem() instanceof SpearItem || mainHandStack.getItem() instanceof BlazearmItem || mainHandStack.getItem() instanceof TridentItem) {
-            int thrustLevel = EnchantmentHelper.getLevel(ModEnchantments.THRUSTING, mainHandStack);
-            double thrustAddition = (clientPlayerEntity.isOnGround() && !clientPlayerEntity.isSprinting() && !(mainHandStack.getItem() instanceof BlazearmItem)) ? thrustLevel/3.0 : 0.0;
-            return originalReach + 2.0 + thrustAddition;
+        else if (mainHandStack.isIn(ModItemTags.THRUSTING_WEAPONS) || mainHandStack.isOf(ModItems.BLAZEARM)) {
+            return originalReach + 1.0;
         }
         return originalReach;
     }
@@ -45,13 +39,11 @@ public abstract class GameRendererMixin implements AutoCloseable {
     private double modifiedRangeConstant(double originalRange) {
         ClientPlayerEntity clientPlayerEntity = this.client.player;
         ItemStack mainHandStack = clientPlayerEntity.getMainHandStack();
-        if (mainHandStack.getItem() instanceof SwordItem) {
-            return originalRange + 1.0;
+        if (mainHandStack.isIn(ModItemTags.SWEEPING_WEAPONS)) {
+            return originalRange + 0.5;
         }
-        else if (mainHandStack.getItem() instanceof SpearItem || mainHandStack.getItem() instanceof BlazearmItem || mainHandStack.getItem() instanceof TridentItem) {
-            int thrustLevel = EnchantmentHelper.getLevel(ModEnchantments.THRUSTING, mainHandStack);
-            double thrustAddition = (clientPlayerEntity.isOnGround() && !clientPlayerEntity.isSprinting() && !(mainHandStack.getItem() instanceof BlazearmItem)) ? thrustLevel/3.0 : 0.0;
-            return originalRange + 2.0 + thrustAddition;
+        else if (mainHandStack.isIn(ModItemTags.THRUSTING_WEAPONS) || mainHandStack.isOf(ModItems.BLAZEARM)) {
+            return originalRange + 1.0;
         }
         return originalRange;
     }
@@ -62,13 +54,11 @@ public abstract class GameRendererMixin implements AutoCloseable {
         ClientPlayerEntity clientPlayerEntity = this.client.player;
         if (clientPlayerEntity != null) {
             ItemStack mainHandStack = clientPlayerEntity.getMainHandStack();
-            if (mainHandStack.getItem() instanceof SwordItem) {
-                return MathHelper.square(originalReach + 1.0);
+            if (mainHandStack.isIn(ModItemTags.SWEEPING_WEAPONS)) {
+                return MathHelper.square(originalReach + 0.5);
             }
-            else if (mainHandStack.getItem() instanceof SpearItem || mainHandStack.getItem() instanceof BlazearmItem || mainHandStack.getItem() instanceof TridentItem) {
-                int thrustLevel = EnchantmentHelper.getLevel(ModEnchantments.THRUSTING, mainHandStack);
-                double thrustAddition = (clientPlayerEntity.isOnGround() && !clientPlayerEntity.isSprinting() && !(mainHandStack.getItem() instanceof BlazearmItem)) ? thrustLevel/3.0 : 0.0;
-                return MathHelper.square(originalReach + 2.0 + thrustAddition);
+            else if (mainHandStack.isIn(ModItemTags.THRUSTING_WEAPONS) || mainHandStack.isOf(ModItems.BLAZEARM)) {
+                return MathHelper.square(originalReach + 1.0);
             }
         }
         return originalReachSquared;

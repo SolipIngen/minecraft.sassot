@@ -5,9 +5,8 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.TridentItem;
 import solipingen.sassot.enchantment.ModEnchantments;
-import solipingen.sassot.item.SpearItem;
+import solipingen.sassot.registry.tag.ModItemTags;
 
 
 public class ThrustingEnchantment extends Enchantment {
@@ -34,7 +33,7 @@ public class ThrustingEnchantment extends Enchantment {
 
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
-        return stack.getItem() instanceof SpearItem || stack.getItem() instanceof TridentItem;
+        return stack.isIn(ModItemTags.THRUSTING_WEAPONS);
     }
 
     @Override

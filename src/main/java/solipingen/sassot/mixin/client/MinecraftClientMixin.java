@@ -17,13 +17,9 @@ import net.minecraft.client.WindowEventHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.TridentItem;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -35,10 +31,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.thread.ReentrantThreadExecutor;
 import net.minecraft.world.RaycastContext;
-import solipingen.sassot.enchantment.ModEnchantments;
-import solipingen.sassot.item.BlazearmItem;
-import solipingen.sassot.item.SpearItem;
+import solipingen.sassot.item.ModItems;
 import solipingen.sassot.mixin.block.accessors.AbstractBlockAccessor;
+import solipingen.sassot.registry.tag.ModItemTags;
 import solipingen.sassot.util.interfaces.mixin.client.MinecraftClientInterface;
 
 
@@ -60,7 +55,7 @@ public abstract class MinecraftClientMixin extends ReentrantThreadExecutor<Runna
     private void injectedHandleBlockBreaking(boolean breaking, CallbackInfo cbi) {
         if (this.crosshairTarget != null && this.crosshairTarget.getType() == HitResult.Type.BLOCK) {
             ItemStack mainHandStack = this.player.getMainHandStack();
-            if (mainHandStack.getItem() instanceof SwordItem || mainHandStack.getItem() instanceof SpearItem || mainHandStack.getItem() instanceof TridentItem || mainHandStack.getItem() instanceof BlazearmItem || mainHandStack.getItem() instanceof AxeItem) {
+            if (mainHandStack.isIn(ModItemTags.SWEEPING_WEAPONS) || mainHandStack.isIn(ModItemTags.THRUSTING_WEAPONS) || mainHandStack.isIn(ModItemTags.HACKING_WEAPONS)) {
                 BlockHitResult blockHitResult = (BlockHitResult)this.crosshairTarget;
                 BlockPos blockPos = blockHitResult.getBlockPos();
                 BlockState blockState = this.world.getBlockState(blockPos);
@@ -75,7 +70,7 @@ public abstract class MinecraftClientMixin extends ReentrantThreadExecutor<Runna
     private void injectedDoAttack(CallbackInfoReturnable<Boolean> cbireturn) {
         if (this.crosshairTarget != null && this.crosshairTarget.getType() == HitResult.Type.BLOCK) {
             ItemStack mainHandStack = this.player.getMainHandStack();
-            if (mainHandStack.getItem() instanceof SwordItem || mainHandStack.getItem() instanceof SpearItem || mainHandStack.getItem() instanceof TridentItem || mainHandStack.getItem() instanceof BlazearmItem || mainHandStack.getItem() instanceof AxeItem) {
+            if (mainHandStack.isIn(ModItemTags.SWEEPING_WEAPONS) || mainHandStack.isIn(ModItemTags.THRUSTING_WEAPONS) || mainHandStack.isIn(ModItemTags.HACKING_WEAPONS)) {
                 BlockHitResult blockHitResult = (BlockHitResult)this.crosshairTarget;
                 BlockPos blockPos = blockHitResult.getBlockPos();
                 BlockState blockState = this.world.getBlockState(blockPos);
@@ -105,23 +100,19 @@ public abstract class MinecraftClientMixin extends ReentrantThreadExecutor<Runna
         Vec3d vec3d = entity2.getCameraPosVec(tickDelta);
         boolean bl = false;
         double attackReach = 3.0;
-        if (mainHandStack.getItem() instanceof SwordItem) {
-            attackReach += 1.0;
+        if (mainHandStack.isIn(ModItemTags.SWEEPING_WEAPONS)) {
+            attackReach += 0.5;
         }
-        else if (mainHandStack.getItem() instanceof SpearItem || mainHandStack.getItem() instanceof BlazearmItem || mainHandStack.getItem() instanceof TridentItem) {
-            int thrustLevel = EnchantmentHelper.getLevel(ModEnchantments.THRUSTING, mainHandStack);
-            double thrustAddition = (player.isOnGround() && !player.isSprinting() && !(mainHandStack.getItem() instanceof BlazearmItem)) ? thrustLevel/3.0 : 0.0;
-            attackReach += 2.0 + thrustAddition;
+        else if (mainHandStack.isIn(ModItemTags.THRUSTING_WEAPONS) || mainHandStack.isOf(ModItems.BLAZEARM)) {
+            attackReach += 1.0;
         }
         double e = d;
         if (this.interactionManager.hasExtendedReach()) {
-            if (mainHandStack.getItem() instanceof SwordItem) {
-                d = e = 7.0;
+            if (mainHandStack.isIn(ModItemTags.SWEEPING_WEAPONS)) {
+                d = e = 6.5;
             }
-            else if (mainHandStack.getItem() instanceof SpearItem || mainHandStack.getItem() instanceof BlazearmItem || mainHandStack.getItem() instanceof TridentItem) {
-                int thrustLevel = EnchantmentHelper.getLevel(ModEnchantments.THRUSTING, mainHandStack);
-                double thrustAddition = (player.isOnGround() && !player.isSprinting() && !(mainHandStack.getItem() instanceof BlazearmItem)) ? thrustLevel/3.0 : 0.0;
-                d = e = 8.0 + thrustAddition;
+            else if (mainHandStack.isIn(ModItemTags.THRUSTING_WEAPONS) || mainHandStack.isOf(ModItems.BLAZEARM)) {
+                d = e = 7.0;
             }
             else {
                 d = e = 6.0;

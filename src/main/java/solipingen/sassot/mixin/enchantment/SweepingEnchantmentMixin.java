@@ -9,6 +9,8 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.SweepingEnchantment;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.item.ItemStack;
+import solipingen.sassot.registry.tag.ModItemTags;
 
 
 @Mixin(SweepingEnchantment.class)
@@ -23,6 +25,11 @@ public abstract class SweepingEnchantmentMixin extends Enchantment {
     private static void injectedGetMultiplier(int level, CallbackInfoReturnable<Float> cbireturn) {
         float sweepingMultiplier = 1.0f/3.0f + 0.2f*level;
         cbireturn.setReturnValue(sweepingMultiplier);
+    }
+
+    @Override
+    public boolean isAcceptableItem(ItemStack stack) {
+        return stack.isIn(ModItemTags.SWEEPING_WEAPONS);
     }
 
     

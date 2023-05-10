@@ -7,16 +7,12 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.TridentItem;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.MathHelper;
-import solipingen.sassot.enchantment.ModEnchantments;
-import solipingen.sassot.item.BlazearmItem;
-import solipingen.sassot.item.SpearItem;
+import solipingen.sassot.item.ModItems;
+import solipingen.sassot.registry.tag.ModItemTags;
 
 
 @Mixin(ServerPlayNetworkHandler.class)
@@ -31,13 +27,11 @@ public abstract class ServerPlayNetworkHandlerMixin {
         ServerPlayerEntity serverPlayerEntity = this.player;
         if (serverPlayerEntity != null) {
             ItemStack mainHandStack = serverPlayerEntity.getMainHandStack();
-            if (mainHandStack.getItem() instanceof SwordItem) {
-                return MathHelper.square(originalMaxBreakDistance + 1.0);
+            if (mainHandStack.isIn(ModItemTags.SWEEPING_WEAPONS)) {
+                return MathHelper.square(originalMaxBreakDistance + 0.5);
             }
-            else if (mainHandStack.getItem() instanceof SpearItem || mainHandStack.getItem() instanceof BlazearmItem || mainHandStack.getItem() instanceof TridentItem) {
-                int thrustLevel = EnchantmentHelper.getLevel(ModEnchantments.THRUSTING, mainHandStack);
-                double thrustAddition = (serverPlayerEntity.isOnGround() && !serverPlayerEntity.isSprinting() && !(mainHandStack.getItem() instanceof BlazearmItem)) ? thrustLevel/3.0 : 0.0;
-                return MathHelper.square(originalMaxBreakDistance + 2.0 + thrustAddition);
+            else if (mainHandStack.isIn(ModItemTags.THRUSTING_WEAPONS) || mainHandStack.isOf(ModItems.BLAZEARM)) {
+                return MathHelper.square(originalMaxBreakDistance + 1.0);
             }
         }
         return MAX_BREAK_SQUARED_DISTANCE;
