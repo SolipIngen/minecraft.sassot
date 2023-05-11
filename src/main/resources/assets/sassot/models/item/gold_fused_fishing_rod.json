@@ -1,0 +1,15 @@
+{
+    "parent": "sassot:item/generic/fishing_rod",
+    "textures": {
+        "2": "sassot:item/gold_fused_fishing_rod",
+        "particle": "sassot:item/gold_fused_fishing_rod"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "cast": 1
+            },
+            "model": "sassot:item/gold_fused_fishing_rod_cast"
+        }
+    ]
+}

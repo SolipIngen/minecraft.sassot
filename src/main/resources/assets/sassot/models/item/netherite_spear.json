@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+      "layer0": "sassot:item/netherite_spear/netherite_spear"
+    }
+}

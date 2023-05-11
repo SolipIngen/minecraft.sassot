@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "sassot:echo_crystal_block", 
+    "sassot:echo_crystal_cluster",
+    "sassot:small_echo_crystal_bud",
+    "sassot:medium_echo_crystal_bud",
+    "sassot:large_echo_crystal_bud",
+    "sassot:swordsman_marker",
+    "sassot:spearman_marker"
+  ]
+}
