@@ -21,6 +21,7 @@ public class FlintSpearEntityModel extends EntityModel<FlintSpearEntity> {
 	private final ModelPart support;
 	private final ModelPart tip;
 
+	
 	public FlintSpearEntityModel(ModelPart root) {
 		this.pole = root.getChild("pole");
 		this.support = root.getChild("support");

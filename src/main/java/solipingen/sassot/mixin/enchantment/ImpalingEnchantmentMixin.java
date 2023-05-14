@@ -9,6 +9,7 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.ImpalingEnchantment;
 import net.minecraft.entity.EquipmentSlot;
 
+
 @Mixin(ImpalingEnchantment.class)
 public class ImpalingEnchantmentMixin extends Enchantment {
 

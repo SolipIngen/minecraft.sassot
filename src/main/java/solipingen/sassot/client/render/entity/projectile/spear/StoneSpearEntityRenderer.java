@@ -23,6 +23,7 @@ public class StoneSpearEntityRenderer extends EntityRenderer<StoneSpearEntity> {
     public static final Identifier TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "textures/entity/spear/stone_spear.png");
     private final StoneSpearEntityModel model;
 
+    
     public StoneSpearEntityRenderer(EntityRendererFactory.Context context) {
         super(context);
         this.model = new StoneSpearEntityModel(context.getPart(ModEntityModelLayers.STONE_SPEAR_ENTITY_MODEL_LAYER));

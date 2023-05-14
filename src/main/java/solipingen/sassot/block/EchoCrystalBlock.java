@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 
 public class EchoCrystalBlock extends Block {
     
+    
     public EchoCrystalBlock(AbstractBlock.Settings settings) {
         super(settings);
     }

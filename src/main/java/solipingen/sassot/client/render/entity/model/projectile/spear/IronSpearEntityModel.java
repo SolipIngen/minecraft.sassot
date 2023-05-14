@@ -22,6 +22,7 @@ public class IronSpearEntityModel extends EntityModel<IronSpearEntity> {
 	private final ModelPart support;
 	private final ModelPart tip;
 
+	
 	public IronSpearEntityModel(ModelPart root) {
 		this.pole = root.getChild("pole");
 		this.base = root.getChild("base");

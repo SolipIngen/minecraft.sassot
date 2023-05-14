@@ -23,6 +23,7 @@ public class WoodenSpearEntityRenderer extends EntityRenderer<WoodenSpearEntity>
     public static final Identifier TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "textures/entity/spear/wooden_spear.png");
     private final WoodenSpearEntityModel model;
 
+    
     public WoodenSpearEntityRenderer(EntityRendererFactory.Context context) {
         super(context);
         this.model = new WoodenSpearEntityModel(context.getPart(ModEntityModelLayers.WOODEN_SPEAR_ENTITY_MODEL_LAYER));

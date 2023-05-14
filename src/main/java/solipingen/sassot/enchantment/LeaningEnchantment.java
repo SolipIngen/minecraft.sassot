@@ -16,7 +16,7 @@ public class LeaningEnchantment extends Enchantment {
 
     @Override
     public int getMinPower(int level) {
-        return 1 + (level - 1) * 8;
+        return 1 + (level - 1)*8;
     }
 
     @Override

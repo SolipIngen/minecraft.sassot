@@ -20,6 +20,7 @@ public interface AngerableFighterVillager {
     public static final String ANGER_TIME_KEY = "FighterAngerTime";
     public static final String ANGRY_AT_KEY = "FighterAngryAt";
 
+    
     public int getFighterAngerTime();
 
     public void setFighterAngerTime(int var1);

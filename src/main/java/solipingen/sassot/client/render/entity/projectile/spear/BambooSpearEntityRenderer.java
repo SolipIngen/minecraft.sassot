@@ -23,6 +23,7 @@ public class BambooSpearEntityRenderer extends EntityRenderer<BambooSpearEntity>
     public static final Identifier TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "textures/entity/spear/bamboo_spear.png");
     private final BambooSpearEntityModel model;
 
+    
     public BambooSpearEntityRenderer(EntityRendererFactory.Context context) {
         super(context);
         this.model = new BambooSpearEntityModel(context.getPart(ModEntityModelLayers.BAMBOO_SPEAR_ENTITY_MODEL_LAYER));

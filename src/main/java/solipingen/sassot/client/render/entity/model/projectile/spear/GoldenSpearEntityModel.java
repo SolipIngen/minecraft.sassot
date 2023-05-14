@@ -22,6 +22,7 @@ public class GoldenSpearEntityModel extends EntityModel<GoldenSpearEntity> {
 	private final ModelPart support;
 	private final ModelPart tip;
 
+	
 	public GoldenSpearEntityModel(ModelPart root) {
 		this.pole = root.getChild("pole");
 		this.base = root.getChild("base");

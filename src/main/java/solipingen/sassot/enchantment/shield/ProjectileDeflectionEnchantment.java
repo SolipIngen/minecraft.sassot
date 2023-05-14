@@ -17,7 +17,7 @@ public class ProjectileDeflectionEnchantment extends Enchantment {
 
     @Override
     public int getMinPower(int level) {
-        return 10 + 20 * (level - 1);
+        return 10 + 20*(level - 1);
     }
 
     @Override

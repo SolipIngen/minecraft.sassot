@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.PiglinBrain;
 import net.minecraft.entity.mob.PiglinEntity;
 
+
 @Mixin(PiglinBrain.class)
 public interface PiglinBrainInvoker {
 

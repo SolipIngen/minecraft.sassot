@@ -23,6 +23,7 @@ public class GoldenSpearEntityRenderer extends EntityRenderer<GoldenSpearEntity>
     public static final Identifier TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "textures/entity/spear/golden_spear.png");
     private final GoldenSpearEntityModel model;
 
+    
     public GoldenSpearEntityRenderer(EntityRendererFactory.Context context) {
         super(context);
         this.model = new GoldenSpearEntityModel(context.getPart(ModEntityModelLayers.GOLDEN_SPEAR_ENTITY_MODEL_LAYER));
