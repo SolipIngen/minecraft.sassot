@@ -16,7 +16,7 @@ public class UnyieldingEnchantment extends Enchantment {
 
     @Override
     public int getMinPower(int level) {
-        return 5 + level * 7;
+        return 5 + level*7;
     }
 
     @Override

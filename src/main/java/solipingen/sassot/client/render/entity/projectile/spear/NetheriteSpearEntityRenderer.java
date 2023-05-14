@@ -23,6 +23,7 @@ public class NetheriteSpearEntityRenderer extends EntityRenderer<NetheriteSpearE
     public static final Identifier TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "textures/entity/spear/netherite_spear.png");
     private final NetheriteSpearEntityModel model;
 
+    
     public NetheriteSpearEntityRenderer(EntityRendererFactory.Context context) {
         super(context);
         this.model = new NetheriteSpearEntityModel(context.getPart(ModEntityModelLayers.NETHERITE_SPEAR_ENTITY_MODEL_LAYER));

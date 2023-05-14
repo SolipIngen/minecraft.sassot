@@ -22,6 +22,7 @@ public class CopperSpearEntityModel extends EntityModel<CopperSpearEntity> {
 	private final ModelPart support;
 	private final ModelPart tip;
 	
+	
 	public CopperSpearEntityModel(ModelPart root) {
 		this.pole = root.getChild("pole");
 		this.base = root.getChild("base");

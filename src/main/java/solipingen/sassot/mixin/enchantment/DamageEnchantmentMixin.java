@@ -17,6 +17,7 @@ import net.minecraft.item.TridentItem;
 import solipingen.sassot.item.BlazearmItem;
 import solipingen.sassot.item.SpearItem;
 
+
 @Mixin(DamageEnchantment.class)
 public abstract class DamageEnchantmentMixin extends Enchantment {
     @Shadow @Final public int typeIndex;

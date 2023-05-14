@@ -268,7 +268,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @ModifyConstant(method = "attack", constant = @Constant(floatValue = 1.5f))
     private float modifiedCriticalMultiplier(float originalf) {
-        return Math.min(MathHelper.square(1.0f + 0.1f*Math.max(this.getHeight(), 1.0f)*this.fallDistance), originalf);
+        return Math.min(MathHelper.square(1.0f + 0.1f*Math.max(this.getHeight() + 0.1f, 1.0f)*this.fallDistance), originalf);
     }
 
     @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setSprinting(Z)V"))

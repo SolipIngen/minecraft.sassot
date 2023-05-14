@@ -94,16 +94,16 @@ public class ModVillagerProfessions {
                     new TypeAwareSellForOneEmeraldFactory(4, 16, 5, sellCookedFishMap), 
                     new SellItemFactory(ModItems.COPPER_FUSED_FISHING_ROD, 4, 1, 5)}, 
                 3, new Factory[]{new TypeAwareBuyForOneEmeraldFactory(1, 12, 20, boatMap), 
-                    new BuyForOneEmeraldFactory(Items.KELP, 20, 16, 20), 
                     new SellItemFactory(Items.PUFFERFISH, 2, 1, 10), 
-                    new SellItemFactory(Items.INK_SAC, 1, 2, 10), 
+                    new SellItemFactory(Items.INK_SAC, 1, 4, 10), 
                     new SellItemFactory(ModItems.GOLD_FUSED_FISHING_ROD, 3, 1, 10)}, 
                 4, new Factory[]{new BuyForOneEmeraldFactory(Items.BUCKET, 2, 12, 30), 
-                    new SellItemFactory(Items.GLOW_INK_SAC, 2, 2, 15), 
+                    new BuyForOneEmeraldFactory(Items.KELP, 20, 16, 20), 
                     new TypeAwareSellForOneEmeraldFactory(1, 16, 15, sellLiveFishMap), 
                     new SellItemFactory(ModItems.IRON_FUSED_FISHING_ROD, 3, 1, 15)}, 
                 5, new Factory[]{new SellItemFactory(Items.PUFFERFISH_BUCKET, 4, 1, 15), 
-                    new SellEnchantedToolFactory(ModItems.DIAMOND_FUSED_FISHING_ROD, 10, 3, 15)}
+                    new SellItemFactory(Items.GLOW_INK_SAC, 1, 2, 15), 
+                    new SellEnchantedToolFactory(ModItems.DIAMOND_FUSED_FISHING_ROD, 11, 3, 15)}
             )));
     }
 

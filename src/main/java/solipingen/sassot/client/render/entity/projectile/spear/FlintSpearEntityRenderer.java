@@ -23,6 +23,7 @@ public class FlintSpearEntityRenderer extends EntityRenderer<FlintSpearEntity> {
     public static final Identifier TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "textures/entity/spear/flint_spear.png");
     private final FlintSpearEntityModel model;
 
+    
     public FlintSpearEntityRenderer(EntityRendererFactory.Context context) {
         super(context);
         this.model = new FlintSpearEntityModel(context.getPart(ModEntityModelLayers.FLINT_SPEAR_ENTITY_MODEL_LAYER));

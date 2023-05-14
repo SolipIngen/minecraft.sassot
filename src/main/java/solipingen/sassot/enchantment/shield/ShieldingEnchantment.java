@@ -16,7 +16,7 @@ public class ShieldingEnchantment extends Enchantment {
 
     @Override
     public int getMinPower(int level) {
-        return 1 + (level - 1) * 10;
+        return 1 + (level - 1)*10;
     }
 
     @Override

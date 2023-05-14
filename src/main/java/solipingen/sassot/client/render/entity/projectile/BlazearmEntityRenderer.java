@@ -23,6 +23,7 @@ public class BlazearmEntityRenderer extends EntityRenderer<BlazearmEntity> {
     public static final Identifier TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "textures/entity/spear/blazearm.png");
     private final BlazearmEntityModel model;
 
+    
     public BlazearmEntityRenderer(Context ctx) {
         super(ctx);
         this.model = new BlazearmEntityModel(ctx.getPart(ModEntityModelLayers.BLAZEARM_ENTITY_MODEL_LAYER));

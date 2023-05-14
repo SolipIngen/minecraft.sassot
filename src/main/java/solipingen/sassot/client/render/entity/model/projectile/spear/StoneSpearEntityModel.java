@@ -21,6 +21,7 @@ public class StoneSpearEntityModel extends EntityModel<StoneSpearEntity> {
 	private final ModelPart support;
 	private final ModelPart tip;
 
+	
 	public StoneSpearEntityModel(ModelPart root) {
 		this.pole = root.getChild("pole");
 		this.support = root.getChild("support");

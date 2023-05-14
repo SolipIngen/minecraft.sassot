@@ -23,6 +23,7 @@ public class DiamondSpearEntityRenderer extends EntityRenderer<DiamondSpearEntit
     public static final Identifier TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "textures/entity/spear/diamond_spear.png");
     private final DiamondSpearEntityModel model;
 
+    
     public DiamondSpearEntityRenderer(EntityRendererFactory.Context context) {
         super(context);
         this.model = new DiamondSpearEntityModel(context.getPart(ModEntityModelLayers.DIAMOND_SPEAR_ENTITY_MODEL_LAYER));

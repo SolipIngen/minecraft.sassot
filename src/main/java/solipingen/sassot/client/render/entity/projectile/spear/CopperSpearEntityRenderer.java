@@ -23,6 +23,7 @@ public class CopperSpearEntityRenderer extends EntityRenderer<CopperSpearEntity>
     public static final Identifier TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "textures/entity/spear/copper_spear.png");
     private final CopperSpearEntityModel model;
 
+    
     public CopperSpearEntityRenderer(EntityRendererFactory.Context context) {
         super(context);
         this.model = new CopperSpearEntityModel(context.getPart(ModEntityModelLayers.COPPER_SPEAR_ENTITY_MODEL_LAYER));

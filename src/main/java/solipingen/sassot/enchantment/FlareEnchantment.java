@@ -17,7 +17,7 @@ public class FlareEnchantment extends Enchantment {
 
     @Override
     public int getMinPower(int level) {
-        return 10 + level * 7;
+        return 10 + level*7;
     }
 
     @Override

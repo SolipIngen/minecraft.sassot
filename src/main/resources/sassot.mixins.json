@@ -30,6 +30,7 @@
     "entity.mob.PiglinBrainMixin", 
     "entity.mob.PiglinEntityMixin", 
     "entity.mob.PillagerEntityMixin", 
+    "entity.mob.RavagerEntityMixin", 
     "entity.mob.VindicatorEntityMixin", 
     "entity.mob.WitherSkeletonEntityMixin", 
     "entity.mob.ZombieEntityMixin", 
