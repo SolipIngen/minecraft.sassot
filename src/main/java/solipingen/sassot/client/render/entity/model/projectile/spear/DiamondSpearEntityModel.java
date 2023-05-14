@@ -22,6 +22,7 @@ public class DiamondSpearEntityModel extends EntityModel<DiamondSpearEntity> {
 	private final ModelPart support;
 	private final ModelPart tip;
 
+	
 	public DiamondSpearEntityModel(ModelPart root) {
 		this.pole = root.getChild("pole");
 		this.base = root.getChild("base");

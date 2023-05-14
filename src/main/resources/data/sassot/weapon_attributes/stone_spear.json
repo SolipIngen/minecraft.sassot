@@ -1,0 +1,14 @@
+{
+    "parent": "bettercombat:trident", 
+    "attributes": {
+        "category": "spear", 
+        "attack_range": 3.0, 
+        "attacks": [
+            {
+                "swing_sound": {
+                    "id": "sassot:spear_throw"
+                }
+            }
+        ]
+    }
+}

@@ -10,13 +10,15 @@ import solipingen.sassot.registry.tag.ModItemTags;
 
 
 public class HackingEnchantment extends Enchantment {
+    
+    
     public HackingEnchantment(Enchantment.Rarity weight, EquipmentSlot ... slotTypes) {
         super(weight, EnchantmentTarget.BREAKABLE, slotTypes);
     }
 
     @Override
     public int getMinPower(int level) {
-        return 5 + (level - 1) * 9;
+        return 5 + (level - 1)*9;
     }
 
     @Override

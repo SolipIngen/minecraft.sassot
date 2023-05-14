@@ -16,7 +16,7 @@ public class EchoingEnchantment extends Enchantment {
 
     @Override
     public int getMinPower(int level) {
-        return level * 10;
+        return level*10;
     }
 
     @Override

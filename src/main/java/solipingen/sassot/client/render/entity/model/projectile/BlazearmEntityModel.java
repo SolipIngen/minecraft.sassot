@@ -15,9 +15,12 @@ import solipingen.sassot.entity.projectile.BlazearmEntity;
 
 public class BlazearmEntityModel extends EntityModel<BlazearmEntity> {
 	private final ModelPart blazearm;
+
+
 	public BlazearmEntityModel(ModelPart root) {
 		this.blazearm = root.getChild("blazearm");
 	}
+	
 	public static TexturedModelData getTexturedModelData() {
 		ModelData modelData = new ModelData();
 		ModelPartData modelPartData = modelData.getRoot();

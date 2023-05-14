@@ -30,6 +30,7 @@
     "entity.mob.PiglinBrainMixin", 
     "entity.mob.PiglinEntityMixin", 
     "entity.mob.PillagerEntityMixin", 
+    "entity.mob.RavagerEntityMixin", 
     "entity.mob.VindicatorEntityMixin", 
     "entity.mob.WitherSkeletonEntityMixin", 
     "entity.mob.ZombieEntityMixin", 
@@ -53,16 +54,11 @@
     "item.SwordItemMixin", 
     "item.ToolMaterialsMixin", 
     "item.TridentItemMixin", 
-    "recipe.ShieldDecorationRecipeMixin", 
-    "server.network.ServerPlayNetworkHandlerMixin"
+    "recipe.ShieldDecorationRecipeMixin"
   ],
   "client": [
-    "client.gui.InGameHudMixin", 
-    "client.network.ClientPlayerInteractionManagerMixin", 
-    "client.render.entity.feature.HeldItemFeatureRendererMixin", 
     "client.render.entity.feature.TridentRiptideFeatureRendererMixin", 
     "client.render.entity.feature.VillagerHeldItemFeatureRendererMixin", 
-    "client.render.entity.model.BipedEntityModelMixin", 
     "client.render.entity.model.IllagerEntityModelMixin", 
     "client.render.entity.model.PiglinEntityModelMixin", 
     "client.render.entity.model.SkeletonEntityModelMixin", 
@@ -71,8 +67,6 @@
     "client.render.item.HeldItemRendererMixin", 
     "client.render.item.ItemRendererMixin", 
     "client.render.model.ModelLoaderMixin", 
-    "client.render.GameRendererMixin", 
-    "client.MinecraftClientMixin", 
     "client.WelcomeMixin"
   ],
   "injectors": {
