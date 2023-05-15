@@ -1,8 +1,6 @@
 {
-    "parent": "bettercombat:trident", 
+    "parent": "sassot:spear", 
     "attributes": {
-        "category": "spear", 
-        "attack_range": 3.0, 
         "attacks": [
             {
                 "swing_sound": {
