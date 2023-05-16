@@ -359,7 +359,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Override
     public boolean disablesShield() {
-        float thresholdf = 1.0f/(1.0f + (float)Math.exp(-(((LivingEntity)(Object)this).getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE) - 20.0)/(1 + this.world.getDifficulty().getId())));
+        float thresholdf = 1.0f/(1.0f + (float)Math.exp(-(((LivingEntity)(Object)this).getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE) - 20.0)/4));
         Item mainHandItem = this.getMainHandStack().getItem();
         float attackDamage = 0.0f;
         Collection<EntityAttributeModifier> attackModifiers = mainHandItem.getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_DAMAGE);
