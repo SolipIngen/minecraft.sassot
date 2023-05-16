@@ -7,25 +7,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.item.TridentItem;
-import net.minecraft.stat.Stats;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.World;
-import solipingen.sassot.enchantment.ModEnchantments;
 import solipingen.sassot.item.BlazearmItem;
 import solipingen.sassot.item.ModItems;
-import solipingen.sassot.item.ModShieldItem;
 import solipingen.sassot.item.SpearItem;
 import solipingen.sassot.registry.tag.ModItemTags;
 
@@ -78,35 +72,8 @@ public abstract class MobEntityMixin extends LivingEntity {
 
     @Inject(method = "disablePlayerShield", at = @At("HEAD"), cancellable = true)
     private void injectedDisablePlayerShield(PlayerEntity player, ItemStack mobStack, ItemStack playerStack, CallbackInfo cbi) {
-        if (this.disablesShield()) {
-            if (!(playerStack.getItem() instanceof ShieldItem)) {
-                cbi.cancel();
-            }
-            if (!this.world.isClient) {
-                player.incrementStat(Stats.USED.getOrCreateStat(playerStack.getItem()));
-            }
-            float damageReductionf = playerStack.getItem() instanceof ModShieldItem ? ((ModShieldItem)playerStack.getItem()).getMinDamageToBreak() : 3.0f;
-            float f = 1.0f - (float)Math.exp(-MathHelper.square(damageReductionf/((4 - this.world.getDifficulty().getId())*20.0)));
-            f += 0.05f*this.world.getLocalDifficulty(this.getBlockPos()).getClampedLocalDifficulty();
-            int unyieldingLevel = EnchantmentHelper.getLevel(ModEnchantments.UNYIELDING, playerStack);
-            float randomf = this.random.nextFloat();
-            if (playerStack.isOf(Items.SHIELD)) {
-                f -= 0.05f*unyieldingLevel;
-                if (randomf < f) {
-                    player.getItemCooldownManager().set(playerStack.getItem(), 60 - 20*unyieldingLevel);
-                    player.clearActiveItem();
-                    player.world.sendEntityStatus(player, EntityStatuses.BREAK_SHIELD);
-                }
-            }
-            else if (playerStack.getItem() instanceof ModShieldItem) {
-                ModShieldItem modShieldItem = (ModShieldItem)playerStack.getItem();
-                f -= modShieldItem.getUnyieldingModifier()*unyieldingLevel;
-                if (randomf < f) {
-                    player.getItemCooldownManager().set(playerStack.getItem(), modShieldItem.getDisabledTicks() - 20*unyieldingLevel);
-                    player.clearActiveItem();
-                    player.world.sendEntityStatus(player, EntityStatuses.BREAK_SHIELD);
-                }
-            }
+        if (playerStack.getItem() instanceof ShieldItem && this.disablesShield()) {
+            player.disableShield(true);
         }
         cbi.cancel();
     }

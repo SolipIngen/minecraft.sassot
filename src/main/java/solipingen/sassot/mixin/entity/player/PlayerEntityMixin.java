@@ -346,21 +346,15 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Inject(method = "takeShieldHit", at = @At("HEAD"), cancellable = true)
     private void injectedPlayerTakeShieldHit(LivingEntity attacker, CallbackInfo cbi) {
         super.takeShieldHit(attacker);
-        boolean disableBl = attacker.disablesShield();
-        Item activeShieldItem = this.activeItemStack.getItem();
-        float amount = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-        float damageReductionf = activeShieldItem instanceof ModShieldItem ? ((ModShieldItem)activeShieldItem).getMinDamageToBreak() : 3.0f;
-        float f = (float)Math.exp(-MathHelper.square(Math.max(amount - damageReductionf, 0.0f)/((4 - this.world.getDifficulty().getId())*20.0)));
-        disableBl &= this.random.nextFloat() > f;
-        if (disableBl) {
-            ((PlayerEntity)(Object)this).disableShield(disableBl);
+        if (attacker.disablesShield()) {
+            ((PlayerEntity)(Object)this).disableShield(true);
         }
         cbi.cancel();
     }
 
     @Override
     public boolean disablesShield() {
-        float f = 1.0f - (float)Math.exp(-MathHelper.square(this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)/20.0));
+        float thresholdf = 1.0f/(1.0f + (float)Math.exp(-(((LivingEntity)(Object)this).getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE) - 20.0)/(1 + this.world.getDifficulty().getId())));
         Item mainHandItem = this.getMainHandStack().getItem();
         float attackDamage = 0.0f;
         Collection<EntityAttributeModifier> attackModifiers = mainHandItem.getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_DAMAGE);
@@ -369,50 +363,53 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             if (attackDamage > 0.0f) break;
         }
         if (this.getMainHandStack().isIn(ModItemTags.SWEEPING_WEAPONS)) {
-            f += 0.02f*(1.0f + EnchantmentHelper.getSweepingMultiplier(this))*attackDamage;
+            thresholdf += 0.02f*(1.0f + EnchantmentHelper.getSweepingMultiplier(this))*attackDamage;
         }
         else if (this.getMainHandStack().isIn(ModItemTags.THRUSTING_WEAPONS)) {
             if (this.isWet()) {
-                f += 0.05f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(Enchantments.IMPALING, this))*attackDamage;
+                thresholdf += 0.05f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(Enchantments.IMPALING, this))*attackDamage;
             }
-            f += 0.03f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.THRUSTING, this))*attackDamage;
+            thresholdf += 0.03f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.THRUSTING, this))*attackDamage;
         }
         else if (this.getMainHandStack().isIn(ModItemTags.HACKING_WEAPONS)) {
             if (this.isOnFire() || this.isInLava()) {
-                f += 0.05f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.LEANING, this))*attackDamage;
+                thresholdf += 0.05f*(1.0f + 0.2f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.LEANING, this))*attackDamage;
             }
-            f += 0.04f*(1.0f + 0.33f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this))*attackDamage;
+            thresholdf += 0.04f*(1.0f + 0.33f*EnchantmentHelper.getEquipmentLevel(ModEnchantments.HACKING, this))*attackDamage;
         }
         boolean criticalBl = ((PlayerEntity)(Object)this).getAttackCooldownProgress(0.5f) > 0.9f && this.fallDistance > 0.0f && !this.onGround && !this.isClimbing() && !this.isTouchingWater() && !this.hasVehicle() && !this.isSprinting();
         if (this.isSprinting() || criticalBl) {
-            f += 0.15f;
+            thresholdf += 0.15f;
         }
-        return this.random.nextFloat() < f;
+        return this.random.nextFloat() < thresholdf;
     }
 
     @Inject(method = "disableShield", at = @At("HEAD"), cancellable = true)
     private void injectedUnyieldingDisableShield(boolean sprinting, CallbackInfo cbi) {
         if ((this.activeItemStack.getItem() instanceof ShieldItem)) {
-            float f = 0.0f;
+            float randomf = this.random.nextFloat();
+            float thresholdf = 1.0f;
             Item activeShieldItem = this.activeItemStack.getItem();
             int unyieldingLevel = EnchantmentHelper.getLevel(ModEnchantments.UNYIELDING, this.activeItemStack);
-            float randomf = this.random.nextFloat();
             if (this.activeItemStack.isOf(Items.SHIELD)) {
-                f = 0.05f*unyieldingLevel;
-                if (randomf > f) {
-                    ((PlayerEntity)(Object)this).getItemCooldownManager().set(activeShieldItem, 60 - 20*unyieldingLevel);
+                thresholdf -= (3.0f + 1.0f)/20.0f + 0.05f*unyieldingLevel;
+                if (randomf <= thresholdf) {
+                    ((PlayerEntity)(Object)this).getItemCooldownManager().set(activeShieldItem, 60 + this.random.nextBetween(-10, 10) - unyieldingLevel*20);
                     this.clearActiveItem();
                     this.world.sendEntityStatus(this, EntityStatuses.BREAK_SHIELD);
                 }
             }
             else if (this.activeItemStack.getItem() instanceof ModShieldItem) {
                 ModShieldItem modShieldItem = (ModShieldItem)this.activeItemStack.getItem();
-                f = modShieldItem.getUnyieldingModifier()*unyieldingLevel;
-                if (randomf > f) {
-                    ((PlayerEntity)(Object)this).getItemCooldownManager().set(activeShieldItem, modShieldItem.getDisabledTicks() - 20*unyieldingLevel);
+                thresholdf -= (modShieldItem.getMinDamageToBreak() + 1.0f)/20.0f + modShieldItem.getUnyieldingModifier()*unyieldingLevel;
+                if (randomf <= thresholdf) {
+                    ((PlayerEntity)(Object)this).getItemCooldownManager().set(activeShieldItem, modShieldItem.getDisabledTicks() + this.random.nextBetween(-10, 10) - unyieldingLevel*20);
                     this.clearActiveItem();
                     this.world.sendEntityStatus(this, EntityStatuses.BREAK_SHIELD);
                 }
+            }
+            if (!this.world.isClient) {
+                ((PlayerEntity)(Object)this).incrementStat(Stats.USED.getOrCreateStat(activeShieldItem));
             }
             cbi.cancel();
         }

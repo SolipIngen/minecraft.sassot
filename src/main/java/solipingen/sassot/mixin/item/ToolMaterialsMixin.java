@@ -56,13 +56,13 @@ public abstract class ToolMaterialsMixin implements ToolMaterial {
             }
         }
         else if (this.miningLevel == MiningLevels.STONE) {
-            cbireturn.setReturnValue(169);
+            cbireturn.setReturnValue(148);
         }
         else if (this.miningLevel == MiningLevels.IRON) {
             cbireturn.setReturnValue(2*this.itemDurability);
         }
         else if (this.miningLevel >= MiningLevels.DIAMOND) {
-            cbireturn.setReturnValue(MathHelper.ceil(1.5f*this.itemDurability));
+            cbireturn.setReturnValue(MathHelper.ceil(1.25f*this.itemDurability));
         }
     }
 

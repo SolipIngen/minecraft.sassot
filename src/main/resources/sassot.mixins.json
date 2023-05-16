@@ -19,7 +19,6 @@
     "enchantment.SweepingEnchantmentMixin", 
     "entity.accessors.AbstractSkeletonEntityAccessor", 
     "entity.accessors.DamageModifierStatusEffectInvoker", 
-    "entity.accessors.PiglinBrainInvoker", 
     "entity.ai.brain.task.HoldTradeOffersTaskMixin", 
     "entity.ai.brain.task.MeleeAttackTaskMixin", 
     "entity.ai.goal.TridentAttackGoalMixin", 
