@@ -33,13 +33,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
-import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShieldItem;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.TridentItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.DamageTypeTags;
@@ -55,10 +52,9 @@ import net.minecraft.world.event.GameEvent;
 import solipingen.sassot.enchantment.ModEnchantments;
 import solipingen.sassot.entity.projectile.BlazearmEntity;
 import solipingen.sassot.entity.projectile.spear.SpearEntity;
-import solipingen.sassot.item.BlazearmItem;
 import solipingen.sassot.item.ModItems;
 import solipingen.sassot.item.ModShieldItem;
-import solipingen.sassot.item.SpearItem;
+import solipingen.sassot.registry.tag.ModItemTags;
 import solipingen.sassot.sound.ModSoundEvents;
 import solipingen.sassot.util.interfaces.mixin.entity.LivingEntityInterface;
 import solipingen.sassot.util.interfaces.mixin.entity.projectile.TridentEntityInterface;
@@ -258,24 +254,22 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
             }
             if (entity != null && entity instanceof ProjectileEntity) {
                 if (deflectionLevel > 0) {
-                    Vec3d initialVelocity = entity.getVelocity();
-                    Vec3d vec3d2 = initialVelocity.multiply(Math.pow(1.0 + 0.25*deflectionLevel + this.random.nextDouble()/3.0, deflectionLevel));
-                    entity.setVelocity(vec3d2);
                     if (entity instanceof PersistentProjectileEntity) {
                         ((PersistentProjectileEntity)entity).setDamage(((PersistentProjectileEntity)entity).getDamage());
                     }
+                    Vec3d initialVelocity = entity.getVelocity();
+                    Vec3d vec3d2 = initialVelocity.multiply(Math.pow(1.0 + 0.25*deflectionLevel + this.random.nextDouble()/3.0, deflectionLevel));
+                    entity.setVelocity(vec3d2);
                     amount *= 1.0f - 0.15f*deflectionLevel;
                 }
                 if (((LivingEntity)(Object)this) instanceof PlayerEntity) {
-                    Item activeShieldItem = this.activeItemStack.getItem();
-                    float damageReductionf = activeShieldItem instanceof ModShieldItem ? ((ModShieldItem)activeShieldItem).getMinDamageToBreak() : 3.0f;
-                    float f = (float)Math.exp(-MathHelper.square(Math.max(amount - damageReductionf, 0.0f)/((4 - this.world.getDifficulty().getId())*20.0)));
-                    f -= 0.05f*this.world.getLocalDifficulty(this.getBlockPos()).getClampedLocalDifficulty();
-                    int unyieldingLevel = EnchantmentHelper.getLevel(ModEnchantments.UNYIELDING, this.activeItemStack);
                     float randomf = this.random.nextFloat();
+                    float thresholdf = 1.0f/(1.0f + (float)Math.exp(-(amount - 20.0)/(1 + this.world.getDifficulty().getId())));
+                    Item activeShieldItem = this.activeItemStack.getItem();
+                    int unyieldingLevel = EnchantmentHelper.getLevel(ModEnchantments.UNYIELDING, this.activeItemStack);
                     if (this.activeItemStack.isOf(Items.SHIELD)) {
-                        f += 0.05f*unyieldingLevel;
-                        if (randomf > f) {
+                        thresholdf -= 3.0f/20.0f + 0.05f*unyieldingLevel;
+                        if (randomf < thresholdf) {
                             ((PlayerEntity)(Object)this).getItemCooldownManager().set(activeShieldItem, 60 - 20*unyieldingLevel);
                             if (!this.world.isClient) {
                                 boolean bl = ((LivingEntity)(Object)this).isUsingItem();
@@ -289,8 +283,8 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
                     }
                     else if (this.activeItemStack.getItem() instanceof ModShieldItem) {
                         ModShieldItem modShieldItem = (ModShieldItem)this.activeItemStack.getItem();
-                        f += modShieldItem.getUnyieldingModifier()*unyieldingLevel;
-                        if (randomf > f) {
+                        thresholdf -= modShieldItem.getMinDamageToBreak()/20.0f + modShieldItem.getUnyieldingModifier()*unyieldingLevel;
+                        if (randomf < thresholdf) {
                             ((PlayerEntity)(Object)this).getItemCooldownManager().set(activeShieldItem, modShieldItem.getDisabledTicks() - 20*unyieldingLevel);
                             if (!this.world.isClient) {
                                 boolean bl = ((LivingEntity)(Object)this).isUsingItem();
@@ -432,7 +426,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
     private void redirectedPlaySound(LivingEntity livingEntity, SoundEvent originalSoundEvent, float originalVolume, float originalPitch) {
         if (originalSoundEvent == SoundEvents.ITEM_SHIELD_BLOCK && this.activeItemStack.getItem() instanceof ModShieldItem) {
             ModShieldItem modShieldItem = (ModShieldItem)this.activeItemStack.getItem();
-            this.playSound(modShieldItem.getHitSoundEvent(), 0.8f, 0.8f + this.world.random.nextFloat() * 0.4f);
+            this.playSound(modShieldItem.getHitSoundEvent(), 0.8f, 0.8f + this.world.random.nextFloat()*0.4f);
         }
         else {
             this.playSound(originalSoundEvent, originalVolume, originalPitch);
@@ -466,18 +460,17 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
 
     @Inject(method = "disablesShield", at = @At("HEAD"), cancellable = true)
     private void injectedDisablesShield(CallbackInfoReturnable<Boolean> cbireturn) {
-        ItemStack mainHandStack = ((LivingEntity)(Object)this).getMainHandStack();
-        Item mainHandItem = mainHandStack.getItem();
         float randomf = this.random.nextFloat();
-        float thresholdf = 1.0f - (float)Math.exp(-MathHelper.square(((LivingEntity)(Object)this).getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)/((4 - this.world.getDifficulty().getId())*20.0)));
+        float thresholdf = 1.0f/(1.0f + (float)Math.exp(-(((LivingEntity)(Object)this).getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE) - 20.0)/(1 + this.world.getDifficulty().getId())));
+        ItemStack mainHandStack = ((LivingEntity)(Object)this).getMainHandStack();
         float difficultyAdjustment = 0.05f*this.world.getLocalDifficulty(this.getBlockPos()).getClampedLocalDifficulty()*this.world.getDifficulty().getId();
-        if (mainHandItem instanceof SwordItem) {
+        if (mainHandStack.isIn(ModItemTags.SWEEPING_WEAPONS)) {
             cbireturn.setReturnValue(randomf < thresholdf + 0.075f + difficultyAdjustment);
         }
-        else if (mainHandStack.getItem() instanceof SpearItem || mainHandItem instanceof TridentItem || mainHandItem instanceof BlazearmItem) {
+        else if (mainHandStack.isIn(ModItemTags.THRUSTING_WEAPONS) || mainHandStack.isOf(ModItems.BLAZEARM)) {
             cbireturn.setReturnValue(randomf < thresholdf + 0.15f + difficultyAdjustment);
         }
-        else if (mainHandItem instanceof AxeItem) {
+        else if (mainHandStack.isIn(ModItemTags.HACKING_WEAPONS) && !mainHandStack.isOf(ModItems.BLAZEARM)) {
             cbireturn.setReturnValue(randomf < thresholdf + 0.25f + difficultyAdjustment);
         }
         else {
