@@ -277,7 +277,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
     private void onInteractionWith(EntityInteraction interaction, Entity entity, CallbackInfo cbi) {
         if (interaction == EntityInteraction.VILLAGER_HURT) {
             this.setFighterAngryAt(entity.getUuid());
-            List<Entity> hurtNearbyEntities = this.world.getOtherEntities(this, this.getBoundingBox().expand(8.0));
+            List<Entity> hurtNearbyEntities = this.world.getOtherEntities(this, this.getBoundingBox().expand(this.isBaby() ? 16.0 : 8.0), (currentEntity) -> currentEntity.isAlive());
             for (Entity nearbyEntity : hurtNearbyEntities) {
                 if (nearbyEntity instanceof VillagerEntity) {
                     ((AngerableFighterVillager)nearbyEntity).setFighterAngryAt(entity.getUuid());
@@ -288,7 +288,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
             }
         }
         else if (interaction == EntityInteraction.VILLAGER_KILLED) {
-            List<Entity> killedNearbyEntities = this.world.getOtherEntities(this, this.getBoundingBox().expand(16.0));
+            List<Entity> killedNearbyEntities = this.world.getOtherEntities(this, this.getBoundingBox().expand(this.isBaby() ? 32.0 : 16.0), (currentEntity) -> currentEntity.isAlive());
             for (Entity nearbyEntity : killedNearbyEntities) {
                 if (nearbyEntity instanceof VillagerEntity) {
                     ((AngerableFighterVillager)nearbyEntity).setFighterAngryAt(entity.getUuid());
