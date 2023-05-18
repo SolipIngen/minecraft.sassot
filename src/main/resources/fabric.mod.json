@@ -14,7 +14,7 @@
   },
 
   "license": "MIT License",
-  "icon": "assets/sassot/sassot_icon.png",
+  "icon": "assets/sassot/sassot+bettercombat_icon.png",
 
   "environment": "*",
   "entrypoints": {
