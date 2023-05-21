@@ -102,7 +102,7 @@ public class BlazearmItem extends Item implements Vanishable {
                     blazearmEntity.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
                 }
                 world.spawnEntity(blazearmEntity);
-                world.playSoundFromEntity(null, blazearmEntity, ModSoundEvents.BLAZEARM_THROW, SoundCategory.PLAYERS, 1.0f, 0.9f);
+                world.playSoundFromEntity(null, blazearmEntity, ModSoundEvents.BLAZEARM_THROW, SoundCategory.PLAYERS, 1.0f, 0.85f + 0.1f*user.getRandom().nextFloat());
                 if (!playerEntity.getAbilities().creativeMode) {
                     playerEntity.getInventory().removeOne(stack);
                 }
