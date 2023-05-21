@@ -146,7 +146,7 @@ public class SpearItem extends Item implements Vanishable {
                     spearEntity.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
                 }
                 world.spawnEntity(spearEntity);
-                world.playSoundFromEntity(null, spearEntity, ModSoundEvents.SPEAR_THROW, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                world.playSoundFromEntity(null, spearEntity, ModSoundEvents.SPEAR_THROW, SoundCategory.PLAYERS, 1.0f, 1.0f + 0.1f*user.getRandom().nextFloat());
                 if (!playerEntity.getAbilities().creativeMode) {
                     playerEntity.getInventory().removeOne(stack);
                 }
