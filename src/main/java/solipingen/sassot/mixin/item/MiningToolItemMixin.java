@@ -22,7 +22,6 @@ import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.item.Vanishable;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -59,52 +58,26 @@ public abstract class MiningToolItemMixin extends ToolItem implements Vanishable
         }
     }
 
-    @ModifyConstant(method = "isSuitableFor", constant = @Constant(intValue = 3))
-    private int modifiedDiamondLevel(int originalInt) {
-        return ModMiningLevels.DIAMOND;
-    }
-
-    @ModifyConstant(method = "isSuitableFor", constant = @Constant(intValue = 2))
-    private int modifiedIronLevel(int originalInt) {
-        return ModMiningLevels.IRON;
-    }
-
-    @ModifyConstant(method = "isSuitableFor", constant = @Constant(intValue = 1))
-    private int modifiedStoneLevel(int originalInt) {
-        return ModMiningLevels.STONE;
-    }
-
-    @Redirect(method = "isSuitableFor", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isIn(Lnet/minecraft/registry/tag/TagKey;)Z"))
-    private boolean redirectedIsIn(BlockState state, TagKey<Block> blockTag) {
-        if (blockTag == BlockTags.NEEDS_DIAMOND_TOOL) {
-            if (state.isIn(BlockTags.NEEDS_DIAMOND_TOOL) && !state.isIn(ModBlockTags.NEEDS_DIAMOND_TOOL)) {
-                return state.isIn(BlockTags.NEEDS_DIAMOND_TOOL);
-            }
-            return state.isIn(ModBlockTags.NEEDS_DIAMOND_TOOL);
-        }
-        else if (blockTag == BlockTags.NEEDS_IRON_TOOL) {
-            if (state.isIn(BlockTags.NEEDS_IRON_TOOL) && !state.isIn(ModBlockTags.NEEDS_IRON_TOOL)) {
-                return state.isIn(BlockTags.NEEDS_IRON_TOOL);
-            }
-            return state.isIn(ModBlockTags.NEEDS_IRON_TOOL);
-        }
-        else if (blockTag == BlockTags.NEEDS_STONE_TOOL) {
-            if (state.isIn(BlockTags.NEEDS_STONE_TOOL) && !state.isIn(ModBlockTags.NEEDS_STONE_TOOL)) {
-                return state.isIn(BlockTags.NEEDS_STONE_TOOL);
-            }
-            return state.isIn(ModBlockTags.NEEDS_STONE_TOOL);
-        }
-        return state.isIn(blockTag);
-    }
-
-    @Inject(method = "isSuitableFor", at = @At("TAIL"), cancellable = true)
+    @Inject(method = "isSuitableFor", at = @At("HEAD"), cancellable = true)
     private void injectedIsSuitableFor(BlockState state, CallbackInfoReturnable<Boolean> cbireturn) {
         int i = this.getMaterial().getMiningLevel();
         if (i < ModMiningLevels.NETHERITE && state.isIn(ModBlockTags.NEEDS_NETHERITE_TOOL)) {
             cbireturn.setReturnValue(false);
         }
-        if (i < ModMiningLevels.COPPER && state.isIn(ModBlockTags.NEEDS_COPPER_TOOL)) {
+        else if (i < ModMiningLevels.DIAMOND && state.isIn(ModBlockTags.NEEDS_DIAMOND_TOOL)) {
             cbireturn.setReturnValue(false);
+        }
+        else if (i < ModMiningLevels.IRON && state.isIn(ModBlockTags.NEEDS_IRON_TOOL)) {
+            cbireturn.setReturnValue(false);
+        }
+        else if (i < ModMiningLevels.COPPER && state.isIn(ModBlockTags.NEEDS_COPPER_TOOL)) {
+            cbireturn.setReturnValue(false);
+        }
+        else if (i < ModMiningLevels.STONE && state.isIn(ModBlockTags.NEEDS_STONE_TOOL)) {
+            cbireturn.setReturnValue(false);
+        }
+        else {
+            cbireturn.setReturnValue(state.isIn(this.effectiveBlocks));
         }
     }
 
