@@ -36,7 +36,7 @@ import solipingen.sassot.item.ModShieldItem;
 
 
 @Mixin(BuiltinModelItemRenderer.class)
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public abstract class BuiltinModelItemRendererMixin implements SynchronousResourceReloader {
     @Shadow private ShieldEntityModel modelShield;
     

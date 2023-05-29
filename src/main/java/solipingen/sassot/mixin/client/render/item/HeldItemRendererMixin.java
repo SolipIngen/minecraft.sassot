@@ -16,7 +16,7 @@ import net.minecraft.util.Hand;
 
 
 @Mixin(HeldItemRenderer.class)
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public abstract class HeldItemRendererMixin {
     @Shadow private ItemStack mainHand;
 

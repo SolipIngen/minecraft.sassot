@@ -28,7 +28,7 @@ import solipingen.sassot.village.ModVillagerProfessions;
 
 
 @Mixin(VillagerHeldItemFeatureRenderer.class)
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public abstract class VillagerHeldItemFeatureRendererMixin<T extends LivingEntity, M extends EntityModel<T>> extends FeatureRenderer<T, M> {
     @Shadow @Final private HeldItemRenderer heldItemRenderer;
 

@@ -1,5 +1,7 @@
 package solipingen.sassot.client.render.entity.model.projectile;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.model.Dilation;
 import net.minecraft.client.model.ModelData;
 import net.minecraft.client.model.ModelPart;
@@ -13,6 +15,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import solipingen.sassot.entity.projectile.BlazearmEntity;
 
 
+@Environment(value = EnvType.CLIENT)
 public class BlazearmEntityModel extends EntityModel<BlazearmEntity> {
 	private final ModelPart blazearm;
 

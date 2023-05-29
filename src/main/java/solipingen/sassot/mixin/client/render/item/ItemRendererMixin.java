@@ -33,7 +33,7 @@ import solipingen.sassot.item.SpearItem;
 
 
 @Mixin(ItemRenderer.class)
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public abstract class ItemRendererMixin implements SynchronousResourceReloader {
     @Shadow @Final private ItemModels models;
 

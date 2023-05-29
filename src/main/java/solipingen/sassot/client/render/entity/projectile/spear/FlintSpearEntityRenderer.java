@@ -18,7 +18,7 @@ import solipingen.sassot.client.render.entity.model.projectile.spear.FlintSpearE
 import solipingen.sassot.entity.projectile.spear.FlintSpearEntity;
 
 
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public class FlintSpearEntityRenderer extends EntityRenderer<FlintSpearEntity> {
     public static final Identifier TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "textures/entity/spear/flint_spear.png");
     private final FlintSpearEntityModel model;

@@ -19,7 +19,7 @@ import solipingen.sassot.item.SpearItem;
 
 
 @Mixin(SkeletonEntityModel.class)
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public abstract class SkeletonEntityModelMixin<T extends MobEntity> extends BipedEntityModel<T> {
 
 

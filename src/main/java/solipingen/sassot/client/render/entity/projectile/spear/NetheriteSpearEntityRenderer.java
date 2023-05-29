@@ -18,7 +18,7 @@ import solipingen.sassot.client.render.entity.model.projectile.spear.NetheriteSp
 import solipingen.sassot.entity.projectile.spear.NetheriteSpearEntity;
 
 
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public class NetheriteSpearEntityRenderer extends EntityRenderer<NetheriteSpearEntity> {
     public static final Identifier TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "textures/entity/spear/netherite_spear.png");
     private final NetheriteSpearEntityModel model;
