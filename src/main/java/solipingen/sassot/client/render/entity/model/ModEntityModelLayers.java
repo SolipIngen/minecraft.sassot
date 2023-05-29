@@ -18,7 +18,7 @@ import solipingen.sassot.client.render.entity.model.projectile.spear.StoneSpearE
 import solipingen.sassot.client.render.entity.model.projectile.spear.WoodenSpearEntityModel;
 
 
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public class ModEntityModelLayers {
     public static final EntityModelLayer WOODEN_SPEAR_ENTITY_MODEL_LAYER = new EntityModelLayer(new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "wooden_spear"), "main");
     public static final EntityModelLayer BAMBOO_SPEAR_ENTITY_MODEL_LAYER = new EntityModelLayer(new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "bamboo_spear"), "main");

@@ -17,7 +17,7 @@ import solipingen.sassot.client.render.entity.projectile.spear.WoodenSpearEntity
 import solipingen.sassot.entity.ModEntityTypes;
 
 
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public class ModEntityRendererRegistry {
 
     

@@ -19,7 +19,7 @@ import solipingen.sassot.util.interfaces.mixin.entity.LivingEntityInterface;
 
 
 @Mixin(TridentRiptideFeatureRenderer.class)
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public abstract class TridentRiptideFeatureRendererMixin<T extends LivingEntity> {
     @Shadow @Final private static Identifier TEXTURE;
 

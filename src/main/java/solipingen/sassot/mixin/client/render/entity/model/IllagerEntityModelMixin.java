@@ -18,7 +18,7 @@ import solipingen.sassot.item.SpearItem;
 
 
 @Mixin(IllagerEntityModel.class)
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public abstract class IllagerEntityModelMixin<T extends IllagerEntity> {
     @Shadow @Final private ModelPart rightArm;
     @Shadow @Final private ModelPart leftArm;

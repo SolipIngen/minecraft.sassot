@@ -18,7 +18,7 @@ import solipingen.sassot.client.render.entity.model.projectile.spear.DiamondSpea
 import solipingen.sassot.entity.projectile.spear.DiamondSpearEntity;
 
 
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public class DiamondSpearEntityRenderer extends EntityRenderer<DiamondSpearEntity> {
     public static final Identifier TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "textures/entity/spear/diamond_spear.png");
     private final DiamondSpearEntityModel model;

@@ -22,7 +22,7 @@ import solipingen.sassot.item.SpearItem;
 
 
 @Mixin(BipedEntityModel.class)
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public abstract class BipedEntityModelMixin<T extends LivingEntity> {
     @Shadow @Final public ModelPart head;
     @Shadow @Final public ModelPart hat;

@@ -18,7 +18,7 @@ import solipingen.sassot.client.render.entity.model.projectile.spear.CopperSpear
 import solipingen.sassot.entity.projectile.spear.CopperSpearEntity;
 
 
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public class CopperSpearEntityRenderer extends EntityRenderer<CopperSpearEntity> {
     public static final Identifier TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "textures/entity/spear/copper_spear.png");
     private final CopperSpearEntityModel model;

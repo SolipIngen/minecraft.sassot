@@ -26,7 +26,7 @@ import solipingen.sassot.item.SpearItem;
 
 
 @Mixin(HeldItemFeatureRenderer.class)
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public abstract class HeldItemFeatureRendererMixin<T extends LivingEntity, M extends EntityModel<T>> {
     @Shadow @Final private HeldItemRenderer heldItemRenderer;
     

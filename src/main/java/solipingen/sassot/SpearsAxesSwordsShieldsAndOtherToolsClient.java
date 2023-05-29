@@ -7,7 +7,8 @@ import solipingen.sassot.client.item.ModModelPredicateProvider;
 import solipingen.sassot.client.render.entity.ModEntityRendererRegistry;
 import solipingen.sassot.client.render.entity.model.ModEntityModelLayers;
 
-@Environment(value=EnvType.CLIENT)
+
+@Environment(value = EnvType.CLIENT)
 public class SpearsAxesSwordsShieldsAndOtherToolsClient implements ClientModInitializer {
 
     

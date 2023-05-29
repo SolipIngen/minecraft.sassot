@@ -15,7 +15,7 @@ import solipingen.sassot.item.SpearItem;
 
 
 @Mixin(PiglinEntityModel.class)
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public abstract class PiglinEntityModelMixin<T extends MobEntity> extends PlayerEntityModel<T> {
 
 

@@ -1,5 +1,7 @@
 package solipingen.sassot.client.render.entity.model.projectile.spear;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.model.Dilation;
 import net.minecraft.client.model.ModelData;
 import net.minecraft.client.model.ModelPart;
@@ -15,6 +17,7 @@ import solipingen.sassot.SpearsAxesSwordsShieldsAndOtherTools;
 import solipingen.sassot.entity.projectile.spear.StoneSpearEntity;
 
 
+@Environment(value = EnvType.CLIENT)
 public class StoneSpearEntityModel extends EntityModel<StoneSpearEntity> {
 	public static final Identifier TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "textures/entity/spear/stone_spear.png");
 	private final ModelPart pole;
