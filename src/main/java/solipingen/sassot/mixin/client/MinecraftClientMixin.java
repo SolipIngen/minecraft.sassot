@@ -38,7 +38,7 @@ import solipingen.sassot.util.interfaces.mixin.client.MinecraftClientInterface;
 
 
 @Mixin(MinecraftClient.class)
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public abstract class MinecraftClientMixin extends ReentrantThreadExecutor<Runnable> implements WindowEventHandler, MinecraftClientInterface {
     @Shadow @Nullable public ClientPlayerEntity player;
     @Shadow @Nullable public ClientWorld world;

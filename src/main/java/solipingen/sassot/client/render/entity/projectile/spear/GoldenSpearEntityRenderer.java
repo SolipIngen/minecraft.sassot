@@ -18,7 +18,7 @@ import solipingen.sassot.client.render.entity.model.projectile.spear.GoldenSpear
 import solipingen.sassot.entity.projectile.spear.GoldenSpearEntity;
 
 
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public class GoldenSpearEntityRenderer extends EntityRenderer<GoldenSpearEntity> {
     public static final Identifier TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "textures/entity/spear/golden_spear.png");
     private final GoldenSpearEntityModel model;

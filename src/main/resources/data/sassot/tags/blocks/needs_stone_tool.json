@@ -59,6 +59,10 @@
       "minecraft:waxed_oxidized_cut_copper_slab",
       "minecraft:waxed_oxidized_cut_copper_stairs",
       "minecraft:waxed_oxidized_cut_copper",
-      "minecraft:lightning_rod"
+      "minecraft:lightning_rod",
+      "minecraft:gold_block",
+      "minecraft:raw_gold_block",
+      "minecraft:gold_ore",
+      "minecraft:deepslate_gold_ore"
     ]
 }

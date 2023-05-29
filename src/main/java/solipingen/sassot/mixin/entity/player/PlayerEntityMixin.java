@@ -9,9 +9,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -27,6 +29,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.BlazeEntity;
@@ -266,9 +269,20 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         return originalAdditionf;
     }
 
-    @ModifyConstant(method = "attack", constant = @Constant(floatValue = 1.5f))
-    private float modifiedCriticalMultiplier(float originalf) {
-        return Math.min(MathHelper.square(1.0f + 0.1f*Math.max(this.getHeight() + 0.1f, 1.0f)*this.fallDistance), originalf);
+    @ModifyArg(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"), index = 1, 
+        slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;takeKnockback(DDD)V")))
+    private float modifiedCriticalDamage(DamageSource damageSource, float originalf) {
+        float f = (float)this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        float g = EnchantmentHelper.getAttackDamage(this.getMainHandStack(), EntityGroup.DEFAULT);
+        float h = ((PlayerEntity)(Object)this).getAttackCooldownProgress(0.5f);
+        g *= h;
+        f += g;
+        boolean criticalBl = originalf >= 1.5f*f;
+        if (criticalBl) {
+            float criticalDamagef = MathHelper.square(1.0f + 1.0f/3.0f*(float)Math.abs(this.getVelocity().getY()))*originalf/1.5f;
+            return criticalDamagef;
+        }
+        return originalf;
     }
 
     @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setSprinting(Z)V"))

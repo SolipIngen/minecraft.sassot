@@ -18,7 +18,7 @@ import solipingen.sassot.client.render.entity.model.projectile.spear.BambooSpear
 import solipingen.sassot.entity.projectile.spear.BambooSpearEntity;
 
 
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public class BambooSpearEntityRenderer extends EntityRenderer<BambooSpearEntity> {
     public static final Identifier TEXTURE = new Identifier(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "textures/entity/spear/bamboo_spear.png");
     private final BambooSpearEntityModel model;

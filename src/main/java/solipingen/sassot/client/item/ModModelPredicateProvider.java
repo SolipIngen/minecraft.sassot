@@ -16,7 +16,7 @@ import solipingen.sassot.enchantment.ModEnchantments;
 import solipingen.sassot.item.ModItems;
 
 
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public class ModModelPredicateProvider {
     
     

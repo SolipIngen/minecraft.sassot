@@ -31,7 +31,7 @@ import solipingen.sassot.item.ModToolMaterials;
 
 
 @Mixin(FishingBobberEntityRenderer.class)
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public abstract class FishingBobberEntityRendererMixin extends EntityRenderer<FishingBobberEntity> {
     @Shadow @Final private static Identifier TEXTURE;
     @Shadow @Final private static RenderLayer LAYER;

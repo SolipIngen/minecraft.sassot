@@ -29,7 +29,7 @@ import solipingen.sassot.util.interfaces.mixin.client.MinecraftClientInterface;
 
 
 @Mixin(InGameHud.class)
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public abstract class InGameHudMixin extends DrawableHelper {
     @Shadow @Final private MinecraftClient client;
 

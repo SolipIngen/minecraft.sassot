@@ -17,7 +17,7 @@ import solipingen.sassot.registry.tag.ModItemTags;
 
 
 @Mixin(GameRenderer.class)
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public abstract class GameRendererMixin implements AutoCloseable {
     @Shadow @Final MinecraftClient client;
     

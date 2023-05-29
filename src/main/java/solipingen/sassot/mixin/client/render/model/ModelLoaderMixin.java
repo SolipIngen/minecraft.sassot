@@ -27,7 +27,7 @@ import solipingen.sassot.item.SpearItem;
 
 
 @Mixin(ModelLoader.class)
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public abstract class ModelLoaderMixin {
 
     @Invoker("addModel")

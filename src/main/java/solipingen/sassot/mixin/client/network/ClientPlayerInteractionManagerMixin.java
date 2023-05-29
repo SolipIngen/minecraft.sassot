@@ -18,7 +18,7 @@ import solipingen.sassot.registry.tag.ModItemTags;
 
 
 @Mixin(ClientPlayerInteractionManager.class)
-@Environment(value=EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 public abstract class ClientPlayerInteractionManagerMixin {
     @Shadow @Final private MinecraftClient client;
     @Shadow private GameMode gameMode;
