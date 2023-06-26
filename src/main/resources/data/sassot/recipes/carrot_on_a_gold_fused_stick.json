@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+      "#": {
+        "item": "sassot:gold_fused_fishing_rod"
+      },
+      "X": {
+        "item": "minecraft:carrot"
+      }
+    },
+    "pattern": [
+      "# ",
+      " X"
+    ],
+    "result": {
+      "item": "sassot:carrot_on_a_gold_fused_stick"
+    },
+    "show_notification": true
+}
