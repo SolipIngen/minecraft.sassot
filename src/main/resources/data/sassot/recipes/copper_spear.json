@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+      "o": {
+        "item": "minecraft:copper_ingot"
+      },
+      "p": {
+        "item": "minecraft:stick"
+      }
+    },
+    "pattern": [
+      "  o",
+      " p ",
+      "o  "
+    ],
+    "result": {
+      "item": "sassot:copper_spear"
+    }
+}

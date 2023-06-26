@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "sassot",
+  "version": "1.1.0-1.20.1",
+
+  "name": "Spears, Axes, Swords, Shields, and Other Tools",
+  "description": "A mod that adds Spears, enhances Shields, and reworks Swords, Axes, and other Tools. Follow the progression chain, use new copper tools and weapons, and cast new enchantments, protecting yourself from the treacherous World.",
+  "authors": [
+    "SolipIngen"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": "https://github.com/SolipIngen/minecraft.sassot"
+  },
+
+  "license": "MIT License",
+  "icon": "assets/sassot/sassot_icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "solipingen.sassot.SpearsAxesSwordsShieldsAndOtherTools"
+    ],
+    "client": [
+      "solipingen.sassot.SpearsAxesSwordsShieldsAndOtherToolsClient"
+    ],
+    "fabric-datagen": [
+      "solipingen.sassot.SpearsAxesSwordsShieldsAndOtherToolsDataGenerator"
+    ],
+    "dynamiclights": [
+      "solipingen.sassot.client.integration.lambdynlights.ModLambDynamicLightsPlugin"
+    ]
+  },
+  "mixins": [
+    "sassot.mixins.json",
+    {
+			"config": "sassot.client.mixins.json",
+			"environment": "client"
+		}
+  ],
+
+  "depends": {
+		"fabricloader": ">=0.14.21",
+		"minecraft": ">=1.20",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+  "suggests": {
+    "another-mod": [
+      "armorrestitched",
+      "progressivearchery"]
+  }
+}

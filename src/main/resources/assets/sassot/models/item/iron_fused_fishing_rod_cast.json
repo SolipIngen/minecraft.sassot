@@ -1,0 +1,7 @@
+{
+    "parent": "sassot:item/generic/fishing_rod_cast",
+    "textures": {
+        "3": "sassot:item/iron_fused_fishing_rod_cast",
+        "particle": "sassot:item/iron_fused_fishing_rod_cast"
+    }
+}

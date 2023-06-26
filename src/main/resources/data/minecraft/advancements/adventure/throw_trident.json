@@ -1,0 +1,66 @@
+{
+  "parent": "minecraft:adventure/kill_a_mob",
+  "criteria": {
+    "throw_spear": {
+      "conditions": {
+        "item": {
+          "items": [
+            "sassot:wooden_spear", 
+            "sassot:bamboo_spear", 
+            "sassot:stone_spear", 
+            "sassot:flint_spear", 
+            "sassot:copper_spear", 
+            "sassot:golden_spear", 
+            "sassot:iron_spear", 
+            "sassot:diamond_spear", 
+            "sassot:netherite_spear"
+          ]
+        }
+      },
+      "trigger": "sassot:throw_spear"
+    }, 
+    "throw_trident": {
+      "conditions": {
+        "item": {
+          "items": [
+            "minecraft:trident"
+          ]
+        }
+      },
+      "trigger": "sassot:throw_spear"
+    }, 
+    "throw_blazearm": {
+      "conditions": {
+        "item": {
+          "items": [
+            "sassot:blazearm"
+          ]
+        }
+      },
+      "trigger": "sassot:throw_spear"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.adventure.throw_trident.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "sassot:stone_spear",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.adventure.throw_trident.title"
+    }
+  },
+  "requirements": [
+    [
+      "throw_spear", 
+      "throw_trident", 
+      "throw_blazearm"
+    ]
+  ]
+}
