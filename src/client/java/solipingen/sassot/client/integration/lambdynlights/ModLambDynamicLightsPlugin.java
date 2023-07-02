@@ -1,4 +1,4 @@
-package solipingen.sassot.mixin.client.integration.lambdynlights;
+package solipingen.sassot.client.integration.lambdynlights;
 
 import dev.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import dev.lambdaurora.lambdynlights.api.DynamicLightsInitializer;
