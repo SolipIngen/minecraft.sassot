@@ -23,13 +23,13 @@ public class ModBlocks {
         new EchoCrystalClusterBlock(7, 3, FabricBlockSettings.copy(Blocks.AMETHYST_CLUSTER).strength(2.0f).luminance(state -> 10).sounds(ModBlockSoundGroup.ECHO_CLUSTER)), true);
     
     public static final Block LARGE_ECHO_CRYSTAL_BUD = ModBlocks.registerBlock("large_echo_crystal_bud", 
-        new EchoCrystalClusterBlock(5, 3, FabricBlockSettings.copy(ECHO_CRYSTAL_CLUSTER).luminance(state -> 9).sounds(ModBlockSoundGroup.LARGE_ECHO_BUD)), true);
+        new EchoCrystalClusterBlock(5, 3, FabricBlockSettings.copy(ECHO_CRYSTAL_CLUSTER).luminance(state -> 8).sounds(ModBlockSoundGroup.LARGE_ECHO_BUD)), true);
 
     public static final Block MEDIUM_ECHO_CRYSTAL_BUD = ModBlocks.registerBlock("medium_echo_crystal_bud", 
-        new EchoCrystalClusterBlock(4, 3, FabricBlockSettings.copy(ECHO_CRYSTAL_CLUSTER).luminance(state -> 8).sounds(ModBlockSoundGroup.MEDIUM_ECHO_BUD)), true);
+        new EchoCrystalClusterBlock(4, 3, FabricBlockSettings.copy(ECHO_CRYSTAL_CLUSTER).luminance(state -> 6).sounds(ModBlockSoundGroup.MEDIUM_ECHO_BUD)), true);
 
     public static final Block SMALL_ECHO_CRYSTAL_BUD = ModBlocks.registerBlock("small_echo_crystal_bud", 
-        new EchoCrystalClusterBlock(3, 4, FabricBlockSettings.copy(ECHO_CRYSTAL_CLUSTER).luminance(state -> 7).sounds(ModBlockSoundGroup.SMALL_ECHO_BUD)), true);
+        new EchoCrystalClusterBlock(3, 4, FabricBlockSettings.copy(ECHO_CRYSTAL_CLUSTER).luminance(state -> 4).sounds(ModBlockSoundGroup.SMALL_ECHO_BUD)), true);
 
     
     // Villager Fighter Marker
