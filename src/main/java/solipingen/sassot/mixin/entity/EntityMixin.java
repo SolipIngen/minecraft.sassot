@@ -21,18 +21,6 @@ import solipingen.sassot.util.interfaces.mixin.entity.EntityInterface;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements EntityInterface {
-    
-
-    @Redirect(method = "move", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;noneMatch(Ljava/util/function/Predicate;)Z"))
-    private boolean redirectedNoneMatch(Stream<BlockState> blockStream, Predicate<? super BlockState> blockStatePredicate, MovementType movementType, Vec3d movement) {
-        if (((Entity)(Object)this) instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity)((Entity)(Object)this);
-            if (player.isUsingRiptide()) {
-                return false;
-            }
-        }
-        return blockStream.noneMatch(blockStatePredicate);
-    }
 
 
     @Override
