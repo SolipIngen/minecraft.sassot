@@ -16,7 +16,7 @@ public class ModLambDynamicLightsPlugin implements DynamicLightsInitializer {
 
         DynamicLightHandlers.registerDynamicLightHandler(ModEntityTypes.BLAZEARM_ENTITY, (entity) -> {
             if (entity.isTouchingWater()) {
-                return 2;
+                return 4;
             }
             return 14;
         });
