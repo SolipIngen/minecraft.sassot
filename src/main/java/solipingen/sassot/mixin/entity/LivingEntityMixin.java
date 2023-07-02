@@ -249,8 +249,10 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
                 LivingEntity livingEntity = (LivingEntity)entity;
                 float knockbackResistance = (float)livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE);
                 float reboundDamage = 0.2f*shockReboundLevel*amount*knockbackResistance;
-                livingEntity.damage(this.getDamageSources().thorns(this), reboundDamage);
-                livingEntity.takeKnockback(0.2*shockReboundLevel*reboundDamage, this.getX() - entity.getX(), this.getZ() - entity.getZ());
+                if (knockbackResistance > 0.0f) {
+                    livingEntity.damage(this.getDamageSources().thorns(this), reboundDamage);
+                }
+                livingEntity.takeKnockback(0.04*shockReboundLevel*Math.max(amount - reboundDamage, 0.0f), this.getX() - entity.getX(), this.getZ() - entity.getZ());
                 ((LivingEntity)(Object)this).takeKnockback(0.02*Math.max((4 - shockReboundLevel), 0)*amount, entity.getX() - this.getX(), entity.getZ() - this.getZ());
             }
             if (entity != null && entity instanceof ProjectileEntity) {

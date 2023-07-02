@@ -136,7 +136,7 @@ public abstract class FishingBobberEntityMixin extends ProjectileEntity implemen
             if (entity instanceof ItemEntity) {
                 return (material.getMiningLevel()/6.0 + 1.0)*0.15;
             }
-            return pullResistanceFactor*(2.0/3.0*material.getMiningLevel() + 1.0)*0.15;
+            return pullResistanceFactor*(0.125*material.getMiningLevel() + 1.0)*0.15;
         }
         return pullResistanceFactor*0.15;
     }
