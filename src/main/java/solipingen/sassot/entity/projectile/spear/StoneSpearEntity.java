@@ -8,7 +8,7 @@ import solipingen.sassot.entity.ModEntityTypes;
 
 
 public class StoneSpearEntity extends SpearEntity {
-    private static final float DAMAGE_AMOUNT = 6.0f;
+    private static final float DAMAGE_AMOUNT = 5.0f;
     public static final float SPEED = 2.1f;
 
     

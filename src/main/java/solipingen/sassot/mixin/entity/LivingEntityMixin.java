@@ -308,18 +308,20 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
                 }
                 double d1 = Math.pow(0.4, echoingLevel)*(1.0 - ((LivingEntity)(Object)this).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE));
                 double e1 = Math.pow(0.8, echoingLevel)*(1.0 - ((LivingEntity)(Object)this).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE));
-                Vec3d vec3d2 = new Vec3d(this.getX() - entity.getX(), this.getY() - entity.getY(), this.getZ() - entity.getZ());
-                vec3d2 = vec3d2.normalize().multiply(e1, d1, e1);
-                ((LivingEntity)(Object)this).addVelocity(vec3d2);
-                float distance = this.distanceTo(entity);
-                float distanceModifier = Math.max(MathHelper.square(distance), 1.0f);
-                if (entity != null && entity instanceof LivingEntity) {
-                    ((LivingEntity)entity).damage(this.getDamageSources().sonicBoom(entity), (amount - damagef)/distanceModifier);
-                    double d2 = Math.pow(0.4, Math.max(4 - echoingLevel, 0))*(amount - damagef)/distanceModifier*(1.0 - ((LivingEntity)entity).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE));
-                    double e2 = Math.pow(0.8, Math.max(4 - echoingLevel, 0))*(amount - damagef)/distanceModifier*(1.0 - ((LivingEntity)entity).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE));
-                    Vec3d vec3d3 = new Vec3d(entity.getX() - this.getX(), entity.getY() - this.getY(), entity.getZ() - this.getZ());
-                    vec3d3 = vec3d3.normalize().multiply(e2, d2, e2);
-                    ((LivingEntity)(Object)entity).addVelocity(vec3d2);
+                if (entity != null) {
+                    Vec3d vec3d2 = new Vec3d(this.getX() - entity.getX(), this.getY() - entity.getY(), this.getZ() - entity.getZ());
+                    vec3d2 = vec3d2.normalize().multiply(e1, d1, e1);
+                    ((LivingEntity)(Object)this).addVelocity(vec3d2);
+                    float distance = this.distanceTo(entity);
+                    float distanceModifier = Math.max(MathHelper.square(distance), 1.0f);
+                    if (entity != null && entity instanceof LivingEntity) {
+                        ((LivingEntity)entity).damage(this.getDamageSources().sonicBoom(entity), (amount - damagef)/distanceModifier);
+                        double d2 = Math.pow(0.4, Math.max(4 - echoingLevel, 0))*(amount - damagef)/distanceModifier*(1.0 - ((LivingEntity)entity).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE));
+                        double e2 = Math.pow(0.8, Math.max(4 - echoingLevel, 0))*(amount - damagef)/distanceModifier*(1.0 - ((LivingEntity)entity).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE));
+                        Vec3d vec3d3 = new Vec3d(entity.getX() - this.getX(), entity.getY() - this.getY(), entity.getZ() - this.getZ());
+                        vec3d3 = vec3d3.normalize().multiply(e2, d2, e2);
+                        ((LivingEntity)(Object)entity).addVelocity(vec3d2);
+                    }
                 }
                 Box echoingBox = this.getBoundingBox().expand(8.0*echoingLevel);
                 List<Entity> otherEntityList = world.getOtherEntities(this, echoingBox);
@@ -335,7 +337,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
                         double e3 = Math.pow(0.8, Math.max(4 - echoingLevel, 0))*(amount - damagef)/otherDistanceModifier*(1.0 - ((LivingEntity)otherEntity).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE));
                         Vec3d vec3d4 = new Vec3d(otherEntity.getX() - this.getX(), otherEntity.getY() - this.getY(), otherEntity.getZ() - this.getZ());
                         vec3d4 = vec3d4.normalize().multiply(e3, d3, e3);
-                        ((LivingEntity)(Object)otherEntity).addVelocity(vec3d2);
+                        ((LivingEntity)(Object)otherEntity).addVelocity(vec3d4);
                     }
                 }
                 if (world instanceof ServerWorld && (!(source.isOf(DamageTypes.FALLING_ANVIL) || source.isOf(DamageTypes.FALLING_STALACTITE) || source.isOf(DamageTypes.STALAGMITE)))) {

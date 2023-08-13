@@ -21,6 +21,7 @@
     "entity.accessors.DamageModifierStatusEffectInvoker", 
     "entity.ai.brain.task.HoldTradeOffersTaskMixin", 
     "entity.ai.brain.task.MeleeAttackTaskMixin", 
+    "entity.ai.goal.MeleeAttackGoalMixin", 
     "entity.ai.goal.TridentAttackGoalMixin", 
     "entity.effect.StatusEffectsMixin", 
     "entity.mob.DrownedEntityMixin", 

@@ -82,10 +82,10 @@ public abstract class MobEntityMixin extends LivingEntity {
     private void injectedSquaredAttackRange(LivingEntity target, CallbackInfoReturnable<Double> cbireturn) {
         ItemStack mainHandStack = this.getMainHandStack();
         if (mainHandStack.isIn(ModItemTags.SWEEPING_WEAPONS)) {
-            cbireturn.setReturnValue((double)MathHelper.square(this.getWidth()*2.0f + 0.5f + target.getWidth()));
+            cbireturn.setReturnValue((double)MathHelper.square(this.getWidth()*2.0f + 0.5f) + target.getWidth());
         }
         else if (mainHandStack.isIn(ModItemTags.THRUSTING_WEAPONS) || mainHandStack.isOf(ModItems.BLAZEARM)) {
-            cbireturn.setReturnValue((double)MathHelper.square(this.getWidth()*2.0f + 1.0f + target.getWidth()));
+            cbireturn.setReturnValue((double)MathHelper.square(this.getWidth()*2.0f + 1.0f) + target.getWidth());
         }
     }
     

@@ -25,19 +25,19 @@ public class ModItems {
         new SpearItem(ToolMaterials.WOOD, 4.0f, -2.3, new FabricItemSettings()));
     
     public static final Item BAMBOO_SPEAR = ModItems.registerItem("bamboo_spear", 
-        new SpearItem(ToolMaterials.WOOD, 5.0f, -2.2, new FabricItemSettings()));
+        new SpearItem(ToolMaterials.WOOD, 4.0f, -2.2, new FabricItemSettings()));
     
     public static final Item STONE_SPEAR = ModItems.registerItem("stone_spear", 
-        new SpearItem(ToolMaterials.STONE, 6.0f, -2.8, new FabricItemSettings()));
+        new SpearItem(ToolMaterials.STONE, 5.0f, -2.8, new FabricItemSettings()));
     
     public static final Item FLINT_SPEAR = ModItems.registerItem("flint_spear", 
-        new SpearItem(ToolMaterials.STONE, 6.0f, -2.5, new FabricItemSettings()));
+        new SpearItem(ToolMaterials.STONE, 5.0f, -2.5, new FabricItemSettings()));
     
     public static final Item COPPER_SPEAR = ModItems.registerItem("copper_spear", 
-        new SpearItem(ModToolMaterials.COPPER, 7.0f, -2.6, new FabricItemSettings()));
+        new SpearItem(ModToolMaterials.COPPER, 6.0f, -2.6, new FabricItemSettings()));
     
     public static final Item GOLDEN_SPEAR = ModItems.registerItem("golden_spear", 
-        new SpearItem(ToolMaterials.GOLD, 7.0f, -2.6, new FabricItemSettings()));
+        new SpearItem(ToolMaterials.GOLD, 6.0f, -2.6, new FabricItemSettings()));
 
     public static final Item IRON_SPEAR = ModItems.registerItem("iron_spear", 
         new SpearItem(ToolMaterials.IRON, 8.0f, -2.5, new FabricItemSettings()));

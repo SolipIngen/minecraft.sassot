@@ -10,6 +10,7 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.SweepingEnchantment;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
 import solipingen.sassot.registry.tag.ModItemTags;
 
 
@@ -29,7 +30,7 @@ public abstract class SweepingEnchantmentMixin extends Enchantment {
 
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
-        return stack.isIn(ModItemTags.SWEEPING_WEAPONS);
+        return stack.getItem() instanceof SwordItem || stack.isIn(ModItemTags.SWEEPING_WEAPONS);
     }
 
     
