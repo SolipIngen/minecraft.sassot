@@ -32,7 +32,7 @@ public abstract class ItemsMixin {
         int rawId = Item.getRawId(item);
         if (item instanceof SwordItem) {
             if (name.matches("wooden_sword")) {
-                Item newSwordItem = (Item)new SwordItem(ToolMaterials.WOOD, 2, -1.8f, new Item.Settings());
+                Item newSwordItem = (Item)new SwordItem(ToolMaterials.WOOD, 3, -1.8f, new Item.Settings());
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, name, newSwordItem));
             }
             else if (name.matches("stone_sword")) {
@@ -40,7 +40,7 @@ public abstract class ItemsMixin {
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, name, newSwordItem));
             }
             else if (name.matches("golden_sword")) {
-                Item newSwordItem = (Item)new SwordItem(ToolMaterials.GOLD, 4, -2.3f, new Item.Settings());
+                Item newSwordItem = (Item)new SwordItem(ToolMaterials.GOLD, 5, -2.3f, new Item.Settings());
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, name, newSwordItem));
             }
             else if (name.matches("iron_sword")) {
@@ -58,7 +58,7 @@ public abstract class ItemsMixin {
         }
         else if (item instanceof AxeItem) {
             if  (name.matches("wooden_axe")) {
-                Item newAxeItem = (Item)new AxeItem(ToolMaterials.WOOD, 3.0f, -2.5f, new Item.Settings());
+                Item newAxeItem = (Item)new AxeItem(ToolMaterials.WOOD, 5.0f, -2.5f, new Item.Settings());
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, name, newAxeItem));
             }
             else if (name.matches("stone_axe")) {
@@ -66,7 +66,7 @@ public abstract class ItemsMixin {
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, name, newAxeItem));
             }
             else if (name.matches("golden_axe")) {
-                Item newAxeItem = (Item)new AxeItem(ToolMaterials.GOLD, 6.0f, -3.0f, new Item.Settings());
+                Item newAxeItem = (Item)new AxeItem(ToolMaterials.GOLD, 7.0f, -3.0f, new Item.Settings());
                 cbireturn.setReturnValue(Registry.register(Registries.ITEM, rawId, name, newAxeItem));
             }
             else if (name.matches("iron_axe")) {

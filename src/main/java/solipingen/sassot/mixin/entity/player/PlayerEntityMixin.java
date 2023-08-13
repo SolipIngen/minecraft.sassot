@@ -2,15 +2,12 @@ package solipingen.sassot.mixin.entity.player;
 
 import java.util.Collection;
 import java.util.List;
-
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
@@ -296,21 +293,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         return sweepingDamage;
     }
 
-    @ModifyConstant(method = "attack", constant = @Constant(doubleValue = 9.0))
-    private double modifiedSweepingRange(double originalRangeSquared) {
-        return MathHelper.square(Math.sqrt(originalRangeSquared) + 0.5);
-    }
-
     @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;takeKnockback(DDD)V"))
     private void redirectedTakeKnockbackWithFireAspect(LivingEntity livingEntity, double originalStrength, double originalX, double originalZ) {
         int fireAspectLevel = EnchantmentHelper.getFireAspect(this);
         if (this.getMainHandStack().isIn(ModItemTags.SWEEPING_WEAPONS) && fireAspectLevel > 0) {
             livingEntity.setOnFireFor(4*fireAspectLevel);
-            livingEntity.takeKnockback(originalStrength, originalX, originalZ);
         }
-        else {
-            livingEntity.takeKnockback(originalStrength, originalX, originalZ);
-        }
+        livingEntity.takeKnockback(originalStrength, originalX, originalZ);
     }
 
     @Inject(method = "getAttackCooldownProgressPerTick", at = @At("HEAD"), cancellable = true)
@@ -435,5 +424,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             cbi.cancel();
         }
     }
+
 
 }

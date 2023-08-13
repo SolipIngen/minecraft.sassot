@@ -21,6 +21,7 @@
     "entity.accessors.DamageModifierStatusEffectInvoker", 
     "entity.ai.brain.task.HoldTradeOffersTaskMixin", 
     "entity.ai.brain.task.MeleeAttackTaskMixin", 
+    "entity.ai.goal.MeleeAttackGoalMixin", 
     "entity.ai.goal.TridentAttackGoalMixin", 
     "entity.effect.StatusEffectsMixin", 
     "entity.mob.DrownedEntityMixin", 
@@ -53,8 +54,7 @@
     "item.SwordItemMixin", 
     "item.ToolMaterialsMixin", 
     "item.TridentItemMixin", 
-    "recipe.ShieldDecorationRecipeMixin", 
-    "server.network.ServerPlayNetworkHandlerMixin"
+    "recipe.ShieldDecorationRecipeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

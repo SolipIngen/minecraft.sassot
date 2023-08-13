@@ -4,7 +4,6 @@
 	"compatibilityLevel": "JAVA_17",
 	"client": [
 		"gui.InGameHudMixin", 
-		"network.ClientPlayerInteractionManagerMixin", 
 		"render.entity.feature.HeldItemFeatureRendererMixin", 
 		"render.entity.feature.TridentRiptideFeatureRendererMixin", 
 		"render.entity.feature.VillagerHeldItemFeatureRendererMixin", 
@@ -17,7 +16,6 @@
 		"render.item.HeldItemRendererMixin", 
 		"render.item.ItemRendererMixin", 
 		"render.model.ModelLoaderMixin", 
-		"render.GameRendererMixin", 
 		"MinecraftClientMixin", 
 		"WelcomeMixin"
 	  ],

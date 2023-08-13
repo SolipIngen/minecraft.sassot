@@ -157,7 +157,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
         float entityImpactFactor = this.dealtDamage ? this.impactFactor : Math.max(this.impactFactor, 1.0f);
         float f = this.damageAmount*entityImpactFactor;
         this.dealtDamage = entity != null;
-        if (this.hasSkewering()) {
+        if (entity != null && this.hasSkewering()) {
             Vec3d vec3d = this.getPos();
             Vec3d velocity3d = this.getVelocity();
             Vec3d vec3d2 = vec3d.add(velocity3d);
@@ -174,7 +174,7 @@ public abstract class SpearEntity extends PersistentProjectileEntity {
         }
         DamageSource damageSource = this.getDamageSources().trident(this, entity2 == null ? this : entity2);
         SoundEvent soundEvent = ModSoundEvents.SPEAR_HIT_ENTITY;
-        if (entity.damage(damageSource, f)) {
+        if (entity != null && entity.damage(damageSource, f)) {
             if (entity.getType() == EntityType.ENDERMAN) {
                 return;
             }
