@@ -153,56 +153,58 @@ public class BlazearmEntity extends PersistentProjectileEntity {
         float entityImpactFactor = this.dealtDamage ? this.impactFactor : Math.max(this.impactFactor, 1.0f);
         float f = 9.0f*entityImpactFactor;
         this.dealtDamage = entity != null;
-        if (this.hasSkewering()) {
-            Vec3d vec3d = this.getPos();
-            Vec3d velocity3d = this.getVelocity();
-            Vec3d vec3d2 = vec3d.add(velocity3d);
-            entity.setPos(vec3d2.x, entity.getY(), vec3d2.z);
-            entity.setVelocity(velocity3d);
-        }
-        BlockState entityMagmaBlockState = Blocks.AIR.getDefaultState();
-        Iterable<BlockPos> entityBlockPosIterable = BlockPos.iterateOutwards(entity.getBlockPos(), 1, 1, 1);
-        for (BlockPos entityBlockPos : entityBlockPosIterable) {
-            if (entityBlockPos.getManhattanDistance(entity.getBlockPos()) > 1) continue;
-            entityMagmaBlockState = world.getBlockState(entityBlockPos);
-            if (entityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK)) break;
-        }
-        if (entity instanceof LivingEntity) {
-            LivingEntity livingEntity = (LivingEntity)entity;
-            LivingEntityInterface iLivingEntity = (LivingEntityInterface)livingEntity;
-            f += EnchantmentHelper.getAttackDamage(this.blazearmStack, livingEntity.getGroup());
-            f += (livingEntity.isOnFire() || livingEntity.isInLava() || livingEntity.isFireImmune() || entityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK) || (livingEntity.hasStatusEffect(StatusEffects.FIRE_RESISTANCE) && !livingEntity.isWet())) && !(entity instanceof BlazeEntity) ? 1.25f*EnchantmentHelper.getLevel(ModEnchantments.LEANING, this.blazearmStack) : 0.0f;
+        if (entity != null) {
             if (this.hasSkewering()) {
-                iLivingEntity.setIsSkewered(true);
+                Vec3d vec3d = this.getPos();
+                Vec3d velocity3d = this.getVelocity();
+                Vec3d vec3d2 = vec3d.add(velocity3d);
+                entity.setPos(vec3d2.x, entity.getY(), vec3d2.z);
+                entity.setVelocity(velocity3d);
             }
-        }
-        DamageSource damageSource = this.getDamageSources().trident(this, entity2 == null ? this : entity2);
-        SoundEvent soundEvent = ModSoundEvents.BLAZEARM_HIT_ENTITY;
-        if (entity.damage(damageSource, f)) {
-            if (entity.getType() == EntityType.ENDERMAN) {
-                return;
+            BlockState entityMagmaBlockState = Blocks.AIR.getDefaultState();
+            Iterable<BlockPos> entityBlockPosIterable = BlockPos.iterateOutwards(entity.getBlockPos(), 1, 1, 1);
+            for (BlockPos entityBlockPos : entityBlockPosIterable) {
+                if (entityBlockPos.getManhattanDistance(entity.getBlockPos()) > 1) continue;
+                entityMagmaBlockState = world.getBlockState(entityBlockPos);
+                if (entityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK)) break;
             }
             if (entity instanceof LivingEntity) {
-                LivingEntity livingEntity2 = (LivingEntity)entity;
-                if (entity2 instanceof LivingEntity) {
-                    EnchantmentHelper.onUserDamaged(livingEntity2, entity2);
-                    EnchantmentHelper.onTargetDamaged((LivingEntity)entity2, livingEntity2);
+                LivingEntity livingEntity = (LivingEntity)entity;
+                LivingEntityInterface iLivingEntity = (LivingEntityInterface)livingEntity;
+                f += EnchantmentHelper.getAttackDamage(this.blazearmStack, livingEntity.getGroup());
+                f += (livingEntity.isOnFire() || livingEntity.isInLava() || livingEntity.isFireImmune() || entityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK) || (livingEntity.hasStatusEffect(StatusEffects.FIRE_RESISTANCE) && !livingEntity.isWet())) && !(entity instanceof BlazeEntity) ? 1.25f*EnchantmentHelper.getLevel(ModEnchantments.LEANING, this.blazearmStack) : 0.0f;
+                if (this.hasSkewering()) {
+                    iLivingEntity.setIsSkewered(true);
                 }
-                if (!livingEntity2.isOnFire()) {
-                    livingEntity2.setOnFireFor(8*(1 + EnchantmentHelper.getLevel(Enchantments.FIRE_ASPECT, this.blazearmStack)) + this.random.nextBetween(0, 8));
-                }
-                this.onHit(livingEntity2);
             }
-        }
-        if (!this.hasSkewering() || this.getLoyalty() > 0) {
-            this.setVelocity(this.getVelocity().multiply(-0.01, -0.1, -0.01));
-        }
-        float g = 1.0f;
-        this.playSound(soundEvent, g, 0.8f + 0.4f*this.random.nextFloat());
-        if (this.hasSkewering()) {
-            this.playSound(ModSoundEvents.SPEAR_SKEWERING, g, 1.0f);
-            if (entity2 instanceof ServerPlayerEntity) {
-                ModCriteria.PLAYER_SKEWERED_ENTITY.trigger((ServerPlayerEntity)entity2, entity, damageSource, f, f, false);
+            DamageSource damageSource = this.getDamageSources().trident(this, entity2 == null ? this : entity2);
+            SoundEvent soundEvent = ModSoundEvents.BLAZEARM_HIT_ENTITY;
+            if (entity.damage(damageSource, f)) {
+                if (entity.getType() == EntityType.ENDERMAN) {
+                    return;
+                }
+                if (entity instanceof LivingEntity) {
+                    LivingEntity livingEntity2 = (LivingEntity)entity;
+                    if (entity2 instanceof LivingEntity) {
+                        EnchantmentHelper.onUserDamaged(livingEntity2, entity2);
+                        EnchantmentHelper.onTargetDamaged((LivingEntity)entity2, livingEntity2);
+                    }
+                    if (!livingEntity2.isOnFire()) {
+                        livingEntity2.setOnFireFor(8*(1 + EnchantmentHelper.getLevel(Enchantments.FIRE_ASPECT, this.blazearmStack)) + this.random.nextBetween(0, 8));
+                    }
+                    this.onHit(livingEntity2);
+                }
+            }
+            if (!this.hasSkewering() || this.getLoyalty() > 0) {
+                this.setVelocity(this.getVelocity().multiply(-0.01, -0.1, -0.01));
+            }
+            float g = 1.0f;
+            this.playSound(soundEvent, g, 0.8f + 0.4f*this.random.nextFloat());
+            if (this.hasSkewering()) {
+                this.playSound(ModSoundEvents.SPEAR_SKEWERING, g, 1.0f);
+                if (entity2 instanceof ServerPlayerEntity) {
+                    ModCriteria.PLAYER_SKEWERED_ENTITY.trigger((ServerPlayerEntity)entity2, entity, damageSource, f, f, false);
+                }
             }
         }
     }

@@ -10,7 +10,10 @@
     "block.sassot.small_echo_crystal_bud": "Small Echo Crystal Bud", 
 
     "block.sassot.swordsman_marker": "Swordsman Marker", 
-    "block.sassot.spearman_marker": "Spearman Marker",  
+    "block.sassot.spearman_marker": "Spearman Marker", 
+
+    "attribute.name.generic.reach": "Reach", 
+    "attribute.name.generic.attack_range": "Attack Range",
 
     "item.sassot.wooden_spear": "Wooden Spear",
     "item.sassot.bamboo_spear": "Bamboo Spear",

@@ -8,6 +8,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -31,7 +33,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.thread.ReentrantThreadExecutor;
 import net.minecraft.world.RaycastContext;
-import solipingen.sassot.item.ModItems;
 import solipingen.sassot.mixin.block.accessors.AbstractBlockAccessor;
 import solipingen.sassot.registry.tag.ModItemTags;
 import solipingen.sassot.util.interfaces.mixin.client.MinecraftClientInterface;
@@ -84,7 +85,6 @@ public abstract class MinecraftClientMixin extends ReentrantThreadExecutor<Runna
     @Override
     public void updateCrosshairTargetThroughBlock(float tickDelta) {
         Entity entity2 = ((MinecraftClient)(Object)this).getCameraEntity();
-        ItemStack mainHandStack = this.player.getMainHandStack();
         if (entity2 == null) {
             return;
         }
@@ -99,24 +99,10 @@ public abstract class MinecraftClientMixin extends ReentrantThreadExecutor<Runna
         }
         Vec3d vec3d = entity2.getCameraPosVec(tickDelta);
         boolean bl = false;
-        double attackReach = 3.0;
-        if (mainHandStack.isIn(ModItemTags.SWEEPING_WEAPONS)) {
-            attackReach += 0.5;
-        }
-        else if (mainHandStack.isIn(ModItemTags.THRUSTING_WEAPONS) || mainHandStack.isOf(ModItems.BLAZEARM)) {
-            attackReach += 1.0;
-        }
+        double attackReach = 3.0 + this.player.getAttributeValue(ReachEntityAttributes.ATTACK_RANGE);
         double e = d;
         if (this.interactionManager.hasExtendedReach()) {
-            if (mainHandStack.isIn(ModItemTags.SWEEPING_WEAPONS)) {
-                d = e = 6.5;
-            }
-            else if (mainHandStack.isIn(ModItemTags.THRUSTING_WEAPONS) || mainHandStack.isOf(ModItems.BLAZEARM)) {
-                d = e = 7.0;
-            }
-            else {
-                d = e = 6.0;
-            }
+            d = e = attackReach + 0.5;
         } 
         else {
             if (e > attackReach) {
@@ -129,7 +115,7 @@ public abstract class MinecraftClientMixin extends ReentrantThreadExecutor<Runna
             e = this.crosshairTarget.getPos().squaredDistanceTo(vec3d);
         }
         Vec3d vec3d2 = entity2.getRotationVec(1.0f);
-        Vec3d vec3d3 = vec3d.add(vec3d2.x * d, vec3d2.y * d, vec3d2.z * d);
+        Vec3d vec3d3 = vec3d.add(vec3d2.x*d, vec3d2.y*d, vec3d2.z*d);
         Box box = entity2.getBoundingBox().stretch(vec3d2.multiply(d)).expand(1.0, 1.0, 1.0);
         EntityHitResult entityHitResult = ProjectileUtil.raycast(entity2, vec3d, vec3d3, box, entity -> !entity.isSpectator() && entity.canHit(), e);
         if (entityHitResult == null) {

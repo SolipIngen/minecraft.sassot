@@ -2,19 +2,30 @@ package solipingen.sassot.mixin.item;
 
 import java.util.List;
 
+import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.DrownedEntity;
@@ -35,10 +46,12 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import solipingen.sassot.advancement.ModCriteria;
+import solipingen.sassot.item.SpearItem;
 
 
 @Mixin(TridentItem.class)
 public class TridentItemMixin extends Item implements Vanishable {
+    @Shadow @Final private Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
 
     
     public TridentItemMixin(Settings settings) {
@@ -132,6 +145,15 @@ public class TridentItemMixin extends Item implements Vanishable {
     @ModifyConstant(method = "postMine", constant = @Constant(intValue = 2))
     private int modifiedDurabilityDamage(int damage) {
         return 0;
+    }
+
+    @Inject(method = "getAttributeModifiers", at = @At(value = "FIELD", target = "Lnet/minecraft/item/TridentItem;attributeModifiers:Lcom/google/common/collect/Multimap;", opcode = Opcodes.GETFIELD), cancellable = true)
+    private void injectedGetAttributeModifiers(EquipmentSlot slot, CallbackInfoReturnable<Multimap<EntityAttribute, EntityAttributeModifier>> cbireturn) {
+        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
+        this.attributeModifiers.forEach((attribute, modifier) -> builder.put(attribute, modifier));
+        builder.put(ReachEntityAttributes.REACH, new EntityAttributeModifier(SpearItem.REACH_MODIFIER_ID, "Weapon modifier", 1.0, EntityAttributeModifier.Operation.ADDITION));
+        builder.put(ReachEntityAttributes.ATTACK_RANGE, new EntityAttributeModifier(SpearItem.ATTACK_RANGE_MODIFIER_ID, "Weapon modifier", 1.0, EntityAttributeModifier.Operation.ADDITION));
+        cbireturn.setReturnValue(builder.build());
     }
 
     @ModifyConstant(method = "getEnchantability", constant = @Constant(intValue = 1))
