@@ -22,7 +22,8 @@
     },
     "requirements": [
       [
-        "has_golden_spear"
+        "has_golden_spear", 
+        "has_the_recipe"
       ]
     ],
     "rewards": {

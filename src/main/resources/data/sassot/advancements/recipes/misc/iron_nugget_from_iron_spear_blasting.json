@@ -22,7 +22,8 @@
     },
     "requirements": [
       [
-        "has_iron_spear"
+        "has_iron_spear", 
+        "has_the_recipe"
       ]
     ],
     "rewards": {
