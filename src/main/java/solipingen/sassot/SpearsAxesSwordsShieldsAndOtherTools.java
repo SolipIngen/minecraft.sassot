@@ -11,6 +11,7 @@ import solipingen.sassot.item.ModItems;
 import solipingen.sassot.loot.ModifyLootTableHandler;
 import solipingen.sassot.loot.ReplaceLootTableHandler;
 import solipingen.sassot.recipe.ModRecipes;
+import solipingen.sassot.resource.ModDataPacks;
 import solipingen.sassot.sound.ModSoundEvents;
 import solipingen.sassot.village.ModVillagerProfessions;
 
@@ -39,6 +40,8 @@ public class SpearsAxesSwordsShieldsAndOtherTools implements ModInitializer {
 
 		LootTableEvents.REPLACE.register(new ReplaceLootTableHandler());
 		LootTableEvents.MODIFY.register(new ModifyLootTableHandler());
+
+		ModDataPacks.registerModDataPacks();
 
 	}
 
