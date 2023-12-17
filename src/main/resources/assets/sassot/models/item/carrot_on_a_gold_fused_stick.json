@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/handheld_rod",
+    "textures": {
+      "layer0": "sassot:item/carrot_on_a_gold_fused_stick"
+    }
+}

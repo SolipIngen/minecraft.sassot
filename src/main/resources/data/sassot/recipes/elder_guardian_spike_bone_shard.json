@@ -1,0 +1,13 @@
+{
+    "type": "minecraft:crafting_shapeless", 
+    "category": "misc", 
+    "ingredients": [
+      {
+        "item": "sassot:elder_guardian_spike_shard"
+      }
+    ],
+    "result": {
+      "item": "sassot:elder_guardian_spike_bone_shard", 
+      "count": 3
+    }
+}
