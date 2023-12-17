@@ -53,37 +53,59 @@ public class ModVillagerProfessions {
     // Trade Offer Replacements
     public static void replaceFishermanProfessionToLeveledTrade(Map<VillagerProfession, Int2ObjectMap<Factory[]>> originalTradeOffers) {
         ImmutableMap.Builder<VillagerType, Item> sellFishMapBuilder = ImmutableMap.builder();
-        ImmutableMap<VillagerType, Item> sellFishMap = sellFishMapBuilder.put(VillagerType.PLAINS, Items.COD)
-            .put(VillagerType.TAIGA, Items.SALMON)
-            .put(VillagerType.SNOW, Items.SALMON)
-            .put(VillagerType.DESERT, Items.TROPICAL_FISH)
-            .put(VillagerType.JUNGLE, Items.TROPICAL_FISH)
-            .put(VillagerType.SAVANNA, Items.COD)
-            .put(VillagerType.SWAMP, Items.SALMON).build();
+        for (VillagerType villagerType : Registries.VILLAGER_TYPE) {
+            Item fishItem = Items.COD;
+            if (villagerType == VillagerType.TAIGA || villagerType == VillagerType.SNOW || villagerType == VillagerType.SWAMP) {
+                fishItem = Items.SALMON;
+            }
+            else if (villagerType == VillagerType.DESERT || villagerType == VillagerType.JUNGLE) {
+                fishItem = Items.TROPICAL_FISH;
+            }
+            sellFishMapBuilder.put(villagerType, fishItem);
+        }
+        ImmutableMap<VillagerType, Item> sellFishMap = sellFishMapBuilder.build();
         ImmutableMap.Builder<VillagerType, Item> sellCookedFishMapBuilder = ImmutableMap.builder();
-        ImmutableMap<VillagerType, Item> sellCookedFishMap = sellCookedFishMapBuilder.put(VillagerType.PLAINS, Items.COOKED_COD)
-            .put(VillagerType.TAIGA, Items.COOKED_SALMON)
-            .put(VillagerType.SNOW, Items.COOKED_SALMON)
-            .put(VillagerType.DESERT, Items.COOKED_COD)
-            .put(VillagerType.JUNGLE, Items.COOKED_SALMON)
-            .put(VillagerType.SAVANNA, Items.COOKED_COD)
-            .put(VillagerType.SWAMP, Items.COOKED_SALMON).build();
+        for (VillagerType villagerType : Registries.VILLAGER_TYPE) {
+            Item cookedFishItem = Items.COOKED_COD;
+            if (villagerType == VillagerType.TAIGA || villagerType == VillagerType.SNOW || villagerType == VillagerType.SWAMP || villagerType == VillagerType.JUNGLE) {
+                cookedFishItem = Items.COOKED_SALMON;
+            }
+            sellCookedFishMapBuilder.put(villagerType, cookedFishItem);
+        }
+        ImmutableMap<VillagerType, Item> sellCookedFishMap = sellCookedFishMapBuilder.build();
         ImmutableMap.Builder<VillagerType, Item> boatMapBuilder = ImmutableMap.builder();
-        ImmutableMap<VillagerType, Item> boatMap = boatMapBuilder.put(VillagerType.PLAINS, Items.OAK_BOAT)
-            .put(VillagerType.TAIGA, Items.SPRUCE_BOAT)
-            .put(VillagerType.SNOW, Items.SPRUCE_BOAT)
-            .put(VillagerType.DESERT, Items.JUNGLE_BOAT)
-            .put(VillagerType.JUNGLE, Items.BAMBOO_RAFT)
-            .put(VillagerType.SAVANNA, Items.ACACIA_BOAT)
-            .put(VillagerType.SWAMP, Items.MANGROVE_BOAT).build();
+        for (VillagerType villagerType : Registries.VILLAGER_TYPE) {
+            Item boatItem = Items.OAK_BOAT;
+            if (villagerType == VillagerType.TAIGA || villagerType == VillagerType.SNOW) {
+                boatItem = Items.SPRUCE_BOAT;
+            }
+            else if (villagerType == VillagerType.DESERT) {
+                boatItem = Items.JUNGLE_BOAT;
+            }
+            else if (villagerType == VillagerType.JUNGLE) {
+                boatItem = Items.BAMBOO_RAFT;
+            }
+            else if (villagerType == VillagerType.SAVANNA) {
+                boatItem = Items.ACACIA_BOAT;
+            }
+            else if (villagerType == VillagerType.SWAMP) {
+                boatItem = Items.MANGROVE_BOAT;
+            }
+            boatMapBuilder.put(villagerType, boatItem);
+        }
+        ImmutableMap<VillagerType, Item> boatMap = boatMapBuilder.build();
         ImmutableMap.Builder<VillagerType, Item> sellLiveFishMapBuilder = ImmutableMap.builder();
-        ImmutableMap<VillagerType, Item> sellLiveFishMap = sellLiveFishMapBuilder.put(VillagerType.PLAINS, Items.COD_BUCKET)
-            .put(VillagerType.TAIGA, Items.SALMON_BUCKET)
-            .put(VillagerType.SNOW, Items.SALMON_BUCKET)
-            .put(VillagerType.DESERT, Items.TROPICAL_FISH_BUCKET)
-            .put(VillagerType.JUNGLE, Items.TROPICAL_FISH_BUCKET)
-            .put(VillagerType.SAVANNA, Items.COD_BUCKET)
-            .put(VillagerType.SWAMP, Items.TROPICAL_FISH_BUCKET).build();
+        for (VillagerType villagerType : Registries.VILLAGER_TYPE) {
+            Item liveFishItem = Items.COD_BUCKET;
+            if (villagerType == VillagerType.TAIGA || villagerType == VillagerType.SNOW) {
+                liveFishItem = Items.SALMON_BUCKET;
+            }
+            else if (villagerType == VillagerType.DESERT || villagerType == VillagerType.JUNGLE || villagerType == VillagerType.SWAMP) {
+                liveFishItem = Items.TROPICAL_FISH_BUCKET;
+            }
+            sellLiveFishMapBuilder.put(villagerType, liveFishItem);
+        }
+        ImmutableMap<VillagerType, Item> sellLiveFishMap = sellLiveFishMapBuilder.build();
         originalTradeOffers.replace(VillagerProfession.FISHERMAN, ModVillagerProfessions.copyToFastUtilMap(
             ImmutableMap.of(
                 1, new Factory[]{new BuyForOneEmeraldFactory(Items.STRING, 20, 16, 2), new BuyForOneEmeraldFactory(Items.STICK, 32, 16, 2),  
