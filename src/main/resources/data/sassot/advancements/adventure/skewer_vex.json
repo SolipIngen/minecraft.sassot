@@ -1,0 +1,48 @@
+{
+    "parent": "minecraft:adventure/throw_trident",
+    "criteria": {
+      "skewered_vex": {
+        "conditions": {
+            "entity": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "type": "minecraft:vex", 
+                    "distance": {
+                      "horizontal": {
+                        "min": 20.0
+                      }
+                    }
+                  }
+                }
+            ]
+        },
+        "trigger": "sassot:player_skewered_entity"
+      }
+    },
+    "display": {
+      "announce_to_chat": true,
+      "description": {
+        "translate": "advancements.adventure.skewer_vex.description"
+      },
+      "frame": "challenge",
+      "hidden": false,
+      "icon": {
+        "item": "sassot:diamond_spear",
+        "nbt": "{Damage:0,Enchantments:[{sassot:skewering,lvl:1}]}"
+      },
+      "show_toast": true,
+      "title": {
+        "translate": "advancements.adventure.skewer_vex.title"
+      }
+    },
+    "requirements": [
+      [
+        "skewered_vex"
+      ]
+    ],
+    "rewards": {
+      "experience": 40
+    }
+  }

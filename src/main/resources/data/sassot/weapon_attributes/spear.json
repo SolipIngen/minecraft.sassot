@@ -1,0 +1,7 @@
+{
+    "parent": "bettercombat:trident", 
+    "attributes": {
+        "attack_range": 3.0, 
+        "category": "spear"
+    }
+}
