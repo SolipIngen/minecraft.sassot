@@ -1,0 +1,12 @@
+{
+    "parent": "sassot:spear", 
+    "attributes": {
+        "attacks": [
+            {
+                "swing_sound": {
+                    "id": "sassot:spear_throw"
+                }
+            }
+        ]
+    }
+}

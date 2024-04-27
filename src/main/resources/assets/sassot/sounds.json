@@ -1,0 +1,230 @@
+{
+    "spear_throw": {
+        "subtitle": "subtitles.sassot.spear_throw",
+        "sounds": [
+            "sassot:spear_throw"
+        ]
+    },
+    "spear_hit_block": {
+        "subtitle": "subtitles.sassot.spear_hit_block",
+        "sounds": [
+            "sassot:spear_hit_block"
+        ]
+    },
+    "spear_hit_entity": {
+        "subtitle": "subtitles.sassot.spear_hit_entity",
+        "sounds": [
+            "sassot:spear_hit_entity"
+        ]
+    },
+    "spear_return": {
+        "subtitle": "subtitles.sassot.spear_return",
+        "sounds": [
+            "minecraft:item/trident/return1", 
+            "minecraft:item/trident/return2", 
+            "minecraft:item/trident/return3"
+        ]
+    },
+    "spear_whirlwind_1": {
+        "subtitle": "subtitles.sassot.spear_whirlwind_1",
+        "sounds": [
+            "sassot:spear_whirlwind_1"
+        ]
+    },
+    "spear_whirlwind_2": {
+        "subtitle": "subtitles.sassot.spear_whirlwind_2",
+        "sounds": [
+            "sassot:spear_whirlwind_2"
+        ]
+    },
+    "spear_whirlwind_3": {
+        "subtitle": "subtitles.sassot.spear_whirlwind_3",
+        "sounds": [
+            "sassot:spear_whirlwind_3"
+        ]
+    },
+    "spear_skewering": {
+        "subtitle": "subtitles.sassot.spear_skewering",
+        "sounds": [
+            "sassot:spear_skewering"
+        ]
+    }, 
+    "blazearm_throw": {
+        "subtitle": "subtitles.sassot.blazearm_throw",
+        "sounds": [
+            "sassot:blazearm_throw"
+        ]
+    },
+    "blazearm_hit_block": {
+        "subtitle": "subtitles.sassot.blazearm_hit_block",
+        "sounds": [
+            "sassot:blazearm_hit_block_ver1", 
+            "sassot:blazearm_hit_block_ver2", 
+            "sassot:blazearm_hit_block_ver3"
+        ]
+    },
+    "blazearm_hit_entity": {
+        "subtitle": "subtitles.sassot.blazearm_hit_entity",
+        "sounds": [
+            "sassot:blazearm_hit_entity_ver1", 
+            "sassot:blazearm_hit_entity_ver2", 
+            "sassot:blazearm_hit_entity_ver3"
+        ]
+    },
+    "blazearm_return": {
+        "subtitle": "subtitles.sassot.blazearm_return",
+        "sounds": [
+            "minecraft:item/trident/return1", 
+            "minecraft:item/trident/return2", 
+            "minecraft:item/trident/return3"
+        ]
+    },
+    "blazearm_flare_1": {
+        "subtitle": "subtitles.sassot.blazearm_flare_1",
+        "sounds": [
+            "sassot:blazearm_flare_1"
+        ]
+    },
+    "blazearm_flare_2": {
+        "subtitle": "subtitles.sassot.blazearm_flare_2",
+        "sounds": [
+            "sassot:blazearm_flare_2"
+        ]
+    },
+    "blazearm_flare_3": {
+        "subtitle": "subtitles.sassot.blazearm_flare_3",
+        "sounds": [
+            "sassot:blazearm_flare_3"
+        ]
+    }, 
+    "echo_crystal_block_break": {
+        "subtitle": "subtitles.sassot.echo_crystal_block_break", 
+        "sounds": [
+            "sassot:echo_crystal_cluster_break_ver1", 
+            "sassot:echo_crystal_cluster_break_ver2", 
+            "sassot:echo_crystal_cluster_break_ver3", 
+            "sassot:echo_crystal_cluster_break_ver4"
+        ]
+    }, 
+    "echo_crystal_cluster_break": {
+        "subtitle": "subtitles.sassot.echo_crystal_cluster_break", 
+        "sounds": [
+            "sassot:echo_crystal_cluster_break_ver1", 
+            "sassot:echo_crystal_cluster_break_ver2", 
+            "sassot:echo_crystal_cluster_break_ver3", 
+            "sassot:echo_crystal_cluster_break_ver4"
+        ]
+    }, 
+    "large_echo_crystal_bud_break": {
+        "subtitle": "subtitles.sassot.large_echo_crystal_bud_break", 
+        "sounds": [
+            "sassot:large_echo_crystal_bud_break_ver1", 
+            "sassot:large_echo_crystal_bud_break_ver2", 
+            "sassot:large_echo_crystal_bud_break_ver3", 
+            "sassot:large_echo_crystal_bud_break_ver4"
+        ]
+    }, 
+    "medium_echo_crystal_bud_break": {
+        "subtitle": "subtitles.sassot.medium_echo_crystal_bud_break", 
+        "sounds": [
+            "sassot:medium_echo_crystal_bud_break_ver1", 
+            "sassot:medium_echo_crystal_bud_break_ver2", 
+            "sassot:medium_echo_crystal_bud_break_ver3", 
+            "sassot:medium_echo_crystal_bud_break_ver4"
+        ]
+    }, 
+    "small_echo_crystal_bud_break": {
+        "subtitle": "subtitles.sassot.small_echo_crystal_bud_break", 
+        "sounds": [
+            "sassot:small_echo_crystal_bud_break_ver1", 
+            "sassot:small_echo_crystal_bud_break_ver2", 
+            "sassot:small_echo_crystal_bud_break_ver3", 
+            "sassot:small_echo_crystal_bud_break_ver4"
+        ]
+    }, 
+    "shield_echo": {
+        "subtitle": "subtitles.sassot.shield_echo", 
+        "sounds": [
+            "sassot:shield_echo_ver1", 
+            "sassot:shield_echo_ver2", 
+            "sassot:shield_echo_ver3", 
+            "sassot:shield_echo_ver4"
+        ]
+    }, 
+    "copper_shield_block": {
+        "subtitle": "subtitles.sassot.copper_shield_block", 
+        "sounds": [
+            "sassot:copper_shield_block"
+        ]
+    }, 
+    "golden_shield_block": {
+        "subtitle": "subtitles.sassot.golden_shield_block", 
+        "sounds": [
+            "sassot:golden_shield_block"
+        ]
+    }, 
+    "iron_shield_block": {
+        "subtitle": "subtitles.sassot.iron_shield_block", 
+        "sounds": [
+            "sassot:iron_shield_block"
+        ]
+    }, 
+    "diamond_shield_block": {
+        "subtitle": "subtitles.sassot.diamond_shield_block", 
+        "sounds": [
+            "sassot:diamond_shield_block"
+        ]
+    }, 
+    "netherite_shield_block": {
+        "subtitle": "subtitles.sassot.netherite_shield_block", 
+        "sounds": [
+            "sassot:netherite_shield_block"
+        ]
+    }, 
+    "groundshaking": {
+        "subtitle": "subtitles.sassot.groundshaking", 
+        "sounds": [
+            "sassot:groundshaking"
+        ]
+    }, 
+    "pillager_spear_throw": {
+        "subtitle": "subtitles.sassot.pillager_spear_throw", 
+        "sounds": [
+            "sassot:spear_throw"
+        ]
+    }, 
+    "wither_skeleton_spear_throw": {
+        "subtitle": "subtitles.sassot.wither_skeleton_spear_throw", 
+        "sounds": [
+            "sassot:spear_throw"
+        ]
+    }, 
+    "wither_skeleton_blazearm_throw": {
+        "subtitle": "subtitles.sassot.wither_skeleton_blazearm_throw",
+        "sounds": [
+            "sassot:blazearm_throw"
+        ]
+    }, 
+    "piglin_spear_throw": {
+        "subtitle": "subtitles.sassot.piglin_spear_throw", 
+        "sounds": [
+            "sassot:spear_throw"
+        ]
+    }, 
+    "villager_spear_throw": {
+        "subtitle": "subtitles.sassot.villager_spear_throw", 
+        "sounds": [
+            "sassot:spear_throw"
+        ]
+    }, 
+    "villager_attack": {
+        "subtitle": "subtitles.sassot.villager_attack", 
+        "sounds": [
+            "minecraft:mob/villager/no1", 
+            "minecraft:mob/villager/no2", 
+            "minecraft:mob/villager/no3"
+        ]
+    }
+
+
+}

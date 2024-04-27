@@ -1,0 +1,14 @@
+{
+    "values": [
+        "minecraft:trident", 
+        "sassot:wooden_spear", 
+        "sassot:bamboo_spear", 
+        "sassot:stone_spear", 
+        "sassot:flint_spear", 
+        "sassot:copper_spear", 
+        "sassot:iron_spear", 
+        "sassot:golden_spear", 
+        "sassot:diamond_spear", 
+        "sassot:netherite_spear"
+    ]
+}

@@ -1,0 +1,13 @@
+{
+	"pack": {
+		"pack_format": 26, 
+		"supported_formats": {
+			"min_inclusive": 12, 
+			"max_inclusive": 26
+		}, 
+		"description": {
+			"translate": "dataPack.bettersassotcombat.description", 
+			"fallback": "For full §2SASSOT §r+ §3Better Combat"
+		}
+	}
+}

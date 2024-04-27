@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+      "o": {
+        "item": "minecraft:iron_ingot"
+      }
+    },
+    "pattern": [
+      "ooo",
+      "ooo",
+      " o "
+    ],
+    "result": {
+      "item": "sassot:iron_shield"
+    }
+}

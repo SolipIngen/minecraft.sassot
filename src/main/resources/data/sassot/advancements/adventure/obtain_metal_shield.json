@@ -1,0 +1,41 @@
+{
+    "parent": "sassot:adventure/deflect_arrow",
+    "criteria": {
+      "metal_shield": {
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "sassot:copper_shield", 
+                "sassot:iron_shield", 
+                "sassot:golden_shield", 
+                "sassot:netherite_shield"
+              ]
+            }
+          ]
+        },
+        "trigger": "minecraft:inventory_changed"
+      }
+    },
+    "display": {
+      "announce_to_chat": true,
+      "description": {
+        "translate": "advancements.adventure.obtain_metal_shield.description"
+      },
+      "frame": "task",
+      "hidden": false,
+      "icon": {
+        "item": "sassot:copper_shield",
+        "nbt": "{Damage:0}"
+      },
+      "show_toast": true,
+      "title": {
+        "translate": "advancements.adventure.obtain_metal_shield.title"
+      }
+    },
+    "requirements": [
+      [
+        "metal_shield"
+      ]
+    ]
+  }

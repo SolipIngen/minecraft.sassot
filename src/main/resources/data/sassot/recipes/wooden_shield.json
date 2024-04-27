@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+      "W": {
+        "tag": "minecraft:planks"
+      }
+    },
+    "pattern": [
+      "WWW",
+      "WWW",
+      " W "
+    ],
+    "result": {
+      "item": "sassot:wooden_shield"
+    }
+}
