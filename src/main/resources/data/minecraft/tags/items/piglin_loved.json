@@ -1,0 +1,8 @@
+{
+    "replace": false,
+    "values": [
+        "sassot:gold_framed_wooden_shield", 
+        "sassot:golden_shield",
+        "sassot:golden_spear"
+    ]
+}
