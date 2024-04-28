@@ -357,6 +357,7 @@
     "subtitles.sassot.villager_spear_throw": "Villager throws Spear", 
     "subtitles.sassot.villager_attack": "Villager attacks", 
 
-    "dataPack.bettersassotcombat.description": "For full §2SASSOT §r+ §3Better Combat"
+    "dataPack.bettersassotcombat.description": "For full §2SASSOT §r+ §3Better Combat", 
+    "resourcePack.freshsassotanimations.description": "For §2SASSOT 1.20.4 §r+ §4Fresh Animations (>=v1.18.1)"
 
 }
