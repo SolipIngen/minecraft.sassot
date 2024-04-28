@@ -358,7 +358,9 @@
     "subtitles.sassot.wither_skeleton_blazearm_throw": "Wither Skeleton throws Blazearm", 
     "subtitles.sassot.piglin_spear_throw": "Piglin throws Spear", 
     "subtitles.sassot.villager_spear_throw": "Villager throws Spear", 
-    "subtitles.sassot.villager_attack": "Villager attacks"
+    "subtitles.sassot.villager_attack": "Villager attacks", 
+    
+    "resourcePack.freshsassotanimations.description": "For §2SASSOT 1.20.4 §r+ §4Fresh Animations (>=v1.18.1)"
     
 
 }
