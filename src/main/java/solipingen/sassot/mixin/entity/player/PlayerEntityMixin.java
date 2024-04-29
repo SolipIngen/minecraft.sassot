@@ -3,6 +3,7 @@ package solipingen.sassot.mixin.entity.player;
 import java.util.Collection;
 import java.util.List;
 
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -58,11 +59,13 @@ import solipingen.sassot.item.ModShieldItem;
 import solipingen.sassot.registry.tag.ModItemTags;
 import solipingen.sassot.util.interfaces.mixin.entity.EntityInterface;
 import solipingen.sassot.util.interfaces.mixin.entity.LivingEntityInterface;
+import solipingen.sassot.util.interfaces.mixin.entity.player.PlayerEntityInterface;
 
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity {
+public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityInterface {
     @Shadow @Final PlayerInventory inventory;
+    @Nullable ItemStack fishingRodStack;
 
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
@@ -426,5 +429,17 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             cbi.cancel();
         }
     }
+
+    @Nullable
+    @Override
+    public ItemStack getFishingRodStack() {
+        return this.fishingRodStack;
+    }
+
+    @Override
+    public void setFishingRodStack(ItemStack itemStack) {
+        this.fishingRodStack = itemStack;
+    }
+
 
 }
