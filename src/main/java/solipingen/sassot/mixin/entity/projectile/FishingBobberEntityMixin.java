@@ -6,8 +6,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -30,6 +32,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import solipingen.sassot.item.ModFishingRodItem;
+import solipingen.sassot.util.interfaces.mixin.entity.player.PlayerEntityInterface;
 import solipingen.sassot.util.interfaces.mixin.entity.projectile.FishingBobberEntityInterface;
 
 
@@ -46,6 +49,7 @@ public abstract class FishingBobberEntityMixin extends ProjectileEntity implemen
 
     @Redirect(method = "<init>(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/world/World;II)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/FishingBobberEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V"))
     private void redirectedInitSpeed(FishingBobberEntity bobber, Vec3d originalVec3d, PlayerEntity thrower, World world, int luckOfTheSeaLevel, int lureLevel) {
+        this.fishingRodStack = ((PlayerEntityInterface)thrower).getFishingRodStack();
         if (this.fishingRodStack != null && this.fishingRodStack.getItem() instanceof ModFishingRodItem) {
             int i = ((ModFishingRodItem)this.fishingRodStack.getItem()).getMaterial().getMiningLevel();
             originalVec3d.multiply(1.0 + 0.4*i);
@@ -126,6 +130,13 @@ public abstract class FishingBobberEntityMixin extends ProjectileEntity implemen
     @ModifyConstant(method = "use", constant = @Constant(intValue = 2))
     private int modifiedGroundPullDurability(int originalInt) {
         return 0;
+    }
+
+    @Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/FishingBobberEntity;discard()V"), cancellable = true)
+    private void injectedUse(ItemStack usedItem, CallbackInfoReturnable<Integer> cbireturn) {
+        if (this.getOwner() instanceof PlayerEntity) {
+            ((PlayerEntityInterface)this.getOwner()).setFishingRodStack(null);
+        }
     }
 
     @ModifyConstant(method = "pullHookedEntity", constant = @Constant(doubleValue = 0.1))

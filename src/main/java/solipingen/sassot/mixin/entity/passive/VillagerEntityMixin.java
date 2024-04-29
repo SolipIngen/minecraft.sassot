@@ -67,6 +67,7 @@ import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
 import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
@@ -335,6 +336,9 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
         }
         else if (villagerData.getProfession() == VillagerProfession.WEAPONSMITH) {
             ModVillagerProfessions.replaceWeaponsmithProfessionToLeveledTrade(tradeOffers);
+            if (this.getWorld().getEnabledFeatures().contains(FeatureFlags.TRADE_REBALANCE)) {
+                ModVillagerProfessions.replaceRebalancedWeaponsmithProfessionToLeveledTrade(tradeOffers);
+            }
         }
         return tradeOffers.get(villagerData.getProfession());
     }
