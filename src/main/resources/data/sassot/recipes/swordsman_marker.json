@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+      "#": {
+        "item": "minecraft:polished_granite_slab"
+      }, 
+      "$": {
+        "item": "minecraft:emerald"
+      }
+    },
+    "pattern": [
+      "$",
+      "#"
+    ],
+    "result": {
+      "id": "sassot:swordsman_marker",
+      "count": 4
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+      "o": {
+        "item": "minecraft:diamond"
+      }
+    },
+    "pattern": [
+      "  o",
+      " o ",
+      "o  "
+    ],
+    "result": {
+      "id": "sassot:diamond_spear"
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+      "o": {
+        "item": "minecraft:diamond"
+      }
+    },
+    "pattern": [
+      "ooo",
+      "ooo",
+      " o "
+    ],
+    "result": {
+      "id": "sassot:diamond_shield"
+    }
+}
