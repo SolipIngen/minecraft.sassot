@@ -9,6 +9,8 @@ import net.minecraft.item.*;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -52,13 +54,10 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.VexEntity;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.entity.mob.ZombifiedPiglinEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.raid.RaiderEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.server.world.ServerWorld;
@@ -92,12 +91,15 @@ import solipingen.sassot.entity.projectile.spear.StoneSpearEntity;
 import solipingen.sassot.entity.projectile.spear.WoodenSpearEntity;
 import solipingen.sassot.item.ModItems;
 import solipingen.sassot.item.SpearItem;
+import solipingen.sassot.registry.tag.ModEntityTypeTags;
 import solipingen.sassot.sound.ModSoundEvents;
 import solipingen.sassot.village.ModVillagerProfessions;
 
 
 @Mixin(VillagerEntity.class)
 public abstract class VillagerEntityMixin extends MerchantEntity implements AngerableFighterVillager, InteractionObserver, SpearThrowingMob, VillagerDataContainer {
+    @Shadow public abstract VillagerData getVillagerData();
+
     private static final UniformIntProvider ANGER_TIME_RANGE = TimeHelper.betweenSeconds(60, 90);
     private int angerTime;
     @Nullable private UUID angryAt;
@@ -162,6 +164,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
         }
     }
 
+    @Unique
     private void initSwordsmanGoals() {
         super.initGoals();
         World world = this.getWorld();
@@ -177,11 +180,10 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
         this.targetSelector.add(1, this.villagerTrackTargetGoal);
         this.targetSelector.add(2, new RevengeGoal(this, MerchantEntity.class, IronGolemEntity.class).setGroupRevenge(new Class[0]));
         this.targetSelector.add(3, new ActiveTargetGoal<PlayerEntity>((MobEntity)this, PlayerEntity.class, false, this::shouldFighterAngerAt));
-        this.targetSelector.add(3, new ActiveTargetGoal<RaiderEntity>((MobEntity)this, RaiderEntity.class, true));
-        this.targetSelector.add(3, new ActiveTargetGoal<ZombieEntity>((MobEntity)this, ZombieEntity.class, true, this::shouldBeTargetedMob));
-        this.targetSelector.add(3, new ActiveTargetGoal<VexEntity>((MobEntity)this, VexEntity.class, false, this::shouldBeTargetedMob));
+        this.targetSelector.add(3, new ActiveTargetGoal<LivingEntity>((MobEntity)this, LivingEntity.class, true, this::shouldBeTargetedMob));
     }
 
+    @Unique
     private void initSpearmanGoals() {
         super.initGoals();
         World world = this.getWorld();
@@ -197,11 +199,10 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
         this.targetSelector.add(1, this.villagerTrackTargetGoal);
         this.targetSelector.add(2, new RevengeGoal(this, MerchantEntity.class, IronGolemEntity.class).setGroupRevenge(new Class[0]));
         this.targetSelector.add(3, new ActiveTargetGoal<PlayerEntity>((MobEntity)this, PlayerEntity.class, false, this::shouldFighterAngerAt));
-        this.targetSelector.add(3, new ActiveTargetGoal<RaiderEntity>((MobEntity)this, RaiderEntity.class, true));
-        this.targetSelector.add(3, new ActiveTargetGoal<ZombieEntity>((MobEntity)this, ZombieEntity.class, true, this::shouldBeTargetedMob));
-        this.targetSelector.add(3, new ActiveTargetGoal<VexEntity>((MobEntity)this, VexEntity.class, false, this::shouldBeTargetedMob));
+        this.targetSelector.add(3, new ActiveTargetGoal<LivingEntity>((MobEntity)this, LivingEntity.class, true, this::shouldBeTargetedMob));
     }
 
+    @Unique
     private static ImmutableList<Pair<Integer, ? extends Task<? super VillagerEntity>>> createFighterRaidTasks(ServerWorld world, VillagerEntity villager, float speed) {
         return ImmutableList.of(Pair.of(0, TaskTriggerer.runIf(TaskTriggerer.predicate(VillagerEntityMixin::wonRaid), Tasks.pickRandomly(ImmutableList.of(Pair.of(SeekSkyTask.create(speed), 5), Pair.of(FindWalkTargetTask.create(speed * 1.1f), 2))))), 
             Pair.of(0, new CelebrateRaidWinTask(600, 600)), 
@@ -209,21 +210,25 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
             VillagerEntityMixin.createBusyFollowTask(), Pair.of(99, EndRaidTask.create()));
     }
 
+    @Unique
     @SuppressWarnings({"rawtypes", "unchecked"})
     private static Pair<Integer, Task<LivingEntity>> createBusyFollowTask() {
         return Pair.of(5, new RandomTask(ImmutableList.of(Pair.of(LookAtMobTask.create(EntityType.VILLAGER, 8.0f), 2), Pair.of(LookAtMobTask.create(EntityType.PLAYER, 8.0f), 2), Pair.of(new WaitTask(30, 60), 8))));
     }
 
+    @Unique
     private static boolean hasActiveRaid(ServerWorld world, LivingEntity entity) {
         Raid raid = world.getRaidAt(entity.getBlockPos());
         return raid != null && raid.isActive() && !raid.hasWon() && !raid.hasLost();
     }
 
+    @Unique
     private static boolean wonRaid(ServerWorld world, LivingEntity livingEntity) {
         Raid raid = world.getRaidAt(livingEntity.getBlockPos());
         return raid != null && raid.hasWon();
     }
     
+    @Unique
     private void initFighterAttackDamageAddition() {
         long levelledAttackDamageAddition = Math.round(Math.pow(1.5, this.getVillagerData().getLevel()));
         EntityAttributeModifier attackDamageModifier = new EntityAttributeModifier("Villager attack damage bonus", (double)levelledAttackDamageAddition, EntityAttributeModifier.Operation.ADD_VALUE);
@@ -495,16 +500,6 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
         this.setAttacker(attacker);
     }
 
-    private boolean shouldBeTargetedMob(LivingEntity livingEntity) {
-        if (livingEntity instanceof ZombieEntity) {
-            return !(livingEntity instanceof ZombifiedPiglinEntity);
-        }
-        else if (livingEntity instanceof VexEntity) {
-            return ((VexEntity)livingEntity).getOwner() instanceof RaiderEntity;
-        }
-        return false;
-    }
-
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
     private void injectedWriteCustomDataToNbt(NbtCompound nbt, CallbackInfo cbi) {
         this.writeFighterAngerToNbt(nbt);
@@ -513,6 +508,25 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
     private void injectedReadCustomDataFromNbt(NbtCompound nbt, CallbackInfo cbi) {
         this.readFighterAngerFromNbt(this.getWorld(), nbt);
+    }
+
+    @Unique
+    private boolean shouldBeTargetedMob(LivingEntity livingEntity) {
+        VillagerData villagerData = this.getVillagerData();
+        VillagerProfession profession = villagerData.getProfession();
+        if (profession == ModVillagerProfessions.SPEARMAN) {
+            if (livingEntity instanceof VexEntity vexEntity && vexEntity.getOwner() != null) {
+                return vexEntity.getOwner().getType().isIn(ModEntityTypeTags.SPEARMAN_VILLAGER_TARGETS);
+            }
+            return livingEntity.getType().isIn(ModEntityTypeTags.SPEARMAN_VILLAGER_TARGETS);
+        }
+        else if (profession == ModVillagerProfessions.SWORDSMAN) {
+            if (livingEntity instanceof VexEntity vexEntity && vexEntity.getOwner() != null) {
+                return vexEntity.getOwner().getType().isIn(ModEntityTypeTags.SWORDSMAN_VILLAGER_TARGETS);
+            }
+            return livingEntity.getType().isIn(ModEntityTypeTags.SWORDSMAN_VILLAGER_TARGETS);
+        }
+        return false;
     }
 
 
