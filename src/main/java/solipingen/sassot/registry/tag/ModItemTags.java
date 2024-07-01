@@ -25,7 +25,5 @@ public class ModItemTags {
     public static final TagKey<Item> SHIELD_FRAMING_SMITHING_TEMPLATE_INGOTS = TagKey.of(RegistryKeys.ITEM, Identifier.of(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "shield_framing_smithing_template_ingots"));
 
     public static final TagKey<Item> PIG_TEMPT_ITEMS = TagKey.of(RegistryKeys.ITEM, Identifier.of(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "pig_tempt_items"));
-
-    public static final TagKey<Item> INGOTS = TagKey.of(RegistryKeys.ITEM, Identifier.of(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "ingots"));
     
 }

@@ -3,6 +3,7 @@ package solipingen.sassot.mixin.entity;
 import java.util.List;
 
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.registry.RegistryEntryLookup;
@@ -384,7 +385,8 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityIn
             if (entity != null && entity instanceof ProjectileEntity) {
                 int piercingLevel = 0;
                 if (entity instanceof PersistentProjectileEntity) {
-                    piercingLevel = ((PersistentProjectileEntity)entity).getPierceLevel();
+                    piercingLevel = Math.max(((PersistentProjectileEntity)entity).getPierceLevel(),
+                            EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(Enchantments.PIERCING), ((PersistentProjectileEntity)entity).getItemStack()));
                 }
                 if (shieldingLevel > piercingLevel || (shieldingLevel == piercingLevel && shieldingLevel == 0)) {
                     cbireturn.setReturnValue(vectorDotProduct < shieldingRangeDotProduct);
