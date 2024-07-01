@@ -1,0 +1,53 @@
+{
+  "anvil_cost": 4,
+  "description": {
+    "translate": "enchantment.minecraft.sweeping_edge"
+  },
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": {
+          "type": "minecraft:fraction",
+          "numerator": {
+            "type": "minecraft:linear",
+            "base": 7.0,
+            "per_level_above_first": 2.0
+          },
+          "denominator": {
+            "type": "minecraft:linear",
+            "base": 12.0,
+            "per_level_above_first": 0.0
+          }
+        },
+        "attribute": "minecraft:player.sweeping_damage_ratio",
+        "id": "minecraft:enchantment.sweeping_edge",
+        "operation": "add_value"
+      },
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.1,
+          "per_level_above_first": 0.1
+        },
+        "attribute": "minecraft:generic.attack_speed",
+        "id": "minecraft:enchantment.sweeping_edge",
+        "operation": "add_value"
+      }
+    ]
+  },
+  "exclusive_set": "#sassot:exclusive_set/sweeping_edge",
+  "max_cost": {
+    "base": 20,
+    "per_level_above_first": 9
+  },
+  "max_level": 3,
+  "min_cost": {
+    "base": 5,
+    "per_level_above_first": 9
+  },
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#sassot:enchantable/sweeping_weapons",
+  "weight": 2
+}
