@@ -33,7 +33,7 @@ public abstract class VindicatorEntityMixin extends IllagerEntity {
     private void injectedInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData, CallbackInfoReturnable<EntityData> cbireturn) {
         if (spawnReason == SpawnReason.STRUCTURE || this.isPatrolLeader()) {
             float axeEquipFloat = world.getRandom().nextFloat();
-            if (axeEquipFloat > 0.96f - 0.005f*(world.getDifficulty().getId() - 1)) {
+            if (axeEquipFloat > 0.96f - 0.005f*(difficulty.getGlobalDifficulty().getId() - 1)) {
                 this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_AXE));
             }
             else {
@@ -46,10 +46,10 @@ public abstract class VindicatorEntityMixin extends IllagerEntity {
     @Inject(method = "initEquipment", at = @At("TAIL"))
     private void injectedInitEquipment(Random random, LocalDifficulty localDifficulty, CallbackInfo cbi) {
         float axeEquipFloat = random.nextFloat();
-        if (axeEquipFloat > 0.97f - 0.01f*(this.getWorld().getDifficulty().getId() - 1) - 0.01f*localDifficulty.getClampedLocalDifficulty()) {
+        if (axeEquipFloat > 0.97f - 0.01f*(localDifficulty.getGlobalDifficulty().getId() - 1) - 0.01f*localDifficulty.getClampedLocalDifficulty()) {
             this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_AXE));
         }
-        else if (axeEquipFloat <= 0.97f - 0.01f*(this.getWorld().getDifficulty().getId() - 1) - 0.01f*localDifficulty.getClampedLocalDifficulty() && axeEquipFloat > 0.33f - 0.1f*(this.getWorld().getDifficulty().getId() - 1) - 0.1f*localDifficulty.getClampedLocalDifficulty()) {
+        else if (axeEquipFloat <= 0.97f - 0.01f*(localDifficulty.getGlobalDifficulty().getId() - 1) - 0.01f*localDifficulty.getClampedLocalDifficulty() && axeEquipFloat > 0.33f - 0.1f*(this.getWorld().getDifficulty().getId() - 1) - 0.1f*localDifficulty.getClampedLocalDifficulty()) {
             this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
         }
         else {

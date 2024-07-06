@@ -51,11 +51,11 @@ public abstract class WitherSkeletonEntityMixin extends AbstractSkeletonEntity i
 
     @Inject(method = "initEquipment", at = @At("TAIL"))
     private void injectedInitEquipment(Random random, LocalDifficulty localDifficulty, CallbackInfo cbi) {
-        if (random.nextFloat() < 0.004f*(this.getWorld().getDifficulty().getId() + localDifficulty.getClampedLocalDifficulty())) {
+        if (random.nextFloat() < 0.004f*(localDifficulty.getGlobalDifficulty().getId() + localDifficulty.getClampedLocalDifficulty())) {
             this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.BLAZEARM));
         }
-        else if (random.nextFloat() >= 0.01f*(this.getWorld().getDifficulty().getId() + localDifficulty.getClampedLocalDifficulty()) && random.nextFloat() < 0.4f + 0.02f*(this.getWorld().getDifficulty().getId() + localDifficulty.getClampedLocalDifficulty())) {
-            if (this.random.nextInt(3) == 0) {
+        else if (random.nextFloat() >= 0.01f*(localDifficulty.getGlobalDifficulty().getId() + localDifficulty.getClampedLocalDifficulty()) && random.nextFloat() < 0.4f + 0.02f*(this.getWorld().getDifficulty().getId() + localDifficulty.getClampedLocalDifficulty())) {
+            if (random.nextInt(3) == 0) {
                 this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.FLINT_SPEAR));
             }
             else {

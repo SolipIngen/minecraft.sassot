@@ -63,7 +63,7 @@ public abstract class PillagerEntityMixin extends IllagerEntity implements Cross
                 float meleeEquipFloat = world.getRandom().nextFloat();
                 if (meleeEquipFloat >= 0.4f) {
                     float swordEquipFloat = world.getRandom().nextFloat();
-                    if (swordEquipFloat > 0.67f - 0.15f*(this.getWorld().getDifficulty().getId() - 1)) {
+                    if (swordEquipFloat > 0.67f - 0.15f*(difficulty.getGlobalDifficulty().getId() - 1)) {
                         this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
                     }
                     else {
@@ -72,7 +72,7 @@ public abstract class PillagerEntityMixin extends IllagerEntity implements Cross
                 }
                 else if (meleeEquipFloat < 0.4f) {
                     float spearEquipFloat = world.getRandom().nextFloat();
-                    if (spearEquipFloat > 0.67f - (this.getWorld().getDifficulty().getId() - 1)*0.15f) {
+                    if (spearEquipFloat > 0.67f - (difficulty.getGlobalDifficulty().getId() - 1)*0.15f) {
                         this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.IRON_SPEAR));
                     }
                     else {
@@ -90,10 +90,10 @@ public abstract class PillagerEntityMixin extends IllagerEntity implements Cross
             float meleeEquipFloat = random.nextFloat();
             if (meleeEquipFloat >= 0.4f) {
                 float swordEquipFloat = random.nextFloat();
-                if (swordEquipFloat > 0.75f - 0.05f*(this.getWorld().getDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty()) {
+                if (swordEquipFloat > 0.75f - 0.05f*(localDifficulty.getGlobalDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty()) {
                     this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
                 }
-                else if (swordEquipFloat <= 0.75f - 0.05f*(this.getWorld().getDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty() && swordEquipFloat > 0.3f - 0.05f*(this.getWorld().getDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty()) {
+                else if (swordEquipFloat <= 0.75f - 0.05f*(localDifficulty.getGlobalDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty() && swordEquipFloat > 0.3f - 0.05f*(this.getWorld().getDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty()) {
                     this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.COPPER_SWORD));
                 }
                 else {
@@ -102,13 +102,13 @@ public abstract class PillagerEntityMixin extends IllagerEntity implements Cross
             }
             else if (meleeEquipFloat < 0.4f) {
                 float spearEquipFloat = random.nextFloat();
-                if (spearEquipFloat > 0.75f - 0.05f*(this.getWorld().getDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty()) {
+                if (spearEquipFloat > 0.75f - 0.05f*(localDifficulty.getGlobalDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty()) {
                     this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.IRON_SPEAR));
                 }
-                else if (spearEquipFloat <= 0.75f - 0.05f*(this.getWorld().getDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty() && spearEquipFloat > 0.5f - 0.05f*(this.getWorld().getDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty()) {
+                else if (spearEquipFloat <= 0.75f - 0.05f*(localDifficulty.getGlobalDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty() && spearEquipFloat > 0.5f - 0.05f*(this.getWorld().getDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty()) {
                     this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.COPPER_SPEAR));
                 }
-                else if (spearEquipFloat <= 0.5f - 0.05f*(this.getWorld().getDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty() && spearEquipFloat > 0.2f - 0.05f*(this.getWorld().getDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty()) {
+                else if (spearEquipFloat <= 0.5f - 0.05f*(localDifficulty.getGlobalDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty() && spearEquipFloat > 0.2f - 0.05f*(this.getWorld().getDifficulty().getId() - 1) - 0.2f*localDifficulty.getClampedLocalDifficulty()) {
                     this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.FLINT_SPEAR));
                 }
                 else {
