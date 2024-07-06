@@ -72,7 +72,7 @@ public abstract class PiglinEntityMixin extends AbstractPiglinEntity implements 
     private void injectedInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData, CallbackInfoReturnable<EntityData> cbireturn) {
         if (spawnReason == SpawnReason.STRUCTURE) {
             if (!(this.getMainHandStack().getItem() instanceof RangedWeaponItem)) {
-                if (this.random.nextFloat() < 0.33f) {
+                if (world.getRandom().nextFloat() < 0.33f) {
                     this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOLDEN_SPEAR));
                 }
                 else {

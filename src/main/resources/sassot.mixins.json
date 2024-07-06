@@ -35,6 +35,7 @@
     "entity.mob.VindicatorEntityMixin",
     "entity.mob.WitherSkeletonEntityMixin",
     "entity.mob.ZombieEntityMixin",
+    "entity.mob.ZombieVillagerEntityMixin",
     "entity.mob.ZombifiedPiglinEntityMixin",
     "entity.passive.IronGolemEntityMixin",
     "entity.passive.PigEntityMixin",

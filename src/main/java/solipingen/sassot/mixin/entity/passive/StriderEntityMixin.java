@@ -1,5 +1,10 @@
 package solipingen.sassot.mixin.entity.passive;
 
+import net.minecraft.entity.EntityData;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.world.LocalDifficulty;
+import net.minecraft.world.ServerWorldAccess;
+import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,8 +29,8 @@ public abstract class StriderEntityMixin extends AnimalEntity {
     }
 
     @Redirect(method = "initialize", at = @At(value = "FIELD", target = "Lnet/minecraft/item/Items;WARPED_FUNGUS_ON_A_STICK:Lnet/minecraft/item/Item;", opcode = Opcodes.GETSTATIC))
-    private Item redirectedZombifiedPiglinStickStack() {
-        float randomf = this.random.nextFloat();
+    private Item redirectedZombifiedPiglinStickStack(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
+        float randomf = world.getRandom().nextFloat();
         if (randomf < 0.004f) {
             return ModItems.WARPED_FUNGUS_ON_A_NETHERITE_FUSED_STICK;
         }
