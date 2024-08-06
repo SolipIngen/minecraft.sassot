@@ -235,7 +235,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements Ange
     
     @Unique
     private void initFighterAttackDamageAddition() {
-        long levelledAttackDamageAddition = Math.round(Math.pow(1.5, this.getVillagerData().getLevel()));
+        int levelledAttackDamageAddition = (int)Math.round(Math.pow(1.5 + 0.25*(this.getVillagerData().getProfession() == ModVillagerProfessions.SWORDSMAN ? 1.0 : 0.0), this.getVillagerData().getLevel()));
         EntityAttributeModifier attackDamageModifier = new EntityAttributeModifier(Identifier.of(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID, "villager_attack_damage_bonus"), (double)levelledAttackDamageAddition, EntityAttributeModifier.Operation.ADD_VALUE);
         this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).clearModifiers();
         this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).addPersistentModifier(attackDamageModifier);
