@@ -9,7 +9,7 @@ import net.minecraft.util.Unit;
 
 
 public class ModifyItemComponentHandler implements DefaultItemComponentEvents.ModifyCallback {
-    private static final Item[] FIREPROOF_ITEMS = {Items.BLAZE_ROD, Items.BLAZE_POWDER, Items.END_ROD};
+    private static final Item[] FIREPROOF_ITEMS = {Items.BLAZE_ROD, Items.BLAZE_POWDER, Items.END_ROD, Items.WITHER_SKELETON_SKULL};
 
 
     @Override

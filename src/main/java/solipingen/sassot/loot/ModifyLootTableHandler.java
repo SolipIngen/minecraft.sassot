@@ -1,20 +1,23 @@
 package solipingen.sassot.loot;
 
-import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
-import net.fabricmc.fabric.api.loot.v2.LootTableSource;
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
+import net.fabricmc.fabric.api.loot.v3.LootTableSource;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.LootTables;
 import net.minecraft.loot.condition.KilledByPlayerLootCondition;
+import net.minecraft.loot.condition.RandomChanceWithEnchantedBonusLootCondition;
 import net.minecraft.loot.entry.EmptyEntry;
 import net.minecraft.loot.entry.ItemEntry;
+import net.minecraft.loot.function.EnchantRandomlyLootFunction;
 import net.minecraft.loot.function.EnchantWithLevelsLootFunction;
 import net.minecraft.loot.function.SetCountLootFunction;
 import net.minecraft.loot.function.SetDamageLootFunction;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.registry.*;
+import solipingen.sassot.enchantment.ModEnchantments;
 import solipingen.sassot.item.ModItems;
 
 
@@ -22,13 +25,14 @@ public class ModifyLootTableHandler implements LootTableEvents.Modify {
 
 
     @Override
-    public void modifyLootTable(RegistryKey<LootTable> key, LootTable.Builder tableBuilder, LootTableSource source) {
+    public void modifyLootTable(RegistryKey<LootTable> key, LootTable.Builder tableBuilder, LootTableSource source, RegistryWrapper.WrapperLookup registries) {
         LootPool.Builder poolBuilder = LootPool.builder();
         if (key.getValue().getPath().endsWith("elder_guardian")) {
             poolBuilder.rolls(ConstantLootNumberProvider.create(1))
-                    .conditionally(KilledByPlayerLootCondition.builder())
-                    .with(ItemEntry.builder(ModItems.ELDER_GUARDIAN_SPIKE_SHARD))
-                    .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(0.0f, 1.0f)).build());
+                    .conditionally(RandomChanceWithEnchantedBonusLootCondition.builder(registries, 0.34f, 0.12f))
+                    .with(ItemEntry.builder(ModItems.ELDER_GUARDIAN_SPIKE_SHARD)
+                            .apply(SetDamageLootFunction.builder(UniformLootNumberProvider.create(0.15f, 1.0f))))
+                    .apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(1.0f)).build());
             tableBuilder.pool(poolBuilder.build());
         }
         else if (key.equals(LootTables.ABANDONED_MINESHAFT_CHEST)) {
@@ -60,15 +64,15 @@ public class ModifyLootTableHandler implements LootTableEvents.Modify {
         else if (key.equals(LootTables.SHIPWRECK_TREASURE_CHEST)) {
             poolBuilder.rolls(ConstantLootNumberProvider.create(1))
                     .with(EmptyEntry.builder().weight(6))
-                    .with(ItemEntry.builder(ModItems.GOLD_FUSED_FISHING_ROD).weight(1));
-//                        .apply(EnchantRandomlyLootFunction.builder());
+                    .with(ItemEntry.builder(ModItems.GOLD_FUSED_FISHING_ROD).weight(1))
+                    .apply(EnchantRandomlyLootFunction.builder(registries));
             tableBuilder.pool(poolBuilder.build());
         }
         else if (key.equals(LootTables.RUINED_PORTAL_CHEST)) {
             poolBuilder.rolls(ConstantLootNumberProvider.create(1))
                     .with(EmptyEntry.builder().weight(7))
-                    .with(ItemEntry.builder(ModItems.GOLDEN_SPEAR).weight(1));
-//                        .apply(EnchantRandomlyLootFunction.builder());
+                    .with(ItemEntry.builder(ModItems.GOLDEN_SPEAR).weight(1))
+                    .apply(EnchantRandomlyLootFunction.builder(registries));
             tableBuilder.pool(poolBuilder.build());
         }
         else if (key.equals(LootTables.NETHER_BRIDGE_CHEST)) {
@@ -82,8 +86,8 @@ public class ModifyLootTableHandler implements LootTableEvents.Modify {
                     .with(EmptyEntry.builder().weight(6))
                     .with(ItemEntry.builder(ModItems.DIAMOND_SPEAR).weight(1))
                     .with(ItemEntry.builder(ModItems.DIAMOND_SPEAR).weight(1))
-                    .apply(SetDamageLootFunction.builder(UniformLootNumberProvider.create(0.8f, 1.0f)));
-//                            .apply(EnchantRandomlyLootFunction.builder());
+                    .apply(SetDamageLootFunction.builder(UniformLootNumberProvider.create(0.8f, 1.0f)))
+                    .apply(EnchantRandomlyLootFunction.builder(registries));
             tableBuilder.pool(poolBuilder.build());
         }
         else if (key.equals(LootTables.BASTION_BRIDGE_CHEST) || key.equals(LootTables.BASTION_OTHER_CHEST)) {
@@ -137,7 +141,7 @@ public class ModifyLootTableHandler implements LootTableEvents.Modify {
         }
         else if (key.equals(LootTables.TRIAL_CHAMBERS_REWARD_CHEST)) {
             poolBuilder.rolls(ConstantLootNumberProvider.create(1))
-                    .with(EmptyEntry.builder().weight(15))
+                    .with(EmptyEntry.builder().weight(7))
                     .with(ItemEntry.builder(ModItems.COPPER_FRAMED_WOODEN_SHIELD).weight(1)
                             .apply(SetDamageLootFunction.builder(UniformLootNumberProvider.create(0.15f, 0.8f))))
                     .with(ItemEntry.builder(ModItems.COPPER_SHIELD).weight(1)
@@ -145,16 +149,16 @@ public class ModifyLootTableHandler implements LootTableEvents.Modify {
                     .with(ItemEntry.builder(ModItems.IRON_FRAMED_WOODEN_SHIELD).weight(1)
                             .apply(SetDamageLootFunction.builder(UniformLootNumberProvider.create(0.15f, 0.8f))))
                     .with(ItemEntry.builder(ModItems.IRON_SHIELD).weight(1)
-                            .apply(SetDamageLootFunction.builder(UniformLootNumberProvider.create(0.15f, 0.8f))));
-//                            .with(ItemEntry.builder(Items.BOOK).weight(1)
-//                                    .apply(EnchantRandomlyLootFunction.create()
-//                                            .option(ModEnchantments.SHIELDING)
-//                                            .add(ModEnchantments.UNYIELDING)
-//                                            .add(ModEnchantments.SHOCK_REBOUND)
-//                                            .add(ModEnchantments.PROJECTILE_DEFLECTION)
-//                                            .add(ModEnchantments.CLOAKING)));
+                            .apply(SetDamageLootFunction.builder(UniformLootNumberProvider.create(0.15f, 0.8f))))
+                    .with(ItemEntry.builder(Items.BOOK).weight(1)
+                            .apply(EnchantRandomlyLootFunction.create()
+                                    .option(registries.getWrapperOrThrow(RegistryKeys.ENCHANTMENT).getOrThrow(ModEnchantments.SHIELDING))
+                                    .option(registries.getWrapperOrThrow(RegistryKeys.ENCHANTMENT).getOrThrow(ModEnchantments.UNYIELDING))
+                                    .option(registries.getWrapperOrThrow(RegistryKeys.ENCHANTMENT).getOrThrow(ModEnchantments.SHOCK_REBOUND))
+                                    .option(registries.getWrapperOrThrow(RegistryKeys.ENCHANTMENT).getOrThrow(ModEnchantments.PROJECTILE_DEFLECTION))
+                                    .option(registries.getWrapperOrThrow(RegistryKeys.ENCHANTMENT).getOrThrow(ModEnchantments.CLOAKING))));
             tableBuilder.pool(poolBuilder.build());
         }
     }
-    
+
 }

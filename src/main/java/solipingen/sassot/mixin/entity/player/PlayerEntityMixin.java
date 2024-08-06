@@ -73,137 +73,130 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEn
 
     @Inject(method = "tick", at = @At("TAIL"), cancellable = true)
     private void injectedRiptideTick(CallbackInfo cbi) {
-        if (this.riptideStack == null || this.riptideStack.isEmpty()) {
-            cbi.cancel();
-        }
-        LivingEntityInterface iLivingEntity = (LivingEntityInterface)this;
-        if (this.isUsingRiptide()) {
-            this.setNoDrag(true);
-        }
-        if (iLivingEntity.getIsUsingFlare() && this.isWet()) {
-            this.setNoDrag(false);
-        }
-        else if (iLivingEntity.getIsUsingWhirlwind() && (this.isInsideWaterOrBubbleColumn() || this.isInLava())) {
-            this.setNoDrag(false);
-        }
-        else if (iLivingEntity.getIsUsingTridentRiptide() && (!this.isWet() || this.isInLava())) {
-            this.setNoDrag(false);
-        }
-        if (this.riptideTicks <= 0) {
-            iLivingEntity.setIsUsingWhirlwind(false);
-            iLivingEntity.setIsUsingFlare(false);
-            iLivingEntity.setIsUsingTridentRiptide(false);
-            this.setNoDrag(false);
-        }
-        if (this.getWorld() instanceof ServerWorld serverWorld && this.isUsingRiptide()) {
-            RegistryEntryLookup<Enchantment> enchantmentLookup = this.getRegistryManager().createRegistryLookup().getOrThrow(RegistryKeys.ENCHANTMENT);
-            int j = EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(Enchantments.RIPTIDE), this.riptideStack) > 0 ?
-                        EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(Enchantments.RIPTIDE), this.riptideStack) :
-                            (EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.FLARE), this.riptideStack) > 0 ?
-                                EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.FLARE), this.riptideStack) :
-                                    EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.WHIRLWIND), this.riptideStack));
-            boolean riptideFlareBl = EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(Enchantments.RIPTIDE), this.riptideStack) > 0
-                    || EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.FLARE), this.riptideStack) > 0;
-            Box riptideBox = this.getBoundingBox().expand((riptideFlareBl ? 6.0 : 4.0)*j, (riptideFlareBl ? 3.0 : 2.0)*j, (riptideFlareBl ? 6.0 : 4.0)*j);
-            List<Entity> entityList = serverWorld.getOtherEntities(this, riptideBox);
-            for (Entity otherEntity : entityList) {
-                boolean reachBl = false;
-                if (EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.WHIRLWIND), riptideStack) > 0 && this.squaredDistanceTo(otherEntity) > (4.0*j)*(4.0*j)) continue;
-                if (riptideFlareBl && this.squaredDistanceTo(otherEntity) > (6.0*j)*(6.0*j)) continue;
-                for (int i = 0; i < MathHelper.ceil(otherEntity.getHeight() + 1.0f); ++i) {
-                    Vec3d reachVec3d = new Vec3d(otherEntity.getX(), otherEntity.getBodyY(1.0/MathHelper.ceil(otherEntity.getHeight())*i), otherEntity.getZ());
-                    BlockHitResult hitResult = this.getWorld().raycast(new RaycastContext(this.getPos(), reachVec3d, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, this));
-                    if (((HitResult)hitResult).getType() != HitResult.Type.MISS) continue;
-                    reachBl = true;
-                    break;
-                }
-                if (!reachBl) continue;
-                double xDiff = this.getX() - otherEntity.getX();
-                double yDiff = this.getY() - otherEntity.getY();
-                double zDiff = this.getZ() - otherEntity.getZ();
-                double distanceModifier = 1.0/(1.0 + Math.sqrt(xDiff*xDiff + yDiff*yDiff + zDiff*zDiff));
-                BlockState otherEntityMagmaBlockState = Blocks.AIR.getDefaultState();
-                Iterable<BlockPos> otherEntityBlockPosIterable = BlockPos.iterateOutwards(otherEntity.getBlockPos(), 1, 1, 1);
-                for (BlockPos otherEntityBlockPos : otherEntityBlockPosIterable) {
-                    if (otherEntityBlockPos.getManhattanDistance(otherEntity.getBlockPos()) > 1) continue;
-                    otherEntityMagmaBlockState = this.getWorld().getBlockState(otherEntityBlockPos);
-                    if (otherEntityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK)) break;
-                }
-                if (otherEntity instanceof LivingEntity livingOtherEntity) {
-                    float damageAmount = EnchantmentHelper.getDamage(serverWorld, this.riptideStack, otherEntity, this.getDamageSources().playerAttack((PlayerEntity)(Object)this), (float)this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
-                    if (this.riptideStack.isOf(Items.TRIDENT) && !livingOtherEntity.getType().isIn(EntityTypeTags.SENSITIVE_TO_IMPALING) && livingOtherEntity.isWet()) {
-                        damageAmount += 1.0f*EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(Enchantments.IMPALING), this.riptideStack);
-                    }
-                    else if (this.riptideStack.isOf(ModItems.BLAZEARM)) {
-                        BlockState targetEntityMagmaBlockState = Blocks.AIR.getDefaultState();
-                        Iterable<BlockPos> targetEntityBlockPosIterable = BlockPos.iterateOutwards(livingOtherEntity.getBlockPos(), 1, 1, 1);
-                        for (BlockPos targetEntityBlockPos : targetEntityBlockPosIterable) {
-                            if (targetEntityBlockPos.getManhattanDistance(livingOtherEntity.getBlockPos()) > 1) continue;
-                            targetEntityMagmaBlockState = this.getWorld().getBlockState(targetEntityBlockPos);
-                            if (targetEntityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK)) break;
-                        }
-                        if (!livingOtherEntity.getType().isIn(ModEntityTypeTags.SENSITIVE_TO_LEANING) && (livingOtherEntity.isOnFire() || livingOtherEntity.isInLava() || targetEntityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK) || livingOtherEntity.hasStatusEffect(StatusEffects.FIRE_RESISTANCE))) {
-                            damageAmount += 1.0f*EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.LEANING), this.riptideStack);
-                        }
-                    }
-                    damageAmount *= (riptideFlareBl ? 0.5f : 0.25f)*j*(float)distanceModifier;
-                    damageAmount *= (EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.WHIRLWIND), this.riptideStack) > 0 && (livingOtherEntity.getType().isIn(ModEntityTypeTags.SENSITIVE_TO_WHIRLWIND) || ((EntityInterface)livingOtherEntity).isBeingSnowedOn())) ? 2.0f : 1.0f;
-                    damageAmount *= (EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(Enchantments.RIPTIDE), this.riptideStack) > 0 && (livingOtherEntity.isWet() || livingOtherEntity.getType().isIn(EntityTypeTags.SENSITIVE_TO_IMPALING) || livingOtherEntity.hurtByWater())) ? 2.0f : 1.0f;
-                    damageAmount *= (EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.FLARE), this.riptideStack) > 0 && (livingOtherEntity.getType().isIn(ModEntityTypeTags.SENSITIVE_TO_LEANING) || livingOtherEntity.isOnFire() || livingOtherEntity.isInLava() || otherEntityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK) || livingOtherEntity.hasStatusEffect(StatusEffects.FIRE_RESISTANCE))) ? 2.0f : 1.0f;
-                    damageAmount *= this.getWorld().isThundering() ? 1.5f : 1.0f;
-                    if (!(livingOtherEntity.isSubmergedInWater() || livingOtherEntity.isSubmergedIn(FluidTags.LAVA)) && EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.WHIRLWIND), this.riptideStack) > 0 && !livingOtherEntity.getType().isIn(ModEntityTypeTags.IMMUNE_TO_WHIRLWIND)) {
-                        livingOtherEntity.damage(this.getDamageSources().playerAttack((PlayerEntity)(Object)this), damageAmount);
-                        if (((EntityInterface)livingOtherEntity).isBeingSnowedOn()) {
-                            livingOtherEntity.setFrozenTicks(livingOtherEntity.getMinFreezeDamageTicks()*(j + 1));
-                        }
-                        if (!((1.0 - livingOtherEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*1.5*j*distanceModifier <= 0.0)) {
-                            Vec3d vec3d = livingOtherEntity.getVelocity();
-                            Vec3d vec3d2 = new Vec3d(xDiff, 0.0, zDiff).normalize().multiply((1.0 - livingOtherEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*1.5*j*distanceModifier);
-                            otherEntity.setVelocity(vec3d.x - vec3d2.x, livingOtherEntity.isOnGround() ? Math.min(vec3d.y + (1.0 - livingOtherEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*1.5*j*distanceModifier, 0.4) : vec3d.y, vec3d.z - vec3d2.z);
-                        }
-                    }
-                    else if (EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(Enchantments.RIPTIDE), this.riptideStack) > 0) {
-                        livingOtherEntity.damage(this.getDamageSources().playerAttack((PlayerEntity)(Object)this), damageAmount);
-                        if (!((1.0 - livingOtherEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*2.0*j*distanceModifier <= 0.0)) {
-                            Vec3d vec3d = livingOtherEntity.getVelocity();
-                            Vec3d vec3d2 = new Vec3d(xDiff, 0.0, zDiff).normalize().multiply((1.0 - livingOtherEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*2.0*j*distanceModifier);
-                            otherEntity.setVelocity(vec3d.x - vec3d2.x, vec3d.y, vec3d.z - vec3d2.z);
-                        }
-                    }
-                    else if (!livingOtherEntity.isWet() && EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.FLARE), this.riptideStack) > 0 && !livingOtherEntity.getType().isIn(ModEntityTypeTags.IMMUNE_TO_FLARE)) {
-                        livingOtherEntity.damage(this.getDamageSources().playerAttack((PlayerEntity)(Object)this), damageAmount);
-                        if (!livingOtherEntity.isOnFire()) {
-                            livingOtherEntity.setOnFireFor((int)Math.ceil(3.0*j*distanceModifier));
-                        }
-                        if (!((1.0 - livingOtherEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*2.0*j*distanceModifier <= 0.0)) {
-                            Vec3d vec3d = livingOtherEntity.getVelocity();
-                            Vec3d vec3d2 = new Vec3d(xDiff, 0.0, zDiff).normalize().multiply((1.0 - livingOtherEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE))*2.0*j*distanceModifier);
-                            otherEntity.setVelocity(vec3d.x - vec3d2.x, vec3d.y, vec3d.z - vec3d2.z);
-                        }
-                    }
-                }
-                else {
-                    if (!(otherEntity.isSubmergedInWater() || otherEntity.isSubmergedIn(FluidTags.LAVA)) && EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.WHIRLWIND), this.riptideStack) > 0) {
-                        Vec3d vec3d = otherEntity.getVelocity();
-                        Vec3d vec3d2 = new Vec3d(xDiff, 0.0, zDiff).normalize().multiply(1.0 - 1.5*j*distanceModifier);
-                        otherEntity.setVelocity(vec3d.x - vec3d2.x, otherEntity.isOnGround() ? Math.min(vec3d.y + (1.0 - 1.5*j*distanceModifier), 0.4) : vec3d.y, vec3d.z - vec3d2.z);
-                    }
-                    else if (EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(Enchantments.RIPTIDE), this.riptideStack) > 0) {
-                        Vec3d vec3d = otherEntity.getVelocity();
-                        Vec3d vec3d2 = new Vec3d(xDiff, 0.0, zDiff).normalize().multiply(1.0 - 2.0*j*distanceModifier);
-                        otherEntity.setVelocity(vec3d.x - vec3d2.x, vec3d.y, vec3d.z - vec3d2.z);
-                    }
-                    else if ((otherEntity.isFireImmune() || otherEntity.isOnFire() || otherEntity.isInLava() || otherEntityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK)) && EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.FLARE), this.riptideStack) > 0) {
-                        Vec3d vec3d = otherEntity.getVelocity();
-                        Vec3d vec3d2 = new Vec3d(xDiff, 0.0, zDiff).normalize().multiply(1.0 - 2.0*j*distanceModifier);
-                        otherEntity.setVelocity(vec3d.x - vec3d2.x, vec3d.y, vec3d.z - vec3d2.z);
-                    }
-                }
+        if (this.riptideStack != null && !this.riptideStack.isEmpty()) {
+            LivingEntityInterface iLivingEntity = (LivingEntityInterface) this;
+            if (this.isUsingRiptide()) {
+                this.setNoDrag(true);
             }
-            Iterable<BlockPos> blockPosList = BlockPos.iterateOutwards(this.getBlockPos(), MathHelper.ceil(this.getWidth()), MathHelper.ceil(this.getHeight()), MathHelper.ceil(this.getWidth()));
-            for (BlockPos currentBlockPos : blockPosList) {
-                if (this.getWorld().getBlockState(currentBlockPos).isOf(Blocks.POWDER_SNOW)) {
-                    this.getWorld().breakBlock(currentBlockPos, true);
+            if (iLivingEntity.getIsUsingFlare() && this.isWet()) {
+                this.setNoDrag(false);
+            } else if (iLivingEntity.getIsUsingWhirlwind() && (this.isInsideWaterOrBubbleColumn() || this.isInLava())) {
+                this.setNoDrag(false);
+            } else if (iLivingEntity.getIsUsingTridentRiptide() && (!this.isWet() || this.isInLava())) {
+                this.setNoDrag(false);
+            }
+            if (this.riptideTicks <= 0) {
+                iLivingEntity.setIsUsingWhirlwind(false);
+                iLivingEntity.setIsUsingFlare(false);
+                iLivingEntity.setIsUsingTridentRiptide(false);
+                this.setNoDrag(false);
+            }
+            if (this.getWorld() instanceof ServerWorld serverWorld && this.isUsingRiptide()) {
+                RegistryEntryLookup<Enchantment> enchantmentLookup = this.getRegistryManager().createRegistryLookup().getOrThrow(RegistryKeys.ENCHANTMENT);
+                int j = EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(Enchantments.RIPTIDE), this.riptideStack) > 0 ?
+                        EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(Enchantments.RIPTIDE), this.riptideStack) :
+                        (EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.FLARE), this.riptideStack) > 0 ?
+                                EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.FLARE), this.riptideStack) :
+                                EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.WHIRLWIND), this.riptideStack));
+                boolean riptideFlareBl = EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(Enchantments.RIPTIDE), this.riptideStack) > 0
+                        || EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.FLARE), this.riptideStack) > 0;
+                Box riptideBox = this.getBoundingBox().expand((riptideFlareBl ? 6.0 : 4.0) * j, (riptideFlareBl ? 3.0 : 2.0) * j, (riptideFlareBl ? 6.0 : 4.0) * j);
+                List<Entity> entityList = serverWorld.getOtherEntities(this, riptideBox);
+                for (Entity otherEntity : entityList) {
+                    boolean reachBl = false;
+                    if (EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.WHIRLWIND), riptideStack) > 0 && this.squaredDistanceTo(otherEntity) > (4.0 * j) * (4.0 * j))
+                        continue;
+                    if (riptideFlareBl && this.squaredDistanceTo(otherEntity) > (6.0 * j) * (6.0 * j)) continue;
+                    for (int i = 0; i < MathHelper.ceil(otherEntity.getHeight() + 1.0f); ++i) {
+                        Vec3d reachVec3d = new Vec3d(otherEntity.getX(), otherEntity.getBodyY(1.0 / MathHelper.ceil(otherEntity.getHeight()) * i), otherEntity.getZ());
+                        BlockHitResult hitResult = this.getWorld().raycast(new RaycastContext(this.getPos(), reachVec3d, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, this));
+                        if (((HitResult) hitResult).getType() != HitResult.Type.MISS) continue;
+                        reachBl = true;
+                        break;
+                    }
+                    if (!reachBl) continue;
+                    double xDiff = this.getX() - otherEntity.getX();
+                    double yDiff = this.getY() - otherEntity.getY();
+                    double zDiff = this.getZ() - otherEntity.getZ();
+                    double distanceModifier = 1.0 / (1.0 + Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff));
+                    BlockState otherEntityMagmaBlockState = Blocks.AIR.getDefaultState();
+                    Iterable<BlockPos> otherEntityBlockPosIterable = BlockPos.iterateOutwards(otherEntity.getBlockPos(), 1, 1, 1);
+                    for (BlockPos otherEntityBlockPos : otherEntityBlockPosIterable) {
+                        if (otherEntityBlockPos.getManhattanDistance(otherEntity.getBlockPos()) > 1) continue;
+                        otherEntityMagmaBlockState = this.getWorld().getBlockState(otherEntityBlockPos);
+                        if (otherEntityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK)) break;
+                    }
+                    if (otherEntity instanceof LivingEntity livingOtherEntity) {
+                        float damageAmount = EnchantmentHelper.getDamage(serverWorld, this.riptideStack, otherEntity, this.getDamageSources().playerAttack((PlayerEntity) (Object) this), (float) this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
+                        if (this.riptideStack.isOf(Items.TRIDENT) && !livingOtherEntity.getType().isIn(EntityTypeTags.SENSITIVE_TO_IMPALING) && livingOtherEntity.isWet()) {
+                            damageAmount += 1.0f * EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(Enchantments.IMPALING), this.riptideStack);
+                        } else if (this.riptideStack.isOf(ModItems.BLAZEARM)) {
+                            BlockState targetEntityMagmaBlockState = Blocks.AIR.getDefaultState();
+                            Iterable<BlockPos> targetEntityBlockPosIterable = BlockPos.iterateOutwards(livingOtherEntity.getBlockPos(), 1, 1, 1);
+                            for (BlockPos targetEntityBlockPos : targetEntityBlockPosIterable) {
+                                if (targetEntityBlockPos.getManhattanDistance(livingOtherEntity.getBlockPos()) > 1)
+                                    continue;
+                                targetEntityMagmaBlockState = this.getWorld().getBlockState(targetEntityBlockPos);
+                                if (targetEntityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK)) break;
+                            }
+                            if (!livingOtherEntity.getType().isIn(ModEntityTypeTags.SENSITIVE_TO_LEANING) && (livingOtherEntity.isOnFire() || livingOtherEntity.isInLava() || targetEntityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK) || livingOtherEntity.hasStatusEffect(StatusEffects.FIRE_RESISTANCE))) {
+                                damageAmount += 1.0f * EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.LEANING), this.riptideStack);
+                            }
+                        }
+                        damageAmount *= (riptideFlareBl ? 0.5f : 0.25f) * j * (float) distanceModifier;
+                        damageAmount *= (EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.WHIRLWIND), this.riptideStack) > 0 && (livingOtherEntity.getType().isIn(ModEntityTypeTags.SENSITIVE_TO_WHIRLWIND) || ((EntityInterface) livingOtherEntity).isBeingSnowedOn())) ? 2.0f : 1.0f;
+                        damageAmount *= (EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(Enchantments.RIPTIDE), this.riptideStack) > 0 && (livingOtherEntity.isWet() || livingOtherEntity.getType().isIn(EntityTypeTags.SENSITIVE_TO_IMPALING) || livingOtherEntity.hurtByWater())) ? 2.0f : 1.0f;
+                        damageAmount *= (EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.FLARE), this.riptideStack) > 0 && (livingOtherEntity.getType().isIn(ModEntityTypeTags.SENSITIVE_TO_LEANING) || livingOtherEntity.isOnFire() || livingOtherEntity.isInLava() || otherEntityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK) || livingOtherEntity.hasStatusEffect(StatusEffects.FIRE_RESISTANCE))) ? 2.0f : 1.0f;
+                        damageAmount *= this.getWorld().isThundering() ? 1.5f : 1.0f;
+                        if (!(livingOtherEntity.isSubmergedInWater() || livingOtherEntity.isSubmergedIn(FluidTags.LAVA)) && EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.WHIRLWIND), this.riptideStack) > 0 && !livingOtherEntity.getType().isIn(ModEntityTypeTags.IMMUNE_TO_WHIRLWIND)) {
+                            livingOtherEntity.damage(this.getDamageSources().playerAttack((PlayerEntity) (Object) this), damageAmount);
+                            if (((EntityInterface) livingOtherEntity).isBeingSnowedOn()) {
+                                livingOtherEntity.setFrozenTicks(livingOtherEntity.getMinFreezeDamageTicks() * (j + 1));
+                            }
+                            if (!((1.0 - livingOtherEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)) * 1.5 * j * distanceModifier <= 0.0)) {
+                                Vec3d vec3d = livingOtherEntity.getVelocity();
+                                Vec3d vec3d2 = new Vec3d(xDiff, 0.0, zDiff).normalize().multiply((1.0 - livingOtherEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)) * 1.5 * j * distanceModifier);
+                                otherEntity.setVelocity(vec3d.x - vec3d2.x, livingOtherEntity.isOnGround() ? Math.min(vec3d.y + (1.0 - livingOtherEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)) * 1.5 * j * distanceModifier, 0.4) : vec3d.y, vec3d.z - vec3d2.z);
+                            }
+                        } else if (EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(Enchantments.RIPTIDE), this.riptideStack) > 0) {
+                            livingOtherEntity.damage(this.getDamageSources().playerAttack((PlayerEntity) (Object) this), damageAmount);
+                            if (!((1.0 - livingOtherEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)) * 2.0 * j * distanceModifier <= 0.0)) {
+                                Vec3d vec3d = livingOtherEntity.getVelocity();
+                                Vec3d vec3d2 = new Vec3d(xDiff, 0.0, zDiff).normalize().multiply((1.0 - livingOtherEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)) * 2.0 * j * distanceModifier);
+                                otherEntity.setVelocity(vec3d.x - vec3d2.x, vec3d.y, vec3d.z - vec3d2.z);
+                            }
+                        } else if (!livingOtherEntity.isWet() && EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.FLARE), this.riptideStack) > 0 && !livingOtherEntity.getType().isIn(ModEntityTypeTags.IMMUNE_TO_FLARE)) {
+                            livingOtherEntity.damage(this.getDamageSources().playerAttack((PlayerEntity) (Object) this), damageAmount);
+                            if (!livingOtherEntity.isOnFire()) {
+                                livingOtherEntity.setOnFireFor((int) Math.ceil(3.0 * j * distanceModifier));
+                            }
+                            if (!((1.0 - livingOtherEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)) * 2.0 * j * distanceModifier <= 0.0)) {
+                                Vec3d vec3d = livingOtherEntity.getVelocity();
+                                Vec3d vec3d2 = new Vec3d(xDiff, 0.0, zDiff).normalize().multiply((1.0 - livingOtherEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)) * 2.0 * j * distanceModifier);
+                                otherEntity.setVelocity(vec3d.x - vec3d2.x, vec3d.y, vec3d.z - vec3d2.z);
+                            }
+                        }
+                    } else {
+                        if (!(otherEntity.isSubmergedInWater() || otherEntity.isSubmergedIn(FluidTags.LAVA)) && EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.WHIRLWIND), this.riptideStack) > 0) {
+                            Vec3d vec3d = otherEntity.getVelocity();
+                            Vec3d vec3d2 = new Vec3d(xDiff, 0.0, zDiff).normalize().multiply(1.0 - 1.5 * j * distanceModifier);
+                            otherEntity.setVelocity(vec3d.x - vec3d2.x, otherEntity.isOnGround() ? Math.min(vec3d.y + (1.0 - 1.5 * j * distanceModifier), 0.4) : vec3d.y, vec3d.z - vec3d2.z);
+                        } else if (EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(Enchantments.RIPTIDE), this.riptideStack) > 0) {
+                            Vec3d vec3d = otherEntity.getVelocity();
+                            Vec3d vec3d2 = new Vec3d(xDiff, 0.0, zDiff).normalize().multiply(1.0 - 2.0 * j * distanceModifier);
+                            otherEntity.setVelocity(vec3d.x - vec3d2.x, vec3d.y, vec3d.z - vec3d2.z);
+                        } else if ((otherEntity.isFireImmune() || otherEntity.isOnFire() || otherEntity.isInLava() || otherEntityMagmaBlockState.isOf(Blocks.MAGMA_BLOCK)) && EnchantmentHelper.getLevel(enchantmentLookup.getOrThrow(ModEnchantments.FLARE), this.riptideStack) > 0) {
+                            Vec3d vec3d = otherEntity.getVelocity();
+                            Vec3d vec3d2 = new Vec3d(xDiff, 0.0, zDiff).normalize().multiply(1.0 - 2.0 * j * distanceModifier);
+                            otherEntity.setVelocity(vec3d.x - vec3d2.x, vec3d.y, vec3d.z - vec3d2.z);
+                        }
+                    }
+                }
+                Iterable<BlockPos> blockPosList = BlockPos.iterateOutwards(this.getBlockPos(), MathHelper.ceil(this.getWidth()), MathHelper.ceil(this.getHeight()), MathHelper.ceil(this.getWidth()));
+                for (BlockPos currentBlockPos : blockPosList) {
+                    if (this.getWorld().getBlockState(currentBlockPos).isOf(Blocks.POWDER_SNOW)) {
+                        this.getWorld().breakBlock(currentBlockPos, true);
+                    }
                 }
             }
         }
