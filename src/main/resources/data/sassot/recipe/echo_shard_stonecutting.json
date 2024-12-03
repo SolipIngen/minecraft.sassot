@@ -1,0 +1,10 @@
+{
+    "type": "minecraft:stonecutting",
+    "count": 4,
+    "ingredient": {
+      "item": "sassot:echo_crystal_block"
+    },
+    "result": {
+        "id": "minecraft:echo_shard"
+    }
+}

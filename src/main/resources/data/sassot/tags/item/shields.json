@@ -1,0 +1,17 @@
+{
+  "values": [
+    "minecraft:shield",
+    "sassot:wooden_shield",
+    "sassot:copper_framed_wooden_shield",
+    "sassot:gold_framed_wooden_shield",
+    "sassot:iron_framed_wooden_shield",
+    "sassot:diamond_framed_wooden_shield",
+    "sassot:emerald_framed_wooden_shield",
+    "sassot:netherite_framed_wooden_shield",
+    "sassot:copper_shield",
+    "sassot:golden_shield",
+    "sassot:iron_shield",
+    "sassot:diamond_shield",
+    "sassot:netherite_shield"
+  ]
+}

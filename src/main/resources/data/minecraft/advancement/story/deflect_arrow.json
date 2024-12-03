@@ -1,0 +1,36 @@
+{
+    "parent": "minecraft:story/obtain_armor",
+    "criteria": {
+      "deflected_projectile": {
+        "conditions": {
+          "damage": {
+            "type": {
+              "is_projectile": true
+            },
+            "blocked": true
+          }
+        },
+        "trigger": "minecraft:entity_hurt_player"
+      }
+    },
+    "display": {
+      "announce_to_chat": false,
+      "description": {
+        "translate": "advancements.story.deflect_arrow.description"
+      },
+      "frame": "task",
+      "hidden": true,
+      "icon": {
+        "id": "minecraft:shield"
+      },
+      "show_toast": false,
+      "title": {
+        "translate": "advancements.story.deflect_arrow.title"
+      }
+    },
+    "requirements": [
+      [
+        "deflected_projectile"
+      ]
+    ]
+}

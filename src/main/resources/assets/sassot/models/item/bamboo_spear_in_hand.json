@@ -1,0 +1,117 @@
+{
+	"credit": "Made with Blockbench",
+	"gui_light": "front",
+	"textures": {
+		"0": "sassot:item/bamboo_spear/pole_texture",
+		"1": "sassot:item/bamboo_spear/tip1_texture",
+		"2": "sassot:item/bamboo_spear/tip2_texture",
+		"3": "sassot:item/bamboo_spear/tip3_texture",
+		"4": "sassot:item/bamboo_spear/tip4_texture",
+		"5": "sassot:item/bamboo_spear/tip5_texture",
+		"particle": "sassot:item/bamboo_spear/tip1_texture"
+	},
+	"elements": [
+		{
+			"name": "pole",
+			"from": [8, 0, 8],
+			"to": [9, 27, 9],
+			"faces": {
+				"north": {"uv": [0, 0, 0.5, 13.5], "texture": "#0"},
+				"east": {"uv": [0.5, 0, 1, 13.5], "texture": "#0"},
+				"south": {"uv": [1, 0, 1.5, 13.5], "texture": "#0"},
+				"west": {"uv": [1.5, 0, 2, 13.5], "texture": "#0"},
+				"up": {"uv": [2.5, 0.5, 2, 0], "texture": "#0"},
+				"down": {"uv": [2.5, 0.5, 2, 1], "texture": "#0"}
+			}
+		},
+		{
+			"name": "tip1",
+			"from": [8, 27, 8],
+			"to": [9, 28.2, 9],
+			"faces": {
+				"north": {"uv": [0, 0, 1, 1], "texture": "#1"},
+				"east": {"uv": [0, 1, 1, 2], "texture": "#1"},
+				"south": {"uv": [1, 0, 2, 1], "texture": "#1"},
+				"west": {"uv": [1, 1, 2, 2], "texture": "#1"},
+				"up": {"uv": [1, 3, 0, 2], "texture": "#1"},
+				"down": {"uv": [3, 0, 2, 1], "texture": "#1"}
+			}
+		},
+		{
+			"name": "tip2",
+			"from": [8, 28.2, 8],
+			"to": [9, 29.2, 8.8],
+			"faces": {
+				"north": {"uv": [0, 0, 1, 1], "texture": "#2"},
+				"east": {"uv": [0, 1, 1, 2], "texture": "#2"},
+				"south": {"uv": [1, 0, 2, 1], "texture": "#2"},
+				"west": {"uv": [1, 1, 2, 2], "texture": "#2"},
+				"up": {"uv": [1, 3, 0, 2], "texture": "#2"},
+				"down": {"uv": [3, 0, 2, 1], "texture": "#2"}
+			}
+		},
+		{
+			"name": "tip3",
+			"from": [8, 29.2, 8],
+			"to": [9, 30.2, 8.6],
+			"faces": {
+				"north": {"uv": [0, 0, 1, 1], "texture": "#3"},
+				"east": {"uv": [0, 1, 1, 2], "texture": "#3"},
+				"south": {"uv": [1, 0, 2, 1], "texture": "#3"},
+				"west": {"uv": [1, 1, 2, 2], "texture": "#3"},
+				"up": {"uv": [1, 3, 0, 2], "texture": "#3"},
+				"down": {"uv": [3, 0, 2, 1], "texture": "#3"}
+			}
+		},
+		{
+			"name": "tip4",
+			"from": [8, 30.2, 8],
+			"to": [9, 31.2, 8.4],
+			"faces": {
+				"north": {"uv": [0, 0, 1, 1], "texture": "#4"},
+				"east": {"uv": [0, 1, 1, 2], "texture": "#4"},
+				"south": {"uv": [1, 0, 2, 1], "texture": "#4"},
+				"west": {"uv": [1, 1, 2, 2], "texture": "#4"},
+				"up": {"uv": [1, 3, 0, 2], "texture": "#4"},
+				"down": {"uv": [3, 0, 2, 1], "texture": "#4"}
+			}
+		},
+		{
+			"name": "tip5",
+			"from": [8, 31, 8],
+			"to": [9, 32, 8.2],
+			"faces": {
+				"north": {"uv": [0, 0, 1, 1], "texture": "#5"},
+				"east": {"uv": [0, 1, 1, 2], "texture": "#5"},
+				"south": {"uv": [1, 0, 2, 1], "texture": "#5"},
+				"west": {"uv": [1, 1, 2, 2], "texture": "#5"},
+				"up": {"uv": [1, 3, 0, 2], "texture": "#5"},
+				"down": {"uv": [3, 0, 2, 1], "texture": "#5"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [-1, -8.75, 1]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, -8.75, 1]
+		},
+		"firstperson_righthand": {
+			"rotation": [-10, 0, 0],
+			"translation": [0, -10, 4.5]
+		},
+		"firstperson_lefthand": {
+			"rotation": [-10, 0, 0],
+			"translation": [0, -10, 4.5]
+		}
+	},
+	"overrides": [
+        {
+            "predicate": {
+                "throwing": 1
+            },
+            "model": "sassot:item/bamboo_spear_throwing"
+        }
+    ]
+}

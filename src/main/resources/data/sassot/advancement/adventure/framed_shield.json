@@ -1,0 +1,42 @@
+{
+    "parent": "sassot:adventure/deflect_arrow",
+    "criteria": {
+      "has_framed_shield": {
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "sassot:copper_framed_wooden_shield",
+                "sassot:gold_framed_wooden_shield",
+                "sassot:iron_framed_wooden_shield",
+                "sassot:emerald_framed_wooden_shield",
+                "sassot:diamond_framed_wooden_shield",
+                "sassot:netherite_framed_wooden_shield"
+              ]
+            }
+          ]
+        },
+        "trigger": "minecraft:inventory_changed"
+      }
+    },
+    "display": {
+      "announce_to_chat": true,
+      "description": {
+        "translate": "advancements.adventure.framed_shield.description"
+      },
+      "frame": "task",
+      "hidden": false,
+      "icon": {
+        "id": "sassot:copper_framed_wooden_shield"
+      },
+      "show_toast": true,
+      "title": {
+        "translate": "advancements.adventure.framed_shield.title"
+      }
+    },
+    "requirements": [
+      [
+        "has_framed_shield"
+      ]
+    ]
+}
