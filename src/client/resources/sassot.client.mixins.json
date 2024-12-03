@@ -1,0 +1,23 @@
+{
+  "required": false,
+  "package": "solipingen.sassot.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "WelcomeMixin",
+    "render.entity.FishingBobberEntityRendererMixin",
+    "render.entity.feature.HeldItemFeatureRendererMixin",
+    "render.entity.feature.TridentRiptideFeatureRendererMixin",
+    "render.entity.feature.VillagerHeldItemFeatureRendererMixin",
+    "render.entity.model.BipedEntityModelMixin",
+    "render.entity.model.IllagerEntityModelMixin",
+    "render.entity.model.PiglinEntityModelMixin",
+    "render.entity.model.SkeletonEntityModelMixin",
+    "render.item.BuiltinModelItemRendererMixin",
+    "render.item.HeldItemRendererMixin",
+    "render.item.ItemRendererMixin",
+    "render.model.ModelLoaderMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}

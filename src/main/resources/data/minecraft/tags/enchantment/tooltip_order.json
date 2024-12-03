@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "sassot:whirlwind",
+    "sassot:skewering",
+    "sassot:groundshaking",
+    "sassot:flare",
+    "sassot:leaning",
+    "sassot:thrusting",
+    "sassot:hacking",
+    "sassot:shielding",
+    "sassot:unyielding",
+    "sassot:shock_rebound",
+    "sassot:projectile_deflection",
+    "sassot:cloaking",
+    "sassot:echoing"
+  ]
+}

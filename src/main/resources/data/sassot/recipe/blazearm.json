@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+      "o": {
+        "item": "minecraft:netherite_ingot"
+      }, 
+      "r": {
+        "item": "minecraft:blaze_rod"
+      }, 
+      "p": {
+        "item": "minecraft:blaze_powder"
+      }, 
+      "w": {
+        "item": "minecraft:nether_wart"
+      }
+    },
+    "pattern": [
+      "pwo",
+      " rw",
+      "r p"
+    ],
+    "result": {
+      "id": "sassot:blazearm"
+    }
+}

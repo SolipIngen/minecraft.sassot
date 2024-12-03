@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+      "o": {
+        "tag": "sassot:shield_framing_smithing_template_ingots"
+      }, 
+      "p": {
+        "tag": "minecraft:planks"
+      }
+    },
+    "pattern": [
+      "ppp",
+      "pop",
+      " p "
+    ],
+    "result": {
+      "id": "sassot:shield_framing_smithing_template"
+    }
+}

@@ -1,0 +1,71 @@
+{
+  "anvil_cost": 4,
+  "description": {
+    "translate": "enchantment.sassot.thrusting"
+  },
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": {
+          "type": "minecraft:fraction",
+          "numerator": {
+            "type": "minecraft:linear",
+            "base": 1.0,
+            "per_level_above_first": 1.0
+          },
+          "denominator": {
+            "type": "minecraft:linear",
+            "base": 4.0,
+            "per_level_above_first": 0.0
+          }
+        },
+        "attribute": "minecraft:player.block_interaction_range",
+        "id": "sassot:enchantment.thrusting",
+        "operation": "add_value"
+      },
+      {
+        "amount": {
+          "type": "minecraft:fraction",
+          "numerator": {
+            "type": "minecraft:linear",
+            "base": 1.0,
+            "per_level_above_first": 1.0
+          },
+          "denominator": {
+            "type": "minecraft:linear",
+            "base": 4.0,
+            "per_level_above_first": 0.0
+          }
+        },
+        "attribute": "minecraft:player.entity_interaction_range",
+        "id": "sassot:enchantment.thrusting",
+        "operation": "add_value"
+      },
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.1,
+          "per_level_above_first": 0.1
+        },
+        "attribute": "minecraft:generic.attack_speed",
+        "id": "sassot:enchantment.thrusting",
+        "operation": "add_value"
+      }
+    ]
+  },
+  "exclusive_set": "#sassot:exclusive_set/thrusting",
+  "max_cost": {
+    "base": 20,
+    "per_level_above_first": 9
+  },
+  "max_level": 3,
+  "min_cost": {
+    "base": 5,
+    "per_level_above_first": 9
+  },
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#sassot:enchantable/thrusting_weapons",
+  "weight": 2
+}

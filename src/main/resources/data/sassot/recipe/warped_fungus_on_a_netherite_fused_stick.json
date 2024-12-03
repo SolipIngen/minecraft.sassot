@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+      "#": {
+        "item": "sassot:netherite_fused_fishing_rod"
+      },
+      "X": {
+        "item": "minecraft:warped_fungus"
+      }
+    },
+    "pattern": [
+      "# ",
+      " X"
+    ],
+    "result": {
+      "id": "sassot:warped_fungus_on_a_netherite_fused_stick"
+    },
+    "show_notification": true
+}
