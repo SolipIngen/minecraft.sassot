@@ -53,7 +53,7 @@ public class ModClientEMIPlugin implements EmiPlugin {
                         ModClientEMIPlugin.addRecipeSafe(registry, () ->
                                 new EmiCraftingRecipe(input, output,
                                         Identifier.of(SpearsAxesSwordsShieldsAndOtherTools.MOD_ID,
-                                                Registries.ITEM.getId(itemEntry.value()).getPath() + "_" + "crafting/echoing_shield_" + level),
+                                                "/crafting/echoing_shield/" + Registries.ITEM.getId(itemEntry.value()).getPath() + "_" + level),
                                         false));
 
                     }
