@@ -1,0 +1,9 @@
+{
+  "values": [
+    "#minecraft:enchantable/bow",
+    "#minecraft:enchantable/crossbow",
+    "#minecraft:enchantable/trident",
+    "#sassot:enchantable/blazearm",
+    "#sassot:enchantable/spear"
+  ]
+}

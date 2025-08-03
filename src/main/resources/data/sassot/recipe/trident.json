@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+      "o": "sassot:elder_guardian_spike_bone_shard",
+      "p": "minecraft:prismarine_shard"
+    },
+    "pattern": [
+      " oo",
+      " po",
+      "p  "
+    ],
+    "result": {
+      "id": "minecraft:trident"
+    }
+}

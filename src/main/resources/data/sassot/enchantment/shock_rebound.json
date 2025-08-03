@@ -1,0 +1,23 @@
+{
+  "anvil_cost": 4,
+  "description": {
+    "translate": "enchantment.sassot.shock_rebound"
+  },
+  "effects": {
+  },
+  "exclusive_set": "#sassot:exclusive_set/shield",
+  "max_cost": {
+    "base": 50,
+    "per_level_above_first": 0
+  },
+  "max_level": 3,
+  "min_cost": {
+    "base": 5,
+    "per_level_above_first": 9
+  },
+  "slots": [
+    "hand"
+  ],
+  "supported_items": "#sassot:enchantable/shield",
+  "weight": 2
+}

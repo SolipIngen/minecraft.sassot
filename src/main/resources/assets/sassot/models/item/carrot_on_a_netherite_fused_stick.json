@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/handheld_rod",
+    "textures": {
+      "layer0": "sassot:item/carrot_on_a_netherite_fused_stick"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "pack": {
+        "pack_format": 64,
+        "supported_formats": {
+            "min_inclusive": 13, 
+            "max_inclusive": 64
+        }, 
+        "description": {
+            "translate": "resourcePack.freshsassotanimations.description", 
+            "fallback": "For §2SASSOT 1.2.3-1.21.7 §r+ §4Fresh Animations (>=v1.18.1)"
+        }
+    }
+}

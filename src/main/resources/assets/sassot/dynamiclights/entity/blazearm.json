@@ -1,0 +1,10 @@
+{
+	"match": {
+		"type": "sassot:blazearm"
+	},
+	"luminance": {
+		"type": "lambdynlights:wet_sensitive",
+		"dry": 15,
+		"wet": 4
+	}
+}

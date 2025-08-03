@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+      "layer0": "sassot:item/diamond_spear/diamond_spear"
+    }
+}

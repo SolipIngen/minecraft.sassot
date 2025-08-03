@@ -1,0 +1,31 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "cases": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "sassot:item/golden_spear"
+        },
+        "when": [
+          "gui",
+          "ground",
+          "fixed"
+        ]
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:condition",
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "sassot:item/golden_spear_in_hand"
+      },
+      "on_true": {
+        "type": "minecraft:model",
+        "model": "sassot:item/golden_spear_throwing"
+      },
+      "property": "sassot:using_spear"
+    },
+    "property": "minecraft:display_context"
+  }
+}

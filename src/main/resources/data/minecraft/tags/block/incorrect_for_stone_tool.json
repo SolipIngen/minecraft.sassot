@@ -1,0 +1,9 @@
+{
+  "values": [
+    "#sassot:needs_netherite_tool",
+    "#minecraft:needs_diamond_tool",
+    "#minecraft:needs_iron_tool",
+    "#sassot:needs_emerald_tool",
+    "#sassot:needs_copper_tool"
+  ]
+}

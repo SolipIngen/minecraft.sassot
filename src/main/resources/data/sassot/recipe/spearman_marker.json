@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "minecraft:polished_andesite_slab",
+    "$": "minecraft:emerald"
+  },
+  "pattern": [
+    "$",
+    "#"
+  ],
+  "result": {
+    "id": "sassot:spearman_marker",
+    "count": 4
+  }
+}

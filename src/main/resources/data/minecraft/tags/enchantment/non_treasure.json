@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:wind_burst",
+    "sassot:flare",
+    "sassot:groundshaking",
+    "sassot:hacking",
+    "sassot:leaning",
+    "sassot:projectile_deflection",
+    "sassot:shielding",
+    "sassot:shock_rebound",
+    "sassot:skewering",
+    "sassot:thrusting",
+    "sassot:unyielding",
+    "sassot:whirlwind"
+  ]
+}

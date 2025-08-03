@@ -1,0 +1,37 @@
+{
+    "parent": "sassot:adventure/obtain_metal_shield",
+    "criteria": {
+      "diamond_shield": {
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "sassot:diamond_shield"
+              ]
+            }
+          ]
+        },
+        "trigger": "minecraft:inventory_changed"
+      }
+    },
+    "display": {
+      "announce_to_chat": true,
+      "description": {
+        "translate": "advancements.adventure.shiny_shield.description"
+      },
+      "frame": "goal",
+      "hidden": false,
+      "icon": {
+        "id": "sassot:diamond_shield"
+      },
+      "show_toast": true,
+      "title": {
+        "translate": "advancements.adventure.shiny_shield.title"
+      }
+    },
+    "requirements": [
+      [
+        "diamond_shield"
+      ]
+    ]
+  }

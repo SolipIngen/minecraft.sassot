@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": "minecraft:netherite_upgrade_smithing_template",
+  "addition": "minecraft:netherite_ingot",
+  "base": "sassot:diamond_spear",
+  "result": {
+    "id": "sassot:netherite_spear"
+  }
+}

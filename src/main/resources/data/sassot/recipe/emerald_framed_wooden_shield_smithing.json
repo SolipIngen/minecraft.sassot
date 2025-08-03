@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smithing_transform", 
+    "template": "sassot:shield_framing_smithing_template",
+    "addition": "minecraft:emerald",
+    "base": "sassot:wooden_shield",
+    "result": {
+      "id": "sassot:emerald_framed_wooden_shield"
+    }
+}

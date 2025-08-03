@@ -1,0 +1,11 @@
+{
+  "values": [
+    "#minecraft:pig_food",
+    "minecraft:carrot_on_a_stick",
+    "sassot:carrot_on_a_copper_fused_stick",
+    "sassot:carrot_on_an_iron_fused_stick",
+    "sassot:carrot_on_a_gold_fused_stick",
+    "sassot:carrot_on_a_diamond_fused_stick",
+    "sassot:carrot_on_a_netherite_fused_stick"
+  ]
+}

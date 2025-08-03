@@ -1,0 +1,6 @@
+{
+	"model": {
+		"type": "minecraft:model",
+		"model": "sassot:block/echo_crystal_cluster"
+	}
+}

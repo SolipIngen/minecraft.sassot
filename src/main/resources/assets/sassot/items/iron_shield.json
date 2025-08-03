@@ -1,0 +1,32 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "cases": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/air"
+        },
+        "when": "cloaking"
+      },
+      {
+        "model": {
+          "type": "minecraft:special",
+          "base": "sassot:item/iron_shield_blocking",
+          "model": {
+            "type": "minecraft:shield"
+          }
+        },
+        "when": "blocking"
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:special",
+      "base": "sassot:item/iron_shield",
+      "model": {
+        "type": "minecraft:shield"
+      }
+    },
+    "property": "sassot:shield_state"
+  }
+}

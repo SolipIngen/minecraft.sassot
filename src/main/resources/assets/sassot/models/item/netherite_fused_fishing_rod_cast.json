@@ -1,0 +1,7 @@
+{
+    "parent": "sassot:item/generic/fishing_rod_cast",
+    "textures": {
+        "3": "sassot:item/netherite_fused_fishing_rod_cast",
+        "particle": "sassot:item/netherite_fused_fishing_rod_cast"
+    }
+}

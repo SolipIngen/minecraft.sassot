@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+      "o": "minecraft:stick",
+      "#": "sassot:fishing_rod_fusion_smithing_template",
+      "~": "minecraft:string"
+    },
+    "pattern": [
+      "o~o",
+      "o#o",
+      " o "
+    ],
+    "result": {
+      "id": "sassot:fishing_rod_fusion_smithing_template"
+    }
+}

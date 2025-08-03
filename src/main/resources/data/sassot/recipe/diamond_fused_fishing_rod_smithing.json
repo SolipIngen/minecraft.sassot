@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smithing_transform", 
+    "template": "sassot:fishing_rod_fusion_smithing_template",
+    "addition": "minecraft:diamond",
+    "base": "minecraft:fishing_rod",
+    "result": {
+      "id": "sassot:diamond_fused_fishing_rod"
+    }
+}

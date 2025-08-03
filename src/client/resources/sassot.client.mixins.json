@@ -1,0 +1,28 @@
+{
+  "required": false,
+  "package": "solipingen.sassot.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "MinecraftClientMixin",
+    "WelcomeMixin",
+    "gui.InGameHudMixin",
+    "render.entity.AbstractSkeletonEntityRendererMixin",
+    "render.entity.FishingBobberEntityRendererMixin",
+    "render.entity.LivingEntityRendererMixin",
+    "render.entity.feature.HeldItemFeatureRendererMixin",
+    "render.entity.feature.TridentRiptideFeatureRendererMixin",
+    "render.entity.feature.VillagerHeldItemFeatureRendererMixin",
+    "render.entity.model.BipedEntityModelMixin",
+    "render.entity.model.IllagerEntityModelMixin",
+    "render.entity.model.PiglinEntityModelMixin",
+    "render.entity.model.SkeletonEntityModelMixin",
+    "render.entity.state.ItemHolderEntityRenderStateMixin",
+    "render.entity.state.LivingEntityRenderStateMixin",
+    "render.entity.state.SkeletonEntityRenderStateMixin",
+    "render.item.HeldItemRendererMixin",
+    "render.item.model.special.ShieldModelRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}

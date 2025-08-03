@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+      "o": "minecraft:stick",
+      "p": "minecraft:flint"
+    },
+    "pattern": [
+      "  p",
+      " o ",
+      "o  "
+    ],
+    "result": {
+      "id": "sassot:flint_spear"
+    }
+}
